@@ -12,7 +12,18 @@ taboolib {
     install("module-lang")
     install("module-configuration")
     classifier = null
-    version = "6.0.0-pre37"
+    version = "6.0.0-pre39"
+
+    description {
+        contributors {
+            name("AmazingOcean")
+            name("KunSs")
+        }
+        dependencies {
+            name("PlaceholderAPI")
+        }
+    }
+
 }
 
 repositories {
@@ -20,14 +31,19 @@ repositories {
 }
 
 dependencies {
-    compileOnly("ink.ptms.core:v11701:11701:mapped")
-    compileOnly("ink.ptms.core:v11701:11701:universal")
+    implementation("ink.ptms.core:v11701:11701:mapped")
+    implementation("ink.ptms.core:v11701:11701:universal")
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs"))
+
 }
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+}
+
+tasks.withType<Jar> {
+    destinationDir = file("F:/Server/Spigot 1.12.2 - 副本/plugins")
 }
 
 configure<JavaPluginConvention> {

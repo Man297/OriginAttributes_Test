@@ -1,7 +1,6 @@
 package ac.github.oa.internal.attribute.impl.attack
 
 import ac.github.oa.api.event.entity.EntityDamageEvent
-import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 
 import ac.github.oa.internal.attribute.AttributeType
@@ -10,14 +9,15 @@ import ac.github.oa.internal.attribute.impl.defense.Armor
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.enums.ValueType
-import ac.github.oa.internal.event.EventMemory
-import ac.github.oa.internal.event.impl.DamageMemory
+import ac.github.oa.internal.base.event.EventMemory
+import ac.github.oa.internal.base.event.impl.DamageMemory
 import taboolib.common.platform.SubscribeEvent
 
 /**
  * 破甲攻击
  */
 class ArmorBreak : SingleAttributeAdapter(AttributeType.ATTACK), Listener {
+
     override val strings: Array<String>
         get() = arrayOf("破甲几率")
     override val type: ValueType

@@ -9,13 +9,12 @@ import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.attribute.AttributeType
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.PriorityEnum
-import ac.github.oa.internal.event.EventMemory
-import ac.github.oa.internal.event.impl.DamageMemory
-import ac.github.oa.internal.event.impl.UpdateMemory
+import ac.github.oa.internal.base.event.EventMemory
+import ac.github.oa.internal.base.event.impl.DamageMemory
+import ac.github.oa.internal.base.event.impl.UpdateMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.EntityEquipment
 import org.bukkit.inventory.ItemStack
-import org.bukkit.scheduler.BukkitRunnable
 import taboolib.common.platform.submit
 import java.util.*
 import java.util.function.Consumer
@@ -24,6 +23,7 @@ import java.util.function.Function
 object OriginAttributeAPI {
 
     var map: MutableMap<UUID, MutableMap<String, AttributeData>> = HashMap<UUID, MutableMap<String, AttributeData>>()
+
 
     fun getAttributeData(livingEntity: LivingEntity): AttributeData {
         val attributeData = AttributeData()
@@ -131,9 +131,7 @@ object OriginAttributeAPI {
     }
 
     fun getExtras(uuid: UUID): MutableMap<String, AttributeData> {
-        return map.computeIfAbsent(
-            uuid,
-            Function<UUID, MutableMap<String, AttributeData>> { u: UUID? -> HashMap<String, AttributeData>() })
+        return map.computeIfAbsent(uuid) { HashMap<String, AttributeData>() }
     }
 
 

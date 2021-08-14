@@ -11,13 +11,14 @@ import ac.github.oa.internal.attribute.abst.SingleAttributeAdapter
 import ac.github.oa.internal.base.BaseConfig
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.ValueType
-import ac.github.oa.internal.event.EventMemory
+import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.util.ArrayUtils
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Listener
 import taboolib.common.platform.SubscribeEvent
 import java.util.ArrayList
+import kotlin.math.floor
 
 class Special : AttributeAdapter(0), Listener {
     var list: MutableList<SpecialAttribute> = ArrayList()
@@ -25,7 +26,7 @@ class Special : AttributeAdapter(0), Listener {
         config.select("Power")
             .set("placeholder", "Power")
             .setStrings("力量")
-            .setStrings("entries", "攻击力 +{ct:{i}*0.1}")
+            .setList("entries", "攻击力 +{ct:{i}*0.1}")
     }
 
     @SubscribeEvent
@@ -38,7 +39,7 @@ class Special : AttributeAdapter(0), Listener {
                 val specialAttribute = attributeAdapter as SpecialAttribute
                 val baseDoubles: Array<BaseDouble> = attributeData.find(specialAttribute.name)
                 val number: Double = baseDoubles[0].number()
-                val strings: List<String> = ArrayUtils.read(specialAttribute.entries, Math.floor(number).toInt())
+                val strings: List<String> = ArrayUtils.read(specialAttribute.entries, floor(number).toInt())
                 val data: AttributeData = OriginAttributeAPI.loadList(e.livingEntity, strings)
                 e.attributeData.merge(data)
             }

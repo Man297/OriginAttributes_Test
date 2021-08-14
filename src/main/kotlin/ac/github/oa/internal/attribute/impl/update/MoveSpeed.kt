@@ -5,8 +5,8 @@ import ac.github.oa.internal.attribute.abst.SingleAttributeAdapter
 import ac.github.oa.internal.base.BaseConfig
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.ValueType
-import ac.github.oa.internal.event.EventMemory
-import ac.github.oa.internal.event.impl.UpdateMemory
+import ac.github.oa.internal.base.event.EventMemory
+import ac.github.oa.internal.base.event.impl.UpdateMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import taboolib.common.platform.submit
@@ -17,7 +17,7 @@ class MoveSpeed : SingleAttributeAdapter(AttributeType.OTHER) {
         config.select(this)["base"] = 0.2
     }
 
-    val baseValue: Double
+    private val baseValue: Double
         get() = baseConfig.select(this).any("base").asNumber().toDouble()
 
     override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {

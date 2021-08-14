@@ -1,10 +1,11 @@
-package ac.github.oa.internal.script
+package ac.github.oa.internal.core.script
 
 import java.lang.Exception
 import org.bukkit.entity.Entity
 import java.util.*
 
-class InternalConfig(
+open class InternalConfig(
+    var id: String?,
     var key: String,
     var value: String,
     var string: String,
@@ -17,17 +18,14 @@ class InternalConfig(
             val format = config.format(entity, wrapper)
             s = s.replace("{" + config.string + "}", format!!)
         }
-        return InternalScriptManager.filter(key)?.execute(entity, wrapper, string) ?: s
+
+        return InternalScriptManager.filter(key)?.execute(entity, wrapper,this, s) ?: s
     }
 
     override fun toString(): String {
-        return "Config{" +
-                "key='" + key + '\'' +
-                ", value='" + value + '\'' +
-                ", string='" + string + '\'' +
-                ", list=" + list +
-                '}'
+        return "InternalConfig(id=$id, key='$key', value='$value', string='$string', list=$list)"
     }
+
 
     companion object {
         fun parse(string: String): List<InternalConfig> {
@@ -53,10 +51,19 @@ class InternalConfig(
                 }
                 if (index == 0 && start != -1 && end != -1) {
                     try {
-                        val substring = string.substring(start, end)
+                        var substring = string.substring(start, end)
+                        val string = substring
+
+                        val id = if (substring.startsWith("$")) {
+                            val s = substring.substring(1, substring.indexOf(":"))
+                            substring = substring.substring(s.length + 2);
+                            s
+                        } else null
+
                         val key = substring.split(":").toTypedArray()[0]
                         val value = if (key.length == substring.length) "" else substring.substring(key.length + 1)
-                        val config = InternalConfig(key, value, substring, parse(value))
+
+                        val config = InternalConfig(id, key, value, string, parse(value))
                         list.add(config)
                         start = -1
                         end = -1

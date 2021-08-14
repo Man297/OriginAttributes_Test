@@ -1,8 +1,9 @@
 package ac.github.oa.util
 
 import ac.github.oa.internal.base.BaseDouble
-import ac.github.oa.internal.script.InternalScript
-import ac.github.oa.internal.script.hoop.MapScript
+import ac.github.oa.internal.core.script.InternalScript
+import ac.github.oa.internal.core.script.hoop.MapScript
+import org.bukkit.Material
 import java.util.*
 
 object ArrayUtils {

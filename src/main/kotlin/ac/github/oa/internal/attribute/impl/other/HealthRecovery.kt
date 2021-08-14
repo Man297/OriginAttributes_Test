@@ -7,7 +7,7 @@ import ac.github.oa.internal.attribute.abst.SingleAttributeAdapter
 import ac.github.oa.internal.base.BaseConfig
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.ValueType
-import ac.github.oa.internal.event.EventMemory
+import ac.github.oa.internal.base.event.EventMemory
 import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player

@@ -1,8 +1,7 @@
 package ac.github.oa.api.event.entity
 
 import ac.github.oa.internal.base.enums.PriorityEnum
-import ac.github.oa.internal.event.impl.DamageMemory
-import org.bukkit.event.Cancellable
+import ac.github.oa.internal.base.event.impl.DamageMemory
 import taboolib.common.platform.ProxyEvent
 
 /**

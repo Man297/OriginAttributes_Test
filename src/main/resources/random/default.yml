@@ -1,0 +1,10 @@
+品质:
+  - '普通'
+  - '精良'
+  - '高级'
+普通材质: 'GOLDEN_SWORD'
+精良材质: 'GOLDEN_SWORD'
+高级材质: 'GOLDEN_SWORD'
+高级攻击: '{random:int:200-300}'
+精良攻击: '{random:int:100-200}'
+普通攻击: '{random:int:1-100}'

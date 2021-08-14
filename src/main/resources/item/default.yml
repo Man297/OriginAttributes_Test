@@ -1,0 +1,10 @@
+def0:
+  create-pre:
+    - '{$quality:random:group:品质}'
+  id: "{random:group:{map:quality}材质}"
+  name: "{map:quality}的 神木剑"
+  lore:
+    - ''
+    - '&f攻击+ &b{eval:{random:group:{map:quality}攻击} * {papi:%player_level%} * 0.5}'
+    - ''
+    - '&c来源: &f{papi:%player_name%}'

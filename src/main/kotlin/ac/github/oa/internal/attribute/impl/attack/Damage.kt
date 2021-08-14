@@ -5,17 +5,20 @@ import ac.github.oa.internal.attribute.AttributeAdapter
 import ac.github.oa.internal.base.BaseConfig
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.ValueType
-import ac.github.oa.internal.event.EventMemory
-import ac.github.oa.internal.event.impl.DamageMemory
+import ac.github.oa.internal.base.event.EventMemory
+import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import taboolib.common.util.random
 
 /**
- * 0 攻击伤害
- * 1 对玩家增伤
- * 2 对怪物增伤
+ * 0 攻击伤害 min
+ * 1 攻击伤害 max
+ * 2 对玩家增伤
+ * 3 对怪物增伤
  */
-class Damage : AttributeAdapter(3) {
+class Damage : AttributeAdapter(4) {
+
     override fun defaultOption(config: BaseConfig) {
         config.select(this)
             .setStrings("攻击力")
@@ -27,25 +30,35 @@ class Damage : AttributeAdapter(3) {
             .setStrings("对怪物增伤")
     }
 
-     override fun inject(entity: LivingEntity?, string: String, baseDoubles: Array<BaseDouble>) {
-        baseDoubles[0].merge(baseConfig.analysis(this, string, ValueType.NUMBER))
+    override fun inject(entity: LivingEntity?, string: String, baseDoubles: Array<BaseDouble>) {
+
+        if (string.contains("-")) {
+            val split = string.split("-")
+            baseDoubles[0].merge(baseConfig.analysis(this, split[0], ValueType.NUMBER))
+            baseDoubles[1].merge(baseConfig.analysis(this, split[1], ValueType.NUMBER, true))
+        } else {
+            baseDoubles[0].merge(baseConfig.analysis(this, string, ValueType.NUMBER))
+            baseDoubles[1].merge(baseConfig.analysis(this, string, ValueType.NUMBER))
+        }
+
         baseDoubles[1].merge(baseConfig.analysis("damage-pvp", string, ValueType.PERCENT))
         baseDoubles[2].merge(baseConfig.analysis("damage-pve", string, ValueType.PERCENT))
     }
 
-    override fun format(entity: LivingEntity, s: String, baseDoubles: Array<BaseDouble>): Any  {
+    override fun format(entity: LivingEntity, s: String, baseDoubles: Array<BaseDouble>): Any {
         return when (s) {
+            "min" -> baseDoubles[0].number()
+            "max" -> baseDoubles[1].number()
             "pvp" -> baseDoubles[1].number()
             "pve" -> baseDoubles[2].number()
-            else -> baseDoubles[0].number()
+            else -> "${baseDoubles[0].number()} - ${baseDoubles[1].number()}"
         }
     }
 
     override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {
         if (eventMemory is DamageMemory) {
             val damageMemory: DamageMemory = eventMemory
-            val baseDouble: BaseDouble = baseDoubles[0]
-            damageMemory.addDamage("damage", baseDouble.number())
+            damageMemory.addDamage("damage", random(baseDoubles[0].number(), baseDoubles[1].number()))
             val injured: LivingEntity = damageMemory.injured
             if (injured is Player) {
                 damageMemory.addDamage("damage-pvp", baseDoubles[1].eval(damageMemory.damage))

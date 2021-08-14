@@ -18,24 +18,17 @@ object AttributeManager {
 
     var folder: File = File(BukkitPlugin.getInstance().dataFolder, "attributes")
 
-    var instance: AttributeManager? = null
-
-    var map: MutableMap<UUID, AttributeData>? = null
-
-    fun AttributeManager() {
-        instance = this
-        map = ConcurrentHashMap()
-    }
+    var map: MutableMap<UUID, AttributeData> = ConcurrentHashMap()
 
     var list: MutableList<AttributeAdapter> = ArrayList()
     var attributes: MutableList<AttributeAdapter> = ArrayList()
 
     operator fun get(uuid: UUID): AttributeData {
-        return instance!!.map!!.computeIfAbsent(uuid) { u: UUID? -> AttributeData() }
+        return map.computeIfAbsent(uuid) { u: UUID? -> AttributeData() }
     }
 
     operator fun set(uuid: UUID, attributeData: AttributeData) {
-        instance!!.map!![uuid] = attributeData
+        map[uuid] = attributeData
     }
 
     fun getAttributeAdapter(name: String): Optional<AttributeAdapter> {
@@ -65,7 +58,7 @@ object AttributeManager {
         BukkitPlugin.getInstance().logger.log(Level.INFO, "属性 {0} 启用成功.", attributeAdapter.name)
         attributeAdapter.baseConfig = getBaseConfig(attributeAdapter)
         attributes.add(attributeAdapter)
-        Collections.sort(attributes)
+        attributes.sort()
     }
 
     fun getBaseConfig(attributeAdapter: AttributeAdapter): BaseConfig {

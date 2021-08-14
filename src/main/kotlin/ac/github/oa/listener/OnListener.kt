@@ -4,7 +4,7 @@ import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.api.event.entity.EntityDamageEvent
 import ac.github.oa.internal.attribute.AttributeData
 import ac.github.oa.internal.base.enums.PriorityEnum
-import ac.github.oa.internal.event.impl.DamageMemory
+import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.EntityDamageByEntityEvent

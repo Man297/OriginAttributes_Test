@@ -26,18 +26,23 @@ class BaseConfig(var parent: ConfigurationSection?, var config: ConfigurationSec
             .stream().anyMatch { s: String? -> string.contains(s!!) }
     }
 
-    fun analysis(name: String, s: String, valueType: ValueType): BaseDouble {
+    fun analysis(name: String, s: String, valueType: ValueType, force: Boolean = false): BaseDouble {
         val contains: Boolean = this.select(name).contains(s)
-        return if (contains) {
+        return if (contains || force) {
             AttributeAdapter.getNumber(s, valueType)
         } else {
             BaseDouble()
         }
     }
 
-    fun analysis(attributeAdapter: AttributeAdapter, s: String, valueType: ValueType): BaseDouble {
+    fun analysis(
+        attributeAdapter: AttributeAdapter,
+        s: String,
+        valueType: ValueType,
+        force: Boolean = false
+    ): BaseDouble {
         val simpleName: String = attributeAdapter::class.java.simpleName
-        return this.analysis(Strings.parseLowerString(simpleName), s, valueType)
+        return this.analysis(Strings.parseLowerString(simpleName), s, valueType,force)
     }
 
     fun superior(): BaseConfig {

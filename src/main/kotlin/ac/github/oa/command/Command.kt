@@ -1,30 +1,100 @@
 package ac.github.oa.command
 
+import ac.github.oa.OriginAttribute
+import ac.github.oa.internal.core.item.ItemPlant
+import ac.github.oa.internal.core.item.random.RandomPlant
+import org.bukkit.Material
+import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
-import taboolib.common.platform.ProxyCommandSender
-import taboolib.common.platform.ProxyPlayer
-import taboolib.common.platform.command
+import taboolib.common.platform.*
+import taboolib.module.nms.getItemTag
+import taboolib.platform.util.sendLang
 
-class Command {
+object Command {
 
     @Awake(LifeCycle.ENABLE)
     fun reg() {
+        // rpg
         command("rpg") {
-
+            // get
             literal("get") {
-                execute<ProxyPlayer> { sender, context, argument ->
 
+                // [item]
+                dynamic {
+                    suggestion<Player> { _, _ -> ItemPlant.configs.map { it.name } }
+
+                    // amount = 1
+                    execute<Player> { sender, context, argument ->
+                        giveItem(sender, argument, 1)
+                    }
+
+                    // [amount]
+                    dynamic(optional = true) {
+                        execute<Player> { sender, context, argument ->
+                            giveItem(sender, context.argument(-1)!!, argument.toInt())
+                        }
+                    }
                 }
             }
-            dynamic {
-                suggestion<ProxyCommandSender> { sender, context ->
-                    listOf("reload")
+
+            // nbt
+            literal("nbt") {
+                execute<Player> { sender, context, argument ->
+                    val mainHand = sender.inventory.itemInMainHand
+                    if (mainHand.type == Material.AIR) {
+                        sender.sendMessage("hand is null.")
+                        return@execute
+                    }
+                    val itemTag = mainHand.getItemTag()
+                    val asString = itemTag.asString()
+                    sender.sendMessage("json = $asString")
                 }
             }
 
+            literal("reload") {
+                execute<ProxyCommandSender> { sender, context, argument ->
+                    ItemPlant.init()
+                    RandomPlant.init()
+                    OriginAttribute.config.reload()
+                    sender.sendMessage("reload successful.")
+                }
+            }
         }
     }
+
+    fun giveItem(sender: Player, item: String, amount: Int) {
+        if (!ItemPlant.hasKey(item)) {
+            sender.sendLang("item-key-is-null")
+            return
+        }
+
+        val items = createItems(sender, item, amount)
+        items.forEach { sender.inventory.addItem(it.key) }
+        mutableMapOf<String, Int>().apply {
+            items.map {
+                val displayName = it.key.itemMeta!!.displayName
+                this[displayName] = (this[displayName] ?: 0) + it.value
+            }
+
+            this.forEach {
+                sender.sendLang("sender-get-item", it.key, it.value)
+            }
+        }
+    }
+
+    fun createItems(target: LivingEntity, key: String, amount: Int): Map<ItemStack, Int> {
+        val mapOf = mutableMapOf<ItemStack, Int>()
+        (0 until amount).forEach { _ ->
+            val itemStack = ItemPlant.build(target, key)
+            if (itemStack != null) {
+                mapOf[itemStack] = (mapOf[itemStack] ?: 0) + 1
+            }
+        }
+        return mapOf
+    }
+
 
 //    @SubCommand(value = "get", args = "<item> <amount|1>", description = "@message.command-get")
 //    var get: SubCommandAdapter = object : SubCommandAdapter() {

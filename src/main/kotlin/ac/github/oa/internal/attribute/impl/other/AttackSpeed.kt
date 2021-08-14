@@ -6,11 +6,10 @@ import ac.github.oa.internal.attribute.abst.SingleAttributeAdapter
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.enums.ValueType
-import ac.github.oa.internal.event.EventMemory
-import ac.github.oa.internal.event.impl.DamageMemory
+import ac.github.oa.internal.base.event.EventMemory
+import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import taboolib.common.platform.SubscribeEvent
 import java.util.concurrent.ConcurrentHashMap

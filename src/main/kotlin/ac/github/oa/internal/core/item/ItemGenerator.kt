@@ -1,4 +1,4 @@
-package ac.github.oa.internal.item
+package ac.github.oa.internal.core.item
 
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack

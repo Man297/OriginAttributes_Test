@@ -4,8 +4,8 @@ import ac.github.oa.internal.attribute.AttributeType
 import ac.github.oa.internal.attribute.abst.SingleAttributeAdapter
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.ValueType
-import ac.github.oa.internal.event.EventMemory
-import ac.github.oa.internal.event.impl.DamageMemory
+import ac.github.oa.internal.base.event.EventMemory
+import ac.github.oa.internal.base.event.impl.DamageMemory
 
 class Dodge : SingleAttributeAdapter(AttributeType.DEFENSE) {
     override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {

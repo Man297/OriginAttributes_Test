@@ -1,13 +1,12 @@
 package ac.github.oa.internal.attribute.impl.update
 
-import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.internal.attribute.AttributeType
 import ac.github.oa.internal.attribute.abst.SingleAttributeAdapter
 import ac.github.oa.internal.base.BaseConfig
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.ValueType
-import ac.github.oa.internal.event.EventMemory
-import ac.github.oa.internal.event.impl.UpdateMemory
+import ac.github.oa.internal.base.event.EventMemory
+import ac.github.oa.internal.base.event.impl.UpdateMemory
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.entity.LivingEntity
@@ -15,7 +14,7 @@ import org.bukkit.entity.LivingEntity
 class Health : SingleAttributeAdapter(AttributeType.UPDATE) {
     override fun defaultOption(config: BaseConfig) {
         super.defaultOption(config)
-        config.select(this).set("default", 40.0)
+        config.select(this)["default"] = 40.0
     }
 
     override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {

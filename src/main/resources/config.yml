@@ -1,2 +1,22 @@
 options:
   decimal-format: '#.##'
+  time-format: 'yyyy-MM-dd HH:mm:ss'
+
+
+attributes:
+  - Damage
+  - BloodSucking
+  - Crit
+  - Hit
+  - Armor
+  - Dodge
+  - Rebound
+  - ExpAddion
+  - HealthRecovery
+  - Mana
+  - ManaRecovery
+  - Health
+  - MoveSpeed
+  - Special
+  - AttackSpeed
+  - ArmorBreak
