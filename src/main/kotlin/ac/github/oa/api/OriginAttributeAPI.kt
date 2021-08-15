@@ -2,6 +2,7 @@ package ac.github.oa.api
 
 import ac.github.oa.api.event.entity.EntityGetterDataEvent
 import ac.github.oa.api.event.entity.EntityUpdateEvent
+import ac.github.oa.api.event.entity.EntityLoadEquipmentEvent
 import ac.github.oa.api.event.render.AttributeRenderStringEvent
 import ac.github.oa.internal.attribute.AttributeAdapter
 import ac.github.oa.internal.attribute.AttributeData
@@ -12,13 +13,15 @@ import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import ac.github.oa.internal.base.event.impl.UpdateMemory
+import ac.github.oa.internal.core.equip.*
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.EntityEquipment
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.submit
+import taboolib.platform.util.isNotAir
 import java.util.*
 import java.util.function.Consumer
-import java.util.function.Function
 
 object OriginAttributeAPI {
 
@@ -42,25 +45,42 @@ object OriginAttributeAPI {
         }
     }
 
-    fun loadItems(equipment: EntityEquipment?): List<ItemStack> {
-        val itemStacks: MutableList<ItemStack> = ArrayList(Arrays.asList(*equipment!!.armorContents))
-        itemStacks.add(equipment.itemInMainHand)
-        itemStacks.add(equipment.itemInOffHand)
-        return itemStacks
+    fun loadItems(equipment: EntityEquipment): List<AdaptItem> {
+
+        val listOf = arrayListOf<AdaptItem>()
+        listOf.add(AdaptItem(Hand(equipment.itemInMainHand)))
+        listOf.add(AdaptItem(OffHand(equipment.itemInMainHand)))
+        listOf.add(AdaptItem(Helmet(equipment.getItem(EquipmentSlot.HEAD))))
+        listOf.add(AdaptItem(BreastPlate(equipment.getItem(EquipmentSlot.CHEST))))
+        listOf.add(AdaptItem(Gaiter(equipment.getItem(EquipmentSlot.HEAD))))
+        listOf.add(AdaptItem(Boot(equipment.getItem(EquipmentSlot.FEET))))
+        return listOf
+    }
+
+    fun loadInventory(livingEntity: LivingEntity): List<AdaptItem> {
+        val items = this.loadItems(livingEntity.equipment!!)
+        val event = EntityLoadEquipmentEvent(livingEntity, items)
+        event.call()
+        return items
     }
 
     fun loadEntityEquipment(livingEntity: LivingEntity) {
         val equipment = livingEntity.equipment
         val attributeData = AttributeData()
         attributeData.entityEquipment = equipment
-        val itemStacks = loadItems(equipment)
+
+        val items = loadInventory(livingEntity)
+
         val list: MutableList<String> = ArrayList()
-        itemStacks.forEach(Consumer { itemStack: ItemStack? ->
-            if (itemStack != null && itemStack.hasItemMeta() && itemStack.itemMeta!!.hasLore()) {
-                val lore = itemStack.itemMeta!!.lore
-                list.addAll(lore!!)
+
+        items.forEach {
+            val itemStack = it.item
+            if (itemStack.isNotAir()) {
+                // conditioning...
+                list.addAll(itemStack.itemMeta!!.lore!!)
             }
-        })
+        }
+
         val event = AttributeRenderStringEvent(livingEntity, list)
         event.call()
         if (!event.isCancelled) {
@@ -71,7 +91,7 @@ object OriginAttributeAPI {
                 }
             }
         }
-        AttributeManager.set(livingEntity.uniqueId, attributeData)
+        AttributeManager[livingEntity.uniqueId] = attributeData
     }
 
     fun callDamage(damageMemory: DamageMemory) {

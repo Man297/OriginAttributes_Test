@@ -1,6 +1,7 @@
 package ac.github.oa.internal.attribute.impl.attack
 
 import ac.github.oa.internal.attribute.AttributeAdapter
+import ac.github.oa.internal.attribute.AttributeType
 import ac.github.oa.internal.base.BaseConfig
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.ValueType
@@ -12,7 +13,7 @@ import org.bukkit.entity.LivingEntity
  * 0 吸血几率
  * 1 吸血量
  */
-class BloodSucking : AttributeAdapter(2) {
+class BloodSucking : AttributeAdapter(2,AttributeType.ATTACK) {
 
     override fun defaultOption(config: BaseConfig) {
         config.select(this)

@@ -14,7 +14,7 @@ import org.bukkit.event.Listener
 import taboolib.common.platform.SubscribeEvent
 import java.util.concurrent.ConcurrentHashMap
 
-class AttackSpeed : SingleAttributeAdapter(AttributeType.OTHER), Listener {
+class AttackSpeed : SingleAttributeAdapter(AttributeType.OTHER) {
     @SubscribeEvent
     fun e(e: EntityDamageEvent) {
         val damageMemory: DamageMemory = e.damageMemory

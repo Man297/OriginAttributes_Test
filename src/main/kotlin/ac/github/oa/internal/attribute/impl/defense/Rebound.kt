@@ -1,6 +1,7 @@
 package ac.github.oa.internal.attribute.impl.defense
 
 import ac.github.oa.internal.attribute.AttributeAdapter
+import ac.github.oa.internal.attribute.AttributeType
 import ac.github.oa.internal.base.BaseConfig
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.ValueType
@@ -12,7 +13,7 @@ import org.bukkit.entity.LivingEntity
  * 0 反弹概率
  * 1 反弹伤害
  */
-class Rebound : AttributeAdapter(2) {
+class Rebound : AttributeAdapter(2,AttributeType.DEFENSE) {
     override fun defaultOption(config: BaseConfig) {
         config.select(this).setStrings("反弹概率")
             .superior()

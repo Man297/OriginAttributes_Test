@@ -1,6 +1,7 @@
 package ac.github.oa.internal.attribute.impl.attack
 
 import ac.github.oa.internal.attribute.AttributeAdapter
+import ac.github.oa.internal.attribute.AttributeType
 import ac.github.oa.internal.base.BaseConfig
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.ValueType
@@ -13,7 +14,7 @@ import org.bukkit.entity.LivingEntity
  * 1 暴击伤害
  * 2 爆伤抵抗
  */
-class Crit : AttributeAdapter(3) {
+class Crit : AttributeAdapter(3,AttributeType.ATTACK) {
     override fun defaultOption(config: BaseConfig) {
         config.select(this)
             .setStrings("暴击几率")

@@ -48,7 +48,6 @@ class RandomScript : InternalScript<MapScript.Wrapper> {
         }
     }
 
-
     class DoubleUnit : RandomUnit {
         override fun execute(entity: LivingEntity?, wrapper: MapScript.Wrapper, string: String): String? {
             val split = string.split("-")

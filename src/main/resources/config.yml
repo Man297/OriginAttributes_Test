@@ -1,6 +1,24 @@
 options:
   decimal-format: '#.##'
   time-format: 'yyyy-MM-dd HH:mm:ss'
+  sell:
+    title: '物品回收'
+    keyword:
+      - '出售价格'
+    slots: [ 10,11,12,13,14,15,16,19,20,21,22,23,24,25,26 ]
+    layout:
+      - '#########'
+      - '#iiiiiii#'
+      - '#iiiiiii#'
+      - '####s####'
+    template-#: 'sell-#'
+    template-s: 'sell-s'
+  condition:
+    level:
+      - '使用等级'
+    time:
+      keyword:
+        - '使用期限'
 
 
 attributes:
@@ -13,8 +31,6 @@ attributes:
   - Rebound
   - ExpAddion
   - HealthRecovery
-  - Mana
-  - ManaRecovery
   - Health
   - MoveSpeed
   - Special

@@ -14,8 +14,12 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.projectiles.ProjectileSource
+import taboolib.common.LifeCycle
+import taboolib.common.platform.Awake
 import taboolib.common.platform.SubscribeEvent
 
+
+@Awake(LifeCycle.ENABLE)
 object OnListener {
 
 
@@ -50,14 +54,6 @@ object OnListener {
                 // POST CALL
                 if (!entityDamageEvent.isCancelled) {
                     e.damage = damageMemory.damage.coerceAtLeast(1.0)
-                    for (i in 0..19) {
-                        damager.sendMessage(" ")
-                    }
-                    damager.sendMessage("与" + entity.getName() + "§f对战结束,日志信息：")
-                    for ((entryKey, value) in damageMemory.labels) {
-                        damager.sendMessage("§7" + (if (entryKey is Class<*>) entryKey.simpleName else entryKey) + " = " + value)
-                    }
-                    damageMemory.attacker.sendMessage("最终攻击 " + e.damage)
                 }
             }
         }

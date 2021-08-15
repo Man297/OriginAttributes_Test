@@ -4,6 +4,7 @@ import ac.github.oa.OriginAttribute
 import ac.github.oa.internal.core.script.hoop.MapScript
 import ac.github.oa.internal.core.item.ItemGenerator
 import ac.github.oa.util.random
+import ac.github.oa.util.rebuild
 import com.google.gson.Gson
 import org.bukkit.Color
 import org.bukkit.entity.LivingEntity
@@ -36,9 +37,9 @@ class DefaultGenerator : ItemGenerator {
         val id = config.getString("id").random(wrapper, entity)
         val data = config.getString("data", "0").random(wrapper, entity)
         val name = config.getString("name", "name null").random(wrapper, entity)
-        val lore = config.getStringList("lore").random(wrapper, entity)
-        val enchantments = config.getStringList("enchantments").random(wrapper, entity)
-        val itemFlags = config.getStringList("item-flags").random(wrapper, entity)
+        val lore = config.getStringList("lore").random(wrapper, entity).rebuild()
+        val enchantments = config.getStringList("enchantments").random(wrapper, entity).rebuild()
+        val itemFlags = config.getStringList("item-flags").random(wrapper, entity).rebuild()
         val unbreakable = config.getString("unbreakable", "false").random(wrapper, entity)
         val optional = XMaterial.matchXMaterial(id)
 
@@ -82,6 +83,8 @@ class DefaultGenerator : ItemGenerator {
                     Color.fromBGR(split[0].toInt(), split[1].toInt(), split[2].toInt())
                 }
             }
+
+
 
             colored()
         }.apply {

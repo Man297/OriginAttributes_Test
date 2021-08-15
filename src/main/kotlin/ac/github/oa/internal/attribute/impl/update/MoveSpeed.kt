@@ -11,7 +11,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import taboolib.common.platform.submit
 
-class MoveSpeed : SingleAttributeAdapter(AttributeType.OTHER) {
+class MoveSpeed : SingleAttributeAdapter(AttributeType.UPDATE) {
     override fun defaultOption(config: BaseConfig) {
         super.defaultOption(config)
         config.select(this)["base"] = 0.2

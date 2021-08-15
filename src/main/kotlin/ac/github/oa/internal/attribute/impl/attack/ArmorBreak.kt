@@ -16,7 +16,7 @@ import taboolib.common.platform.SubscribeEvent
 /**
  * 破甲攻击
  */
-class ArmorBreak : SingleAttributeAdapter(AttributeType.ATTACK), Listener {
+class ArmorBreak : SingleAttributeAdapter(AttributeType.ATTACK) {
 
     override val strings: Array<String>
         get() = arrayOf("破甲几率")

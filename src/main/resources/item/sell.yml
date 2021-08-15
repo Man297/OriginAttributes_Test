@@ -1,0 +1,8 @@
+sell-#:
+  id: GLASS_PANE
+  name: ' '
+  lore: [ ]
+sell-s:
+  id: ANVIL
+  name: '点击出售'
+  lore: [ ]

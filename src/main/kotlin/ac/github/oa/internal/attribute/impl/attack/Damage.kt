@@ -1,6 +1,7 @@
 package ac.github.oa.internal.attribute.impl.attack
 
 import ac.github.oa.internal.attribute.AttributeAdapter
+import ac.github.oa.internal.attribute.AttributeType
 
 import ac.github.oa.internal.base.BaseConfig
 import ac.github.oa.internal.base.BaseDouble
@@ -17,7 +18,7 @@ import taboolib.common.util.random
  * 2 对玩家增伤
  * 3 对怪物增伤
  */
-class Damage : AttributeAdapter(4) {
+class Damage : AttributeAdapter(4, AttributeType.ATTACK) {
 
     override fun defaultOption(config: BaseConfig) {
         config.select(this)

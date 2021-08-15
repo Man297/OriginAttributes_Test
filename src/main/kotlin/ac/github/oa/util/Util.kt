@@ -33,6 +33,20 @@ fun saveDefaultFile(file: File, name: String) {
     BukkitPlugin.getInstance().saveResource("${file.name}/$name", false)
 }
 
+fun String.rebuild(): List<String> {
+    if (this.contains("\n")) {
+        return this.split("\n")
+    }
+    return listOf(this)
+}
+
+fun List<String>.rebuild(): List<String> {
+    val listOf = arrayListOf<String>()
+    this.forEach {
+        listOf.addAll(it.rebuild())
+    }
+    return listOf
+}
 
 fun String.random(wrapper: MapScript.Wrapper, entity: LivingEntity?): String {
     return RandomPlant.eval(this, entity, wrapper)

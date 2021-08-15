@@ -20,7 +20,7 @@ import taboolib.common.platform.SubscribeEvent
 import java.util.ArrayList
 import kotlin.math.floor
 
-class Special : AttributeAdapter(0), Listener {
+class Special : AttributeAdapter(0,AttributeType.UPDATE) {
     var list: MutableList<SpecialAttribute> = ArrayList()
     override fun defaultOption(config: BaseConfig) {
         config.select("Power")

@@ -2,6 +2,7 @@ package ac.github.oa.internal.attribute.impl.defense
 
 
 import ac.github.oa.internal.attribute.AttributeAdapter
+import ac.github.oa.internal.attribute.AttributeType
 
 import ac.github.oa.internal.base.BaseConfig
 import ac.github.oa.internal.base.BaseDouble
@@ -11,7 +12,7 @@ import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-class Armor : AttributeAdapter(3) {
+class Armor : AttributeAdapter(3, AttributeType.DEFENSE) {
     override fun defaultOption(config: BaseConfig) {
         config.select(this)
             .setStrings("防御力")

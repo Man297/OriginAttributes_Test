@@ -6,13 +6,15 @@ plugins {
 
 taboolib {
     install("common")
+    install("common-5")
     install("platform-bukkit")
     install("module-nms")
     install("module-nms-util")
+    install("module-ui")
     install("module-lang")
     install("module-configuration")
     classifier = null
-    version = "6.0.0-pre39"
+    version = "6.0.0-pre40"
 
     description {
         contributors {

@@ -1,3 +1,9 @@
 args-not-null: '参数不可为空.'
 item-key-is-null: '该物品不存在'
 sender-get-item: '获得物品 {0} * {1}'
+item-sell-prefix:
+  - 'c物品回收日志'
+item-sell-success: '&a✔ {0} &f所得 {1}'
+item-sell-fail: '&c❌ {0}'
+item-sell-suffix:
+  - '&c总计: {0}'

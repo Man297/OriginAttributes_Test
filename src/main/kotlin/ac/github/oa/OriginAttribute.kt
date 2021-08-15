@@ -8,6 +8,7 @@ import ac.github.oa.internal.attribute.impl.other.*
 import ac.github.oa.internal.attribute.impl.update.*
 import com.google.gson.GsonBuilder
 import org.bukkit.Bukkit
+import org.bukkit.inventory.EquipmentSlot
 import taboolib.common.platform.Plugin
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.SecuredFile

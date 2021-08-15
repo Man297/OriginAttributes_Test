@@ -12,7 +12,7 @@ abstract class SingleAttributeAdapter(vararg attributeTypes: AttributeType) :
     AttributeAdapter(1) {
 
     override fun defaultOption(config: BaseConfig) {
-        config.select(this).setStrings(Arrays.stream(strings).toArray())
+        config.select(this).setStrings(*strings)
     }
 
     override fun format(entity: LivingEntity, s: String, baseDoubles: Array<BaseDouble>): Any {
