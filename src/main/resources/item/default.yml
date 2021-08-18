@@ -5,6 +5,6 @@ def0:
   name: "{map:quality}的 神木剑"
   lore:
     - ''
-    - '&f攻击+ &b{eval:{random:group:{map:quality}攻击} * {papi:%player_level%} * 0.5}'
+    - '&f攻击力+ &b{eval:{random:group:{map:quality}攻击} * {papi:%player_level%} * 0.5}'
     - ''
     - '&c来源: &f{papi:%player_name%}'
