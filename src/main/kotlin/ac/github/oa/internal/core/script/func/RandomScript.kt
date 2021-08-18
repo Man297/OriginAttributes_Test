@@ -78,7 +78,7 @@ class RandomScript : InternalScript<MapScript.Wrapper> {
         fun firstOrList(list: List<String>, entity: LivingEntity?, wrapper: MapScript.Wrapper): String? {
             val mutableList = list.toMutableList()
             mutableList.forEachIndexed { index, s ->
-                val indexOf = s.indexOf('#')
+                val indexOf = s.indexOf(OriginAttribute.config.getString("options.random-split-char", "#"))
                 if (indexOf != -1) {
                     val random = s.substring(0, indexOf).random(wrapper, entity)
                     if (random(random.toDouble())) {
