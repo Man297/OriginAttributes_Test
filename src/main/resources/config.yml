@@ -1,4 +1,5 @@
 options:
+  random-split-char: '#'
   decimal-format: '#.##'
   time-format: 'yyyy-MM-dd HH:mm:ss'
   sell:
