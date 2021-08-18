@@ -23,7 +23,7 @@ object RandomPlant {
         configs.clear()
         folder.listFile("yml").forEach {
             SecuredFile.loadConfiguration(it).apply {
-                getKeys(false).forEach {
+                getKeys(true).forEach {
                     if (this.isString(it)) {
                         configs[it] = getString(it)
                     } else if (this.isList(it)) {
