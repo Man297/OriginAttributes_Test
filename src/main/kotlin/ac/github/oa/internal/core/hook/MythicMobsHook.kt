@@ -53,7 +53,7 @@ object MythicMobsHook {
                         }
                     }
                     repeat((0 until amount).count()) {
-                        ItemPlant.build(null, args[0])?.let {
+                        ItemPlant.build(event.entity as? LivingEntity, args[0])?.let {
                             drops.add(it)
                         } ?: info("MythicMobs - Drop No Item: " + mm.displayName + " - " + args[0])
                     }
