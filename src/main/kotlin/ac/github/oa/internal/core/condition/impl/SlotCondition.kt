@@ -24,7 +24,7 @@ class SlotCondition : ICondition {
 
             val slot = adaptItem.slot
             val simpleName = slot::class.simpleName
-            val stringList = options("slot").getStringList(simpleName)
+            val stringList = options("slot").getStringList("pattern.$simpleName")
             if (any(lore, list)) {
                 val string = lore.first { list.any { s -> it.contains(s) } }
                 if (!slot.screen(string, stringList)) {
