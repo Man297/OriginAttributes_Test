@@ -9,7 +9,7 @@ import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.UpdateMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import taboolib.common.platform.submit
+import taboolib.common.platform.function.submit
 
 class MoveSpeed : SingleAttributeAdapter(AttributeType.UPDATE) {
     override fun defaultOption(config: BaseConfig) {
@@ -27,17 +27,21 @@ class MoveSpeed : SingleAttributeAdapter(AttributeType.UPDATE) {
             if (livingEntity is Player) {
                 val player: Player = livingEntity
                 val defaultValue = baseValue
-                val result: Double = defaultValue + defaultValue * (baseDoubles[0].number() / 100)
-                if (player.getWalkSpeed().toDouble() == result) return
+                val result: Double = defaultValue + defaultValue * (baseDoubles[0].percent(ValueType.NUMBER))
+                if (player.walkSpeed.toDouble() == result) return
                 submit(async = false) {
-                    player.walkSpeed = result.toFloat()
+                    player.walkSpeed = result.toFloat().coerceAtMost(1f)
                 }
             }
         }
     }
 
+    override fun format(entity: LivingEntity, s: String, baseDoubles: Array<BaseDouble>): Any {
+        return baseDoubles[0].value(ValueType.PERCENT)
+    }
+
     override val strings: Array<String>
         get() = arrayOf("移速加成")
     override val type: ValueType
-        get() = ValueType.NUMBER
+        get() = ValueType.PERCENT
 }

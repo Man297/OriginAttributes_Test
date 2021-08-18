@@ -36,14 +36,19 @@ object ItemPlant {
 
     fun hasKey(key: String): Boolean = configs.any { it.name == key }
 
-    fun build(entity: LivingEntity?, key: String): ItemStack? = build(entity, configs.first { it.name == key })
+    fun build(entity: LivingEntity?, key: String, map: MutableMap<String, String> = mutableMapOf()): ItemStack? =
+        build(entity, configs.first { it.name == key }, map)
 
-    fun build(entity: LivingEntity?, config: ConfigurationSection): ItemStack? {
+    fun build(
+        entity: LivingEntity?,
+        config: ConfigurationSection,
+        map: MutableMap<String, String> = mutableMapOf()
+    ): ItemStack? {
         val generatorKey = config.getString("g", "")
         val generator = generators.firstOrNull { generatorKey == it.name }
             ?: throw NullPointerException("无效的物品生成器 $generatorKey")
 
-        return generator.build(entity, config).apply {
+        return generator.build(entity, config,map).apply {
             // 写入nbt
             val itemTag = getItemTag()
             itemTag["oa-key"] = ItemTagData(config.name)

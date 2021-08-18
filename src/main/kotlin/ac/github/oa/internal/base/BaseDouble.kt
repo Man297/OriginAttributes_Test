@@ -17,7 +17,7 @@ class BaseDouble : HashMap<ValueType, Double>() {
     }
 
     fun number(value: Double = 0.0): Double {
-        var aDouble = value + this.getOrDefault(ValueType.NUMBER, 0.0)!!
+        var aDouble = value + this.getOrDefault(ValueType.NUMBER, 0.0)
         val percent = percent()
         aDouble += aDouble * percent
         return aDouble

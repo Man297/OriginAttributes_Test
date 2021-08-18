@@ -8,7 +8,7 @@ import org.bukkit.entity.Entity
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 
-@Awake(LifeCycle.ENABLE)
+@Awake
 class TimeScript : InternalScript<BaseWrapper> {
     override val name: String
         get() = "time"

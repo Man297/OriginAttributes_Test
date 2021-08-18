@@ -34,8 +34,8 @@ fun saveDefaultFile(file: File, name: String) {
 }
 
 fun String.rebuild(): List<String> {
-    if (this.contains("\n")) {
-        return this.split("\n")
+    if (this.contains("/n")) {
+        return this.split("/n")
     }
     return listOf(this)
 }

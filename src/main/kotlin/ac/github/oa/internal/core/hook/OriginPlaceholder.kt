@@ -7,16 +7,14 @@ import ac.github.oa.internal.attribute.AttributeData
 import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.base.BaseDouble
 import org.bukkit.entity.Player
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
+import taboolib.platform.BukkitPlugin
 import taboolib.platform.compat.PlaceholderExpansion
 import java.util.*
 
-@Awake(LifeCycle.ENABLE)
 object OriginPlaceholder : PlaceholderExpansion {
 
     init {
-        println("call papi")
+        BukkitPlugin.getInstance().logger.info("|- PlaceholderAPI plugin hooked.")
     }
 
     override val identifier: String

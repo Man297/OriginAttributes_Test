@@ -1,19 +1,23 @@
 package ac.github.oa.internal.attribute.impl.attack
 
+import ac.github.oa.api.event.entity.EntityDamageEvent
 import ac.github.oa.internal.attribute.AttributeAdapter
 import ac.github.oa.internal.attribute.AttributeType
 import ac.github.oa.internal.base.BaseConfig
 import ac.github.oa.internal.base.BaseDouble
+import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.enums.ValueType
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
+import taboolib.common.platform.event.SubscribeEvent
+import kotlin.math.max
 
 /**
  * 0 吸血几率
  * 1 吸血量
  */
-class BloodSucking : AttributeAdapter(2,AttributeType.ATTACK) {
+class BloodSucking : AttributeAdapter(2, AttributeType.ATTACK) {
 
     override fun defaultOption(config: BaseConfig) {
         config.select(this)
@@ -28,6 +32,17 @@ class BloodSucking : AttributeAdapter(2,AttributeType.ATTACK) {
         baseDoubles[1].merge(baseConfig.analysis("blood-sucking-value", string, ValueType.ALL))
     }
 
+    @SubscribeEvent
+    fun e(e: EntityDamageEvent) {
+        val priorityEnum = e.priorityEnum
+        if (priorityEnum == PriorityEnum.POST && !e.isCancelled && e.damageMemory.labels.containsKey(BloodSucking::class.java)) {
+            val any = e.damageMemory.labels[BloodSucking::class.java]!!.toString().toDouble()
+            e.damageMemory.attacker.health =
+                max(e.damageMemory.attacker.health + any, e.damageMemory.attacker.maxHealth)
+
+        }
+    }
+
     override fun format(entity: LivingEntity, s: String, baseDoubles: Array<BaseDouble>): Any {
         return baseDoubles[if (s.equals("p", ignoreCase = true)) 0 else 1].number()
     }
@@ -36,8 +51,9 @@ class BloodSucking : AttributeAdapter(2,AttributeType.ATTACK) {
         if (eventMemory is DamageMemory) {
             val damageMemory: DamageMemory = eventMemory
             if (baseDoubles[0].random()) {
-                damageMemory.setLabel(Crit::class.java, true)
-                    .addDamage("blood-sucking-value", baseDoubles[0].globalEval(damageMemory.damage))
+                val eval = baseDoubles[0].globalEval(damageMemory.damage)
+                damageMemory.setLabel(BloodSucking::class.java, eval)
+
             }
         }
     }

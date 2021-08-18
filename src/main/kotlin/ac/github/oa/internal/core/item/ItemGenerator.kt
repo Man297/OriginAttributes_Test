@@ -8,6 +8,6 @@ interface ItemGenerator {
 
     val name: String
 
-    fun build(entity: LivingEntity?, config: ConfigurationSection): ItemStack
+    fun build(entity: LivingEntity?, config: ConfigurationSection, map: MutableMap<String, String>): ItemStack
 
 }

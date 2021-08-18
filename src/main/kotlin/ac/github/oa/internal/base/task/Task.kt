@@ -5,8 +5,8 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.entity.Player
 import java.util.concurrent.atomic.AtomicInteger
 import ac.github.oa.OriginAttribute
-import taboolib.common.platform.PlatformExecutor
-import taboolib.common.platform.submit
+import taboolib.common.platform.function.submit
+import taboolib.common.platform.service.PlatformExecutor
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.function.Consumer

@@ -12,7 +12,7 @@ import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.util.random
 
-@Awake(LifeCycle.ENABLE)
+@Awake
 class RandomScript : InternalScript<MapScript.Wrapper> {
 
     val units = mutableMapOf<String, RandomUnit>()
@@ -81,7 +81,7 @@ class RandomScript : InternalScript<MapScript.Wrapper> {
                 val indexOf = s.indexOf('#')
                 if (indexOf != -1) {
                     val random = s.substring(0, indexOf).random(wrapper, entity)
-                    if (random(1) < random.toDouble()) {
+                    if (random(random.toDouble())) {
                         return s.substring(indexOf + 1)
                     } else {
                         mutableList[index] = s.substring(indexOf + 1)

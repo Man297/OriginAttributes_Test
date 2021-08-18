@@ -13,7 +13,7 @@ import ac.github.oa.internal.base.enums.ValueType
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
-import taboolib.common.platform.SubscribeEvent
+import taboolib.common.platform.event.SubscribeEvent
 
 /**
  * 0 命中几率

@@ -35,14 +35,17 @@ object RandomPlant {
         BukkitPlugin.getInstance().logger.log(Level.INFO, "|- 共加载随机 ${configs.size} 个配置")
     }
 
-    /**
-     * {$min-damage:random:int:10-20}
-     */
     fun eval(string: String, entity: LivingEntity?, wrapper: MapScript.Wrapper): String {
         return InternalScript.transform(string, entity, wrapper) { internalConfig, s ->
+            var result = s
             internalConfig.id?.apply {
-                wrapper[this] = s
+                if (!wrapper.containsKey(this)) {
+                    wrapper[this] = s
+                } else {
+                    result = wrapper[this].toString()
+                }
             }
+            result
         }
     }
 

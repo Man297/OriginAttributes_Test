@@ -13,13 +13,14 @@ import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import ac.github.oa.internal.base.event.impl.UpdateMemory
+import ac.github.oa.internal.core.condition.ConditionManager
 import ac.github.oa.internal.core.equip.*
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.EntityEquipment
 import org.bukkit.inventory.EquipmentSlot
-import org.bukkit.inventory.ItemStack
-import taboolib.common.platform.submit
+import taboolib.common.platform.function.submit
 import taboolib.platform.util.isNotAir
+import taboolib.type.BukkitEquipment
 import java.util.*
 import java.util.function.Consumer
 
@@ -45,20 +46,25 @@ object OriginAttributeAPI {
         }
     }
 
-    fun loadItems(equipment: EntityEquipment): List<AdaptItem> {
+    fun remove(uuid: UUID) {
+        AttributeManager.map.remove(uuid)
+        map.remove(uuid)
+    }
 
+    fun loadItems(livingEntity: LivingEntity): List<AdaptItem> {
         val listOf = arrayListOf<AdaptItem>()
-        listOf.add(AdaptItem(Hand(equipment.itemInMainHand)))
-        listOf.add(AdaptItem(OffHand(equipment.itemInMainHand)))
-        listOf.add(AdaptItem(Helmet(equipment.getItem(EquipmentSlot.HEAD))))
-        listOf.add(AdaptItem(BreastPlate(equipment.getItem(EquipmentSlot.CHEST))))
-        listOf.add(AdaptItem(Gaiter(equipment.getItem(EquipmentSlot.HEAD))))
-        listOf.add(AdaptItem(Boot(equipment.getItem(EquipmentSlot.FEET))))
+
+        listOf.add(AdaptItem(Hand(BukkitEquipment.HAND.getItem(livingEntity))))
+        listOf.add(AdaptItem(OffHand(BukkitEquipment.OFF_HAND.getItem(livingEntity))))
+        listOf.add(AdaptItem(Helmet(BukkitEquipment.HEAD.getItem(livingEntity))))
+        listOf.add(AdaptItem(BreastPlate(BukkitEquipment.CHEST.getItem(livingEntity))))
+        listOf.add(AdaptItem(Gaiter(BukkitEquipment.LEGS.getItem(livingEntity))))
+        listOf.add(AdaptItem(Boot(BukkitEquipment.FEET.getItem(livingEntity))))
         return listOf
     }
 
     fun loadInventory(livingEntity: LivingEntity): List<AdaptItem> {
-        val items = this.loadItems(livingEntity.equipment!!)
+        val items = this.loadItems(livingEntity)
         val event = EntityLoadEquipmentEvent(livingEntity, items)
         event.call()
         return items
@@ -77,7 +83,11 @@ object OriginAttributeAPI {
             val itemStack = it.item
             if (itemStack.isNotAir()) {
                 // conditioning...
-                list.addAll(itemStack.itemMeta!!.lore!!)
+
+                if (ConditionManager.pre(livingEntity, it) && ConditionManager.screen(livingEntity, it)) {
+                    it.enable = true
+                    list.addAll(itemStack.itemMeta?.lore ?: listOf())
+                }
             }
         }
 

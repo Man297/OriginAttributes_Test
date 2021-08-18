@@ -1,6 +1,6 @@
 plugins {
     java
-    id("io.izzel.taboolib") version "1.12"
+    id("io.izzel.taboolib") version "1.18"
     id("org.jetbrains.kotlin.jvm") version "1.5.10"
 }
 
@@ -14,7 +14,7 @@ taboolib {
     install("module-lang")
     install("module-configuration")
     classifier = null
-    version = "6.0.0-pre40"
+    version = "6.0.0-pre51"
 
     description {
         contributors {
@@ -23,6 +23,7 @@ taboolib {
         }
         dependencies {
             name("PlaceholderAPI")
+            name("MythicMobs").optional(true)
         }
     }
 

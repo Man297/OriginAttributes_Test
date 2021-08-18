@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 
-@Awake(LifeCycle.ENABLE)
+@Awake
 class MapScript : InternalScript<MapScript.Wrapper> {
 
     class Wrapper : HashMap<String, Any>(), BaseWrapper

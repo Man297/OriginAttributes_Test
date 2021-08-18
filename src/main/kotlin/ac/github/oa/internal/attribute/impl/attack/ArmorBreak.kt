@@ -11,7 +11,7 @@ import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.enums.ValueType
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
-import taboolib.common.platform.SubscribeEvent
+import taboolib.common.platform.event.SubscribeEvent
 
 /**
  * 破甲攻击

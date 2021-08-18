@@ -8,18 +8,26 @@ import ac.github.oa.util.ReportUtil
 import org.bukkit.entity.Entity
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.platform.BukkitPlugin
+import java.util.logging.Level
 
-@Awake(LifeCycle.ENABLE)
+@Awake
 class EvalScript : InternalScript<BaseWrapper> {
     override val name: String
         get() = "eval"
 
     override fun execute(entity: Entity?, wrapper: BaseWrapper, config: InternalConfig, string: String): String? {
-        val result = ReportUtil.getResult(string)
-        if (result.toString().contains(".")) {
-            return OriginAttribute.decimalFormat.format(result)
+        try {
+            val result = ReportUtil.getResult(string)
+
+            if (result.toString().contains(".")) {
+                return OriginAttribute.decimalFormat.format(result)
+            }
+            return result.toString()
+        } catch (e: Exception) {
+            BukkitPlugin.getInstance().logger.log(Level.WARNING, "错误的表达式 $string")
         }
-        return result.toString()
+        return "0"
     }
 
 }

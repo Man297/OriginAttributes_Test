@@ -8,7 +8,7 @@ import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.ValueType
 import ac.github.oa.internal.base.event.EventMemory
 import org.bukkit.event.player.PlayerExpChangeEvent
-import taboolib.common.platform.SubscribeEvent
+import taboolib.common.platform.event.SubscribeEvent
 
 class ExpAddion : SingleAttributeAdapter(AttributeType.OTHER) {
     override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {}

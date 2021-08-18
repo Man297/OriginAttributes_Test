@@ -9,6 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
 import taboolib.common.platform.*
+import taboolib.common.platform.command.command
 import taboolib.module.nms.getItemTag
 import taboolib.platform.util.sendLang
 
@@ -22,19 +23,54 @@ object Command {
             literal("get") {
 
                 // [item]
+                // demo = def0 {"品质": "战士"}
                 dynamic {
                     suggestion<Player> { _, _ -> ItemPlant.configs.map { it.name } }
 
                     // amount = 1
-                    execute<Player> { sender, context, argument ->
+                    execute<Player> { sender, _, argument ->
                         giveItem(sender, argument, 1)
+                    }
+
+                    dynamic {
+                        execute<Player> { sender, context, argument ->
+                            try {
+                                val itemKey = context.argument(-1)!!
+                                val map = OriginAttribute.json.fromJson<Map<String, String>>(
+                                    argument.replace("/s", " "),
+                                    Map::class.java
+                                )
+                                giveItem(sender, itemKey, 1, map.toMutableMap())
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
                     }
 
                     // [amount]
                     dynamic(optional = true) {
                         execute<Player> { sender, context, argument ->
-                            giveItem(sender, context.argument(-1)!!, argument.toInt())
+                            try {
+                                giveItem(sender, context.argument(-1)!!, argument.toInt())
+                            } catch (e: Exception) {
+                            }
                         }
+
+                        dynamic {
+                            execute<Player> { sender, context, argument ->
+                                try {
+                                    val itemKey = context.argument(-2)!!
+                                    val amount = context.argument(-1)!!
+                                    val map = OriginAttribute.json.fromJson<Map<String, String>>(
+                                        argument.replace("/s", " "),
+                                        Map::class.java
+                                    )
+                                    giveItem(sender, itemKey, amount.toInt(), map.toMutableMap())
+                                } catch (e: Exception) {
+                                }
+                            }
+                        }
+
                     }
                 }
             }
@@ -64,13 +100,13 @@ object Command {
         }
     }
 
-    fun giveItem(sender: Player, item: String, amount: Int) {
+    fun giveItem(sender: Player, item: String, amount: Int, map: MutableMap<String, String> = mutableMapOf()) {
         if (!ItemPlant.hasKey(item)) {
             sender.sendLang("item-key-is-null")
             return
         }
 
-        val items = createItems(sender, item, amount)
+        val items = createItems(sender, item, amount,map)
         items.forEach { sender.inventory.addItem(it.key) }
         mutableMapOf<String, Int>().apply {
             items.map {
@@ -84,10 +120,15 @@ object Command {
         }
     }
 
-    fun createItems(target: LivingEntity, key: String, amount: Int): Map<ItemStack, Int> {
+    fun createItems(
+        target: LivingEntity,
+        key: String,
+        amount: Int,
+        map: MutableMap<String, String> = mutableMapOf()
+    ): Map<ItemStack, Int> {
         val mapOf = mutableMapOf<ItemStack, Int>()
         (0 until amount).forEach { _ ->
-            val itemStack = ItemPlant.build(target, key)
+            val itemStack = ItemPlant.build(target, key, map)
             if (itemStack != null) {
                 mapOf[itemStack] = (mapOf[itemStack] ?: 0) + 1
             }

@@ -1,5 +1,5 @@
 package ac.github.oa.api.event.plugin
 
-import taboolib.common.platform.ProxyEvent
+import taboolib.platform.type.BukkitProxyEvent
 
-class OriginPluginReloadEvent : ProxyEvent()
+class OriginPluginReloadEvent : BukkitProxyEvent()

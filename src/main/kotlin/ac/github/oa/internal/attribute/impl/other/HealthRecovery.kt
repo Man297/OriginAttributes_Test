@@ -12,7 +12,7 @@ import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityRegainHealthEvent
-import taboolib.common.platform.submit
+import taboolib.common.platform.function.submit
 
 /**
  * 0 回血

@@ -16,7 +16,7 @@ import ac.github.oa.util.ArrayUtils
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Listener
-import taboolib.common.platform.SubscribeEvent
+import taboolib.common.platform.event.SubscribeEvent
 import java.util.ArrayList
 import kotlin.math.floor
 

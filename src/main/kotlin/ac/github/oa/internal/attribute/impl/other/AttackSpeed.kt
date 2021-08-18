@@ -11,7 +11,7 @@ import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import taboolib.common.platform.SubscribeEvent
+import taboolib.common.platform.event.SubscribeEvent
 import java.util.concurrent.ConcurrentHashMap
 
 class AttackSpeed : SingleAttributeAdapter(AttributeType.OTHER) {

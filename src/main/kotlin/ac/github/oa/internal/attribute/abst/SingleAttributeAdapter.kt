@@ -9,7 +9,7 @@ import org.bukkit.entity.LivingEntity
 import java.util.*
 
 abstract class SingleAttributeAdapter(vararg attributeTypes: AttributeType) :
-    AttributeAdapter(1) {
+    AttributeAdapter(1,*attributeTypes) {
 
     override fun defaultOption(config: BaseConfig) {
         config.select(this).setStrings(*strings)

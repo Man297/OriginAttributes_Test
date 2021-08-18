@@ -6,12 +6,16 @@ import ac.github.oa.internal.attribute.impl.attack.*
 import ac.github.oa.internal.attribute.impl.defense.*
 import ac.github.oa.internal.attribute.impl.other.*
 import ac.github.oa.internal.attribute.impl.update.*
+import ac.github.oa.internal.core.hook.MythicMobsHook
 import com.google.gson.GsonBuilder
 import org.bukkit.Bukkit
 import org.bukkit.inventory.EquipmentSlot
 import taboolib.common.platform.Plugin
+import taboolib.common.platform.event.OptionalEvent
+import taboolib.common.platform.function.info
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.SecuredFile
+import taboolib.platform.BukkitPlugin
 import java.text.DateFormat
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -38,6 +42,7 @@ object OriginAttribute : Plugin() {
         .create()
 
     override fun onLoad() {
+
         Damage().register()
 //        AddionDamage().register()
         BloodSucking().register()
@@ -64,9 +69,14 @@ object OriginAttribute : Plugin() {
             AttributeManager.enable(attribute)
         }
         OriginPluginEnableEvent().call()
-        if (config.getBoolean("options.damage-effect-limit")) {
+//        if (config.getBoolean("options.damage-effect-limit")) {
 //            hookExecute("ProtocolLib") { unused: Void? -> DamageEffectLimit() }
+//        }
+
+        hookExecute("MythicMobs") {
+            BukkitPlugin.getInstance().logger.info("|- MythicMobs plugin hooked.")
         }
+
     }
 
 

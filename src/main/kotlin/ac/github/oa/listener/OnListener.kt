@@ -7,16 +7,18 @@ import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Projectile
+import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.projectiles.ProjectileSource
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
-import taboolib.common.platform.SubscribeEvent
+import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.submit
 
 
 @Awake(LifeCycle.ENABLE)
@@ -27,18 +29,21 @@ object OnListener {
     fun e(e: EntityDamageByEntityEvent) {
         var damager: LivingEntity? = null
         var entity: LivingEntity? = null
-        if (e.damager is LivingEntity && e.entity is LivingEntity) {
+
+        if (e.entity is LivingEntity) {
             entity = e.entity as LivingEntity
-            if (e.damager is Projectile) {
-                val projectile: Projectile = e.damager as Projectile
-                val shooter: ProjectileSource = projectile.shooter!!
-                if (shooter is LivingEntity) {
-                    damager = shooter
-                }
-            } else if (e.damager is LivingEntity) {
-                damager = e.damager as LivingEntity
-            }
         }
+
+        if (e.damager is Projectile) {
+            val projectile = e.damager as Projectile
+            val shooter = projectile.shooter
+            if (shooter is LivingEntity) {
+                damager = shooter
+            }
+        } else if (e.damager is LivingEntity) {
+            damager = e.damager as LivingEntity
+        }
+
         if (damager != null && entity != null) {
             e.damage = 0.0
             val a: AttributeData = OriginAttributeAPI.getAttributeData(damager)
@@ -54,6 +59,7 @@ object OnListener {
                 // POST CALL
                 if (!entityDamageEvent.isCancelled) {
                     e.damage = damageMemory.damage.coerceAtLeast(1.0)
+                    damager.sendMessage("final damage ${e.damage}")
                 }
             }
         }
@@ -101,6 +107,24 @@ object OnListener {
 //            }
 //        }
 //    }
+
+    @SubscribeEvent
+    fun e(e: CreatureSpawnEvent) {
+        val entity: LivingEntity = e.getEntity()
+
+        entity.isInvulnerable = true
+        submit {
+            entity.isInvulnerable = true
+            OriginAttributeAPI.loadEntityEquipment(entity)
+            OriginAttributeAPI.callUpdate(entity)
+            entity.isInvulnerable = false
+        }
+    }
+
+    @SubscribeEvent
+    fun e(e: EntityDeathEvent) {
+        OriginAttributeAPI.remove(e.entity.uniqueId)
+    }
 
     fun asyncUpdate(entity: LivingEntity) {
         OriginAttributeAPI.async {

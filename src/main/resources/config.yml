@@ -15,10 +15,37 @@ options:
     template-s: 'sell-s'
   condition:
     level:
-      - '使用等级'
+      keyword:
+        - '使用等级'
     time:
       keyword:
         - '使用期限'
+    occupation:
+      keyword:
+        - 职业需要
+      pattern:
+        - 战士 oa.occ.战士
+        - 肉盾 oa.occ.肉盾
+        - 职业 oa.occ.职业
+    slot:
+      keyword:
+        - '物品类型'
+      pattern:
+        Hand:
+          - '主手'
+        OffHand:
+          - '副手'
+        Helmet:
+          - '头盔'
+        BreastPlate:
+          - '胸甲'
+        Gaiter:
+          - '护腿'
+        Boot:
+          - '鞋子'
+        InventorySlot:
+          - '10 戒指'
+          - '11 项链'
 
 
 attributes:

@@ -9,14 +9,14 @@ import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 
-@Awake(LifeCycle.ENABLE)
+@Awake
 class PlaceholderScript : InternalScript<BaseWrapper> {
     override val name: String
         get() = "papi"
 
     override fun execute(entity: Entity?, wrapper: BaseWrapper, config: InternalConfig, string: String): String? {
         val split = string.split(":")
-        val def = if (split.size == 2) split[1] else ""
+        val def = if (split.size == 2) split[1] else "papi undefined"
         return if (entity is Player) PlaceholderAPI.setPlaceholders(entity, split[0]) else def
     }
 }

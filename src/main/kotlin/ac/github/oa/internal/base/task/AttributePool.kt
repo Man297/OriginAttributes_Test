@@ -6,7 +6,7 @@ import ac.github.oa.internal.attribute.AttributeData
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
-import taboolib.common.platform.submit
+import taboolib.common.platform.function.submit
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Consumer

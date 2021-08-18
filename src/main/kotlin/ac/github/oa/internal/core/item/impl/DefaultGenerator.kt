@@ -5,7 +5,6 @@ import ac.github.oa.internal.core.script.hoop.MapScript
 import ac.github.oa.internal.core.item.ItemGenerator
 import ac.github.oa.util.random
 import ac.github.oa.util.rebuild
-import com.google.gson.Gson
 import org.bukkit.Color
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemFlag
@@ -29,8 +28,14 @@ class DefaultGenerator : ItemGenerator {
     override val name: String
         get() = ""
 
-    override fun build(entity: LivingEntity?, config: ConfigurationSection): ItemStack {
-        val wrapper = MapScript.Wrapper()
+    override fun build(
+        entity: LivingEntity?,
+        config: ConfigurationSection,
+        map: MutableMap<String, String>
+    ): ItemStack {
+
+        val wrapper = MapScript.Wrapper().apply { putAll(map) }
+
         config.getStringList("create-pre")?.forEach { it.random(wrapper, entity) }
 
 
