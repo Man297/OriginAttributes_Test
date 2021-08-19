@@ -13,7 +13,6 @@ taboolib {
     install("module-ui")
     install("module-lang")
     install("module-configuration")
-    install("module-metrics")
     classifier = null
     version = "6.0.0-pre55"
 

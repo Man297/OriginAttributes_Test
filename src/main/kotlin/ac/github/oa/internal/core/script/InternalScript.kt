@@ -1,13 +1,18 @@
 package ac.github.oa.internal.core.script
 
+import ac.github.oa.util.getInterfaceT
 import org.bukkit.entity.Entity
 import taboolib.platform.BukkitPlugin
+import java.lang.reflect.ParameterizedType
 
 interface InternalScript<out T : BaseWrapper> {
 
     fun execute(entity: Entity?, wrapper: @UnsafeVariance T, config: InternalConfig, string: String): String? = null
 
     val name: String
+
+    val genericType: Class<*>
+        get() = getInterfaceT(this, 0)!!
 
     fun register() {
         InternalScriptManager.internalScripts.add(this)

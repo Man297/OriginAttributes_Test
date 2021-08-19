@@ -1,11 +1,5 @@
-import ac.github.oa.internal.core.script.InternalScript
-import ac.github.oa.internal.core.script.hoop.MapScript
-import ac.github.oa.internal.core.script.wrapper.VoidWrapper
-import ac.github.oa.util.random
-import ac.github.oa.util.rebuild
+
 import com.google.gson.GsonBuilder
-import com.mojang.brigadier.context.CommandContext
-import org.bukkit.entity.LivingEntity
 import java.text.DateFormat
 
 class Main {

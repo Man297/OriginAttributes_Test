@@ -3,6 +3,7 @@ package ac.github.oa.command
 import ac.github.oa.OriginAttribute
 import ac.github.oa.internal.core.item.ItemPlant
 import ac.github.oa.internal.core.item.random.RandomPlant
+import ac.github.oa.internal.core.script.content.JavaScriptPlant
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -93,6 +94,7 @@ object Command {
                 execute<ProxyCommandSender> { sender, context, argument ->
                     ItemPlant.init()
                     RandomPlant.init()
+                    JavaScriptPlant.init()
                     OriginAttribute.config.reload()
                     sender.sendMessage("reload successful.")
                 }

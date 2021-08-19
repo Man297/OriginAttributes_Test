@@ -1,10 +1,12 @@
 package ac.github.oa.util
 
-import ac.github.oa.internal.core.script.hoop.MapScript
 import ac.github.oa.internal.core.item.random.RandomPlant
+import ac.github.oa.internal.core.script.hoop.MapScript
 import org.bukkit.entity.LivingEntity
 import taboolib.platform.BukkitPlugin
 import java.io.File
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 
 fun newfolder(root: File, name: String, files: List<String>): File {
     val file = File(root, name)
@@ -57,5 +59,28 @@ fun MutableList<String>.random(wrapper: MapScript.Wrapper, entity: LivingEntity?
         forEachIndexed { index, s ->
             this[index] = s.random(wrapper, entity)
         }
+    }
+}
+
+
+fun getInterfaceT(o: Any, index: Int): Class<*>? {
+    val types = o.javaClass.genericInterfaces
+    val parameterizedType = types[index] as ParameterizedType
+    val type = parameterizedType.actualTypeArguments[index]
+    return checkType(type, index)
+}
+
+private fun checkType(type: Type?, index: Int): Class<*>? {
+    if (type is Class<*>) {
+        return type
+    } else if (type is ParameterizedType) {
+        val t = type.actualTypeArguments[index]
+        return checkType(t, index)
+    } else {
+        val className = if (type == null) "null" else type.javaClass.name
+        throw IllegalArgumentException(
+            "Expected a Class, ParameterizedType"
+                    + ", but <" + type + "> is of type " + className
+        )
     }
 }

@@ -18,8 +18,14 @@ open class InternalConfig(
             val format = config.format(entity, wrapper)
             s = s.replace("{" + config.string + "}", format!!)
         }
-
-        return InternalScriptManager.filter(key)?.execute(entity, wrapper,this, s) ?: s
+        val internalScript = InternalScriptManager.filter(key)
+        if (internalScript != null) {
+            val genericType = internalScript.genericType
+            if (genericType == BaseWrapper::class.java || genericType == wrapper::class.java) {
+                return internalScript.execute(entity, wrapper, this, s) ?: s
+            }
+        }
+        return s
     }
 
     override fun toString(): String {
