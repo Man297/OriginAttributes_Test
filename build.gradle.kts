@@ -14,7 +14,7 @@ taboolib {
     install("module-lang")
     install("module-configuration")
     classifier = null
-    version = "6.0.0-pre51"
+    version = "6.0.0-pre54"
 
     description {
         contributors {
