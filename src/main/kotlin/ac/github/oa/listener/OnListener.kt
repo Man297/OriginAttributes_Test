@@ -1,7 +1,9 @@
 package ac.github.oa.listener
 
+import ac.github.oa.OriginAttribute
 import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.api.event.entity.EntityDamageEvent
+import ac.github.oa.api.event.render.AttributeRenderStringEvent
 import ac.github.oa.internal.attribute.AttributeData
 import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.event.impl.DamageMemory
@@ -59,10 +61,31 @@ object OnListener {
                 // POST CALL
                 if (!entityDamageEvent.isCancelled) {
                     e.damage = damageMemory.damage.coerceAtLeast(1.0)
+                    damager.sendMessage("final damage ${e.damage} ${entity.health}/${entity.maxHealth}")
                 }
             }
         }
     }
+
+
+    @SubscribeEvent
+    fun e(e: AttributeRenderStringEvent) {
+
+        e.list.forEachIndexed { index, s ->
+            var string = s
+            val matchResult = OriginAttribute.numberRegex.find(s)
+            matchResult?.apply {
+                this.groupValues.forEach {
+                    string =
+                        s.replace(it, it.replace(OriginAttribute.config.getString("options.operator-add", "+"), "+"))
+                    string =
+                        s.replace(it, it.replace(OriginAttribute.config.getString("options.operator-take", "-"), "+"))
+                }
+            }
+            e.list[index] = string
+        }
+    }
+
 
     @SubscribeEvent
     fun e(e: PlayerJoinEvent) {

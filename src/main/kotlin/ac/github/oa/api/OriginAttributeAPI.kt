@@ -101,7 +101,9 @@ object OriginAttributeAPI {
                 }
             }
         }
+
         AttributeManager[livingEntity.uniqueId] = attributeData
+
     }
 
     fun callDamage(damageMemory: DamageMemory) {

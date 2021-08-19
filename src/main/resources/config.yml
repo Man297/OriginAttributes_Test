@@ -2,6 +2,8 @@ options:
   random-split-char: '#'
   decimal-format: '#.##'
   time-format: 'yyyy-MM-dd HH:mm:ss'
+  operator-add: '+'
+  operator-take: '-'
   sell:
     title: '物品回收'
     keyword:

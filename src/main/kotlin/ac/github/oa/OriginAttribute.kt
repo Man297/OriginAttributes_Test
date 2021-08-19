@@ -10,11 +10,13 @@ import ac.github.oa.internal.core.hook.MythicMobsHook
 import com.google.gson.GsonBuilder
 import org.bukkit.Bukkit
 import org.bukkit.inventory.EquipmentSlot
+import taboolib.common.platform.Platform
 import taboolib.common.platform.Plugin
 import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.function.info
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.SecuredFile
+import taboolib.module.metrics.Metrics
 import taboolib.platform.BukkitPlugin
 import java.text.DateFormat
 import java.text.DecimalFormat
@@ -41,6 +43,8 @@ object OriginAttribute : Plugin() {
         .setVersion(1.0)
         .create()
 
+    val numberRegex = Regex("^[+-]?[1-9]*[0-9]?(\\.[0-9]{1,2})?\$")
+
     override fun onLoad() {
 
         Damage().register()
@@ -59,6 +63,9 @@ object OriginAttribute : Plugin() {
         Special().register()
         AttackSpeed().register()
         ArmorBreak().register()
+
+        Metrics(12489, BukkitPlugin.getInstance().description.version, Platform.BUKKIT)
+
     }
 
     override fun onEnable() {

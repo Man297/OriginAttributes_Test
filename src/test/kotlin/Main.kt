@@ -23,8 +23,7 @@ class Main {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            val map = json.fromJson<Map<String, String>>("{\"品质\"：\"高级\"}", Map::class.java)
-            println(map["品质"])
+            val string = "攻击力 +10"
 
         }
     }
