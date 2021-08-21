@@ -34,9 +34,14 @@ class Damage : AttributeAdapter(4, AttributeType.ATTACK) {
     override fun inject(entity: LivingEntity?, string: String, baseDoubles: Array<BaseDouble>) {
 
         if (string.contains("-")) {
-            val split = string.split("-")
-            baseDoubles[0].merge(baseConfig.analysis(this, split[0], ValueType.NUMBER))
-            baseDoubles[1].merge(baseConfig.analysis(this, split[1], ValueType.NUMBER, true))
+
+            val list = baseConfig.select(this).any("strings").asStringList()
+            if (list.any { string.contains(it) }) {
+                val split = string.split("-")
+                baseDoubles[0].merge(baseConfig.analysis(this, split[0], ValueType.NUMBER, true))
+                baseDoubles[1].merge(baseConfig.analysis(this, split[1], ValueType.NUMBER, true))
+            }
+
         } else {
             baseDoubles[0].merge(baseConfig.analysis(this, string, ValueType.NUMBER))
             baseDoubles[1].merge(baseConfig.analysis(this, string, ValueType.NUMBER))

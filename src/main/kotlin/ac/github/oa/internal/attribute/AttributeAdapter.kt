@@ -61,8 +61,9 @@ abstract class AttributeAdapter(
                 .replace("-[^0-9]".toRegex(), "")
                 .replace("[^-0-9.%?]".toRegex(), "")
             val s = if (str.isEmpty() || str.replace("[^.]".toRegex(), "").length > 1) "0.0" else str
-            val lastChar = s[str.length - 1]
             val baseDouble = BaseDouble()
+            if (str.isEmpty()) return baseDouble
+            val lastChar = s[str.length - 1]
             val percent = lastChar == '%'
             if (percent) {
                 str = str.substring(0, str.length - 1)

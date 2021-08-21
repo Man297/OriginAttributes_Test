@@ -7,6 +7,7 @@ import ac.github.oa.internal.attribute.AttributeData
 import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.base.BaseDouble
 import org.bukkit.entity.Player
+import taboolib.common.platform.Awake
 import taboolib.platform.BukkitPlugin
 import taboolib.platform.compat.PlaceholderExpansion
 import java.util.*

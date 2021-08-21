@@ -61,7 +61,6 @@ object OnListener {
                 // POST CALL
                 if (!entityDamageEvent.isCancelled) {
                     e.damage = damageMemory.damage.coerceAtLeast(1.0)
-                    damager.sendMessage("final damage ${e.damage} ${entity.health}/${entity.maxHealth}")
                 }
             }
         }
