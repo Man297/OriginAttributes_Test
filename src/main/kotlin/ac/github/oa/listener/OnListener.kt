@@ -47,7 +47,7 @@ object OnListener {
         }
 
         if (damager != null && entity != null) {
-            e.damage = 0.0
+//            e.damage = 0.0
             val a: AttributeData = OriginAttributeAPI.getAttributeData(damager)
             val d: AttributeData = OriginAttributeAPI.getAttributeData(entity)
             val damageMemory = DamageMemory(damager, entity, e, a, d)
