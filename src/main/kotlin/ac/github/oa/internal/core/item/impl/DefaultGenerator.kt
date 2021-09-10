@@ -95,6 +95,10 @@ class DefaultGenerator : ItemGenerator {
         }.apply {
             val itemTag = getItemTag()
             val json = OriginAttribute.json.toJson(wrapper)
+            nbt.forEach{
+                val split = it.split(":")
+                itemTag[split[0]] = ItemTagData(split[1])
+            }
             itemTag["oa-session"] = ItemTagData(json)
             itemTag.saveTo(this)
         }
