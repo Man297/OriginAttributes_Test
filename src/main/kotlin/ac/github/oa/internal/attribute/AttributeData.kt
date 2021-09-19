@@ -11,6 +11,17 @@ class AttributeData {
 
     var entityEquipment: EntityEquipment? = null
 
+    var combatPower: Long = 0
+
+
+    fun autoCombatPower() {
+        combatPower = 0
+        AttributeManager.attributes.forEach {
+            val arrayOfBaseDoubles = this.find(it)
+            combatPower += it.count(arrayOfBaseDoubles)
+        }
+    }
+
     private val doubles: Array<Array<BaseDouble>> =
         Array(AttributeManager.attributes.size) { create(AttributeManager.attributes[it]) }
 

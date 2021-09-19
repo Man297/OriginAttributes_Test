@@ -11,6 +11,7 @@ import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import taboolib.common.util.random
+import kotlin.math.roundToLong
 
 /**
  * 0 攻击伤害 min
@@ -23,12 +24,23 @@ class Damage : AttributeAdapter(4, AttributeType.ATTACK) {
     override fun defaultOption(config: BaseConfig) {
         config.select(this)
             .setStrings("攻击力")
+            .set("combat-power",1)
             .superior()
             .select("damage-pvp")
             .setStrings("对玩家增伤")
+            .set("combat-power",1)
             .superior()
             .select("damage-pve")
             .setStrings("对怪物增伤")
+            .set("combat-power",1)
+    }
+
+
+    override fun count(baseDoubles: Array<BaseDouble>): Long {
+        return (baseDoubles[0].number() * baseConfig.select(this).any("combat-power").asNumber().toDouble() +
+                baseDoubles[1].number() * baseConfig.select("damage-pvp").any("combat-power").asNumber().toDouble() +
+                baseDoubles[2].number() * baseConfig.select("damage-pve").any("combat-power").asNumber().toDouble()
+                ).roundToLong()
     }
 
     override fun inject(entity: LivingEntity?, string: String, baseDoubles: Array<BaseDouble>) {

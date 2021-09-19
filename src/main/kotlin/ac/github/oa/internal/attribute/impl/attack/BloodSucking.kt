@@ -12,6 +12,7 @@ import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
 import taboolib.common.platform.event.SubscribeEvent
 import kotlin.math.max
+import kotlin.math.roundToLong
 
 /**
  * 0 吸血几率
@@ -22,8 +23,10 @@ class BloodSucking : AttributeAdapter(2, AttributeType.ATTACK) {
     override fun defaultOption(config: BaseConfig) {
         config.select(this)
             .setStrings("吸血几率")
+            .set("combat-power",1)
             .superior()
             .select("blood-sucking-value")
+            .set("combat-power",1)
             .setStrings("吸血量")
     }
 
@@ -35,11 +38,10 @@ class BloodSucking : AttributeAdapter(2, AttributeType.ATTACK) {
     @SubscribeEvent
     fun e(e: EntityDamageEvent) {
         val priorityEnum = e.priorityEnum
-        if (priorityEnum == PriorityEnum.POST && !e.isCancelled && e.damageMemory.labels.containsKey(BloodSucking::class.java)) {
+        if (priorityEnum == PriorityEnum.POST && !e.isCancelled() && e.damageMemory.labels.containsKey(BloodSucking::class.java)) {
             val any = e.damageMemory.labels[BloodSucking::class.java]!!.toString().toDouble()
             e.damageMemory.attacker.health =
                 max(e.damageMemory.attacker.health + any, e.damageMemory.attacker.maxHealth)
-
         }
     }
 
@@ -56,5 +58,12 @@ class BloodSucking : AttributeAdapter(2, AttributeType.ATTACK) {
 
             }
         }
+    }
+
+    override fun count(baseDoubles: Array<BaseDouble>): Long {
+        return (baseDoubles[0].number() * baseConfig.select(this).any("combat-power").asNumber().toDouble() +
+                baseDoubles[1].number() * baseConfig.select("blood-sucking-value").any("combat-power").asNumber()
+            .toDouble()
+                ).roundToLong()
     }
 }

@@ -42,7 +42,7 @@ class Hit : SingleAttributeAdapter(AttributeType.ATTACK) {
             val attackAttributeData: AttributeData = damageMemory.attackAttributeData
             val baseDoubles: Array<BaseDouble> = attackAttributeData.find(Hit::class.java)
             if (!baseDoubles[0].random(defaultValue)) {
-                e.isCancelled = true
+                e.setCancelled(true)
             }
         }
     }

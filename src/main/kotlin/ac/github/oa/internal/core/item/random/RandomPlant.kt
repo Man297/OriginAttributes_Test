@@ -36,7 +36,7 @@ object RandomPlant {
     }
 
     fun eval(string: String, entity: LivingEntity?, wrapper: MapScript.Wrapper): String {
-        return InternalScript.transform(string, entity, wrapper) { internalConfig, s ->
+        return InternalScript.transform(string, entity, listOf(wrapper)) { internalConfig, s ->
             var result = s
             internalConfig.id?.apply {
                 if (!wrapper.containsKey(this)) {

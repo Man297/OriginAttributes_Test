@@ -8,23 +8,35 @@ import ac.github.oa.internal.base.enums.ValueType
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
+import kotlin.math.roundToLong
 
 /**
  * 0 暴击几率
  * 1 暴击伤害
  * 2 爆伤抵抗
  */
-class Crit : AttributeAdapter(3,AttributeType.ATTACK) {
+class Crit : AttributeAdapter(3, AttributeType.ATTACK) {
     override fun defaultOption(config: BaseConfig) {
         config.select(this)
             .setStrings("暴击几率")
+            .set("combat-power",1)
             .superior()
             .select("crit-damage")
             .setStrings("暴击伤害")
             .set("default", 100.0)
+            .set("combat-power",1)
             .superior()
             .select("crit-damage-defense")
+            .set("combat-power",1)
             .setStrings("暴伤抵抗")
+    }
+
+
+    override fun count(baseDoubles: Array<BaseDouble>): Long {
+        return (baseDoubles[0].number() * baseConfig.select(this).any("combat-power").asNumber().toDouble() +
+                baseDoubles[1].number() * baseConfig.select("crit-damage").any("combat-power").asNumber().toDouble() +
+                baseDoubles[2].number() * baseConfig.select("crit-damage-defense").any("combat-power").asNumber().toDouble()
+                ).roundToLong()
     }
 
     override fun inject(entity: LivingEntity?, string: String, baseDoubles: Array<BaseDouble>) {

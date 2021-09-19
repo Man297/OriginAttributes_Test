@@ -26,6 +26,11 @@ object OriginPlaceholder : PlaceholderExpansion {
         val key = split[0]
         val args = if (split.size == 1) "" else split[1]
         val attributeData: AttributeData = OriginAttributeAPI.getAttributeData(p)
+
+        if (params == "combat-power") {
+            return attributeData.combatPower.toString()
+        }
+
         val optional: Optional<AttributeAdapter> = AttributeManager.getAttributeAdapter(key)
         if (optional.isPresent) {
             val attributeAdapter: AttributeAdapter = optional.get()

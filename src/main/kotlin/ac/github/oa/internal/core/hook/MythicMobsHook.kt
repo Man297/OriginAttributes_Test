@@ -25,7 +25,7 @@ object MythicMobsHook {
 
     @SubscribeEvent(bind = "io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent")
     fun e(ope: OptionalEvent) {
-        val event = ope.cast(MythicMobDeathEvent::class.java)
+        val event = ope.get<MythicMobDeathEvent>()
         if (event.killer is Player) {
             val mm = event.mobType
             val drops = event.drops
@@ -65,7 +65,7 @@ object MythicMobsHook {
 
     @SubscribeEvent(bind = "io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent")
     fun e1(ope: OptionalEvent) {
-        val event = ope.cast(MythicMobSpawnEvent::class.java)
+        val event = ope.get<MythicMobSpawnEvent>()
         val mobType = event.mobType
         val wrapper = MapScript.Wrapper()
         val entity = event.entity as LivingEntity

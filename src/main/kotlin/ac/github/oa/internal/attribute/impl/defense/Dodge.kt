@@ -13,7 +13,7 @@ class Dodge : SingleAttributeAdapter(AttributeType.DEFENSE) {
             val damageMemory: DamageMemory = eventMemory
             if (baseDoubles[0].random()) {
                 damageMemory.setLabel(Dodge::class.java, true)
-                damageMemory.event.setCancelled(true)
+                damageMemory.event.isCancelled = true
             }
         }
     }

@@ -12,17 +12,19 @@ open class InternalConfig(
     var list: List<InternalConfig> = ArrayList()
 ) {
 
-    fun format(entity: Entity?, wrapper: BaseWrapper): String? {
+    fun format(entity: Entity?, wrappers: List<BaseWrapper>): String? {
         var s = value
         for (config in list) {
-            val format = config.format(entity, wrapper)
+            val format = config.format(entity, wrappers)
             s = s.replace("{" + config.string + "}", format!!)
         }
         val internalScript = InternalScriptManager.filter(key)
         if (internalScript != null) {
             val genericType = internalScript.genericType
-            if (genericType == BaseWrapper::class.java || genericType == wrapper::class.java) {
-                return internalScript.execute(entity, wrapper, this, s) ?: s
+            wrappers.forEach {
+                if (genericType == BaseWrapper::class.java || genericType == it::class.java) {
+                    s = internalScript.execute(entity, it, this, s) ?: s
+                }
             }
         }
         return s
@@ -31,7 +33,6 @@ open class InternalConfig(
     override fun toString(): String {
         return "InternalConfig(id=$id, key='$key', value='$value', string='$string', list=$list)"
     }
-
 
     companion object {
         fun parse(string: String): List<InternalConfig> {

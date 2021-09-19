@@ -4,6 +4,7 @@ import ac.github.oa.OriginAttribute
 import ac.github.oa.internal.core.item.ItemPlant
 import ac.github.oa.internal.core.item.random.RandomPlant
 import ac.github.oa.internal.core.script.content.JavaScriptPlant
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -76,6 +77,24 @@ object Command {
                 }
             }
 
+            // give
+            literal("give") {
+                dynamic {
+                    suggestion<ProxyCommandSender> { sender, context ->
+                        Bukkit.getOnlinePlayers().map { it.name }
+                    }
+
+                    // [item]
+                    dynamic {
+                        suggestion<ProxyCommandSender> { sender, context ->
+                            ItemPlant.configs.map { it.name }
+                        }
+
+                    }
+
+                }
+            }
+
             // nbt
             literal("nbt") {
                 execute<Player> { sender, context, argument ->
@@ -108,7 +127,7 @@ object Command {
             return
         }
 
-        val items = createItems(sender, item, amount,map)
+        val items = createItems(sender, item, amount, map)
         items.forEach { sender.inventory.addItem(it.key) }
         mutableMapOf<String, Int>().apply {
             items.map {

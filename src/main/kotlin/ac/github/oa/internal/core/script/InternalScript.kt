@@ -23,7 +23,7 @@ interface InternalScript<out T : BaseWrapper> {
         fun transform(
             source: String,
             entity: Entity?,
-            wrapper: BaseWrapper,
+            wrapper: List<BaseWrapper>,
             call: (InternalConfig, String) -> String = { _, s -> s }
         ): String {
             var source = source

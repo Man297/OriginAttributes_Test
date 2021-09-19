@@ -29,13 +29,14 @@ class AttackSpeed : SingleAttributeAdapter(AttributeType.OTHER) {
                         return
                     }
                     val value = 1000 / number
-                    insert(player, (System.currentTimeMillis() + value).toLong())
+                    insert(player, (System .currentTimeMillis() + value).toLong())
                 } else {
-                    e.isCancelled = (true)
+                    e.setCancelled(true)
                 }
             }
         }
     }
+
 
     override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {}
 

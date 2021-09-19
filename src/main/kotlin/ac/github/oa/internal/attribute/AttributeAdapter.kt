@@ -41,6 +41,9 @@ abstract class AttributeAdapter(
 
     abstract fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>)
 
+    open fun count(baseDoubles: Array<BaseDouble>): Long = 0
+
+
     open fun register() {
 
         AttributeManager.register(this)

@@ -7,6 +7,7 @@ import ac.github.oa.internal.attribute.impl.defense.*
 import ac.github.oa.internal.attribute.impl.other.*
 import ac.github.oa.internal.attribute.impl.update.*
 import ac.github.oa.internal.core.hook.MythicMobsHook
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.bukkit.Bukkit
 import org.bukkit.inventory.EquipmentSlot
@@ -35,13 +36,7 @@ object OriginAttribute : Plugin() {
     val simpleDateFormat: SimpleDateFormat
         get() = SimpleDateFormat(config.getString("options.time-format"))
 
-    val json = GsonBuilder()
-        .enableComplexMapKeySerialization()
-        .serializeNulls()
-        .setDateFormat(DateFormat.LONG)
-        .setPrettyPrinting()
-        .setVersion(1.0)
-        .create()
+    val json = Gson()
 
     val numberRegex = Regex("^[+-]?[1-9]*[0-9]?(\\.[0-9]{1,2})?\$")
 

@@ -20,11 +20,12 @@ import taboolib.common.platform.event.SubscribeEvent
 import java.util.ArrayList
 import kotlin.math.floor
 
-class Special : AttributeAdapter(0,AttributeType.UPDATE) {
+class Special : AttributeAdapter(0, AttributeType.UPDATE) {
     var list: MutableList<SpecialAttribute> = ArrayList()
     override fun defaultOption(config: BaseConfig) {
         config.select("Power")
             .set("placeholder", "Power")
+            .set("combat-power", 0.5)
             .setStrings("力量")
             .setList("entries", "攻击力 +{ct:{i}*0.1}")
     }

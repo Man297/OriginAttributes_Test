@@ -8,20 +8,31 @@ import ac.github.oa.internal.base.enums.ValueType
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
+import kotlin.math.roundToLong
 
 /**
  * 0 反弹概率
  * 1 反弹伤害
  */
-class Rebound : AttributeAdapter(2,AttributeType.DEFENSE) {
+class Rebound : AttributeAdapter(2, AttributeType.DEFENSE) {
     override fun defaultOption(config: BaseConfig) {
-        config.select(this).setStrings("反弹概率")
+        config.select(this)
+            .setStrings("反弹概率")
+            .set("combat-power", 1)
             .superior()
             .select("rebound-damage")
             .setStrings("反弹伤害")
+            .set("combat-power", 1)
     }
 
-     override fun inject(entity: LivingEntity?, string: String, baseDoubles: Array<BaseDouble>) {
+
+    override fun count(baseDoubles: Array<BaseDouble>): Long {
+        return (baseDoubles[0].number() * baseConfig.select(this).any("combat-power").asNumber().toDouble() +
+                baseDoubles[1].number() * baseConfig.select("rebound-damage").any("combat-power").asNumber()
+            .toDouble()).roundToLong()
+    }
+
+    override fun inject(entity: LivingEntity?, string: String, baseDoubles: Array<BaseDouble>) {
         baseDoubles[0].merge(baseConfig.analysis(this, string, ValueType.PERCENT))
         baseDoubles[1].merge(baseConfig.analysis("rebound-damage", string, ValueType.PERCENT))
     }

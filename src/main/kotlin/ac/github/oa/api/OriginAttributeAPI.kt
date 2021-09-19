@@ -37,6 +37,7 @@ object OriginAttributeAPI {
         getExtras(livingEntity.uniqueId).values.forEach(attributeData::merge)
         val event = EntityGetterDataEvent(livingEntity, attributeData)
         event.call()
+        attributeData.autoCombatPower()
         return attributeData
     }
 
@@ -93,7 +94,7 @@ object OriginAttributeAPI {
 
         val event = AttributeRenderStringEvent(livingEntity, list)
         event.call()
-        if (!event.isCancelled) {
+        if (!event.isCancelled()) {
             for (s in event.list) {
                 for (attribute in AttributeManager.attributes) {
                     val doubles: Array<BaseDouble> = attributeData.find(attribute)

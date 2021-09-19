@@ -11,18 +11,29 @@ import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import kotlin.math.roundToLong
 
 class Armor : AttributeAdapter(3, AttributeType.DEFENSE) {
     override fun defaultOption(config: BaseConfig) {
         config.select(this)
             .setStrings("防御力")
             .set("scale", 0.8)
+            .set("combat-power",1)
             .superior()
             .select("armor-pvp")
             .setStrings("对玩家防御")
+            .set("combat-power",1)
             .superior()
             .select("armor-pve")
+            .set("combat-power",1)
             .setStrings("对怪物防御")
+    }
+
+    override fun count(baseDoubles: Array<BaseDouble>): Long {
+        return (baseDoubles[0].number() * baseConfig.select(this).any("combat-power").asNumber().toDouble() +
+                baseDoubles[1].number() * baseConfig.select("armor-pvp").any("combat-power").asNumber().toDouble() +
+                baseDoubles[2].number() * baseConfig.select("armor-pve").any("combat-power").asNumber()
+            .toDouble()).roundToLong()
     }
 
     override fun inject(entity: LivingEntity?, string: String, baseDoubles: Array<BaseDouble>) {
