@@ -10,10 +10,13 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
+import taboolib.common.io.newFile
 import taboolib.common.platform.*
 import taboolib.common.platform.command.command
+import taboolib.module.configuration.SecuredFile
 import taboolib.module.nms.getItemTag
 import taboolib.platform.util.sendLang
+import java.io.File
 
 object Command {
 
@@ -93,6 +96,27 @@ object Command {
                     }
 
                 }
+            }
+
+            literal("save") {
+
+                // file
+                dynamic {
+
+                    // key
+                    dynamic {
+                        execute<Player> {sender, context, argument ->
+                            val filename = context.argument(0)!!
+                            val newFile = newFile(ItemPlant.folder, "$filename .yml")
+                            if (!newFile.exists()) {
+                                newFile.createNewFile()
+                            }
+                            val securedFile = SecuredFile.loadConfiguration(newFile)
+                        }
+                    }
+
+                }
+
             }
 
             // nbt

@@ -12,38 +12,11 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.info
 import java.util.concurrent.ConcurrentHashMap
 
 class AttackSpeed : SingleAttributeAdapter(AttributeType.OTHER) {
-    @SubscribeEvent
-    fun e(e: EntityDamageEvent) {
-        val damageMemory: DamageMemory = e.damageMemory
-        val attacker: LivingEntity = damageMemory.attacker
-        if (attacker is Player) {
-            val player: Player = attacker
-            if (e.priorityEnum == PriorityEnum.PRE) {
-                if (end(player)) {
-                    val baseDoubles: Array<BaseDouble> = damageMemory.attackAttributeData.find(AttackSpeed::class.java)
-                    val number: Double = baseDoubles[0].number()
-                    if (number <= 0) {
-                        return
-                    }
-                    val value = 1000 / number
-                    insert(player, (System .currentTimeMillis() + value).toLong())
-                } else {
-                    e.setCancelled(true)
-                }
-            }
-        }
-    }
 
-
-    override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {}
-
-    override val strings: Array<String>
-        get() = arrayOf("攻击速度")
-    override val type: ValueType
-        get() = ValueType.NUMBER
 
     companion object {
 
@@ -60,5 +33,35 @@ class AttackSpeed : SingleAttributeAdapter(AttributeType.OTHER) {
             val currentTimeMillis = System.currentTimeMillis()
             return currentTimeMillis > aLong!!
         }
+
+        @SubscribeEvent
+        fun e(e: EntityDamageEvent) {
+            val damageMemory: DamageMemory = e.damageMemory
+            val attacker: LivingEntity = damageMemory.attacker
+            if (attacker is Player) {
+                val player: Player = attacker
+                if (e.priorityEnum == PriorityEnum.PRE) {
+                    if (end(player)) {
+                        val baseDoubles: Array<BaseDouble> = damageMemory.attackAttributeData.find(AttackSpeed::class.java)
+                        val number: Double = baseDoubles[0].number()
+                        if (number <= 0) {
+                            return
+                        }
+                        val value = 1000 / number
+                        insert(player, (System .currentTimeMillis() + value).toLong())
+                    } else {
+                        e.isCancelled = true
+                    }
+                }
+            }
+        }
     }
+
+    override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {}
+
+    override val strings: Array<String>
+        get() = arrayOf("攻击速度")
+    override val type: ValueType
+        get() = ValueType.NUMBER
+
 }

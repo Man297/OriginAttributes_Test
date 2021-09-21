@@ -21,6 +21,8 @@ import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
+import taboolib.platform.util.isNotAir
+import taboolib.type.BukkitEquipment
 
 
 @Awake(LifeCycle.ENABLE)
@@ -47,7 +49,15 @@ object OnListener {
         }
 
         if (damager != null && entity != null) {
-//            e.damage = 0.0
+
+            if (e.damager !is Projectile) {
+                val itemStack = BukkitEquipment.HAND.getItem(damager)
+                if (itemStack != null && itemStack.isNotAir() && OriginAttribute.config.getStringList("options.remotes").any { it == itemStack.type.name }) {
+                    e.isCancelled = true
+                    return
+                }
+            }
+
             val a: AttributeData = OriginAttributeAPI.getAttributeData(damager)
             val d: AttributeData = OriginAttributeAPI.getAttributeData(entity)
             val damageMemory = DamageMemory(damager, entity, e, a, d)

@@ -10,6 +10,7 @@ import ac.github.oa.internal.base.event.impl.UpdateMemory
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 
 class Health : SingleAttributeAdapter(AttributeType.UPDATE) {
     override fun defaultOption(config: BaseConfig) {
@@ -18,7 +19,7 @@ class Health : SingleAttributeAdapter(AttributeType.UPDATE) {
     }
 
     override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {
-        if (eventMemory is UpdateMemory) {
+        if (eventMemory is UpdateMemory && eventMemory.livingEntity is Player) {
             val updateMemory: UpdateMemory = eventMemory
             val number: Double = baseDoubles[0].number() + baseConfig.select(this)
                 .any("default")

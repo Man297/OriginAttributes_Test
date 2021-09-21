@@ -49,6 +49,8 @@ options:
         InventorySlot:
           - '10 戒指'
           - '11 项链'
+  remotes:
+    - BOW
 
 
 attributes:

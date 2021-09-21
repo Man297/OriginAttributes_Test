@@ -58,6 +58,6 @@ class BaseDouble : HashMap<ValueType, Double>() {
 
     @JvmOverloads
     fun random(value: Double = 0.0): Boolean {
-        return Math.random() * 1 < number(ValueType.NUMBER) + value
+        return Math.random() * 1 < (number(ValueType.NUMBER) + value) / 100
     }
 }

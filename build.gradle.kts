@@ -23,7 +23,7 @@ taboolib {
             name("KunSs")
         }
         dependencies {
-            name("PlaceholderAPI")
+            name("PlaceholderAPI").optional(true)
             name("MythicMobs").optional(true)
         }
     }
@@ -47,7 +47,8 @@ tasks.withType<JavaCompile> {
 }
 
 tasks.withType<Jar> {
-    destinationDir = file("F:/Server/Spigot 1.12.2 - 副本/plugins")
+//    destinationDir = file("F:/Server/Spigot 1.12.2 - 副本/plugins")
+    destinationDir = file("F:/Server/spigot 1.17/plugins")
 }
 
 configure<JavaPluginConvention> {
