@@ -16,6 +16,8 @@ import java.util.logging.Level
 
 object ItemPlant {
 
+    const val KEY = "oa-key"
+
     val generators = arrayListOf<ItemGenerator>()
     val configs = arrayListOf<ConfigurationSection>()
 
@@ -39,11 +41,13 @@ object ItemPlant {
     fun build(entity: LivingEntity?, key: String, map: MutableMap<String, String> = mutableMapOf()): ItemStack? =
         build(entity, configs.first { it.name == key }, map)
 
+    fun getConfig(key: String) = configs.first { it.name == key }
+
     fun build(
         entity: LivingEntity?,
         config: ConfigurationSection,
         map: MutableMap<String, String> = mutableMapOf()
-    ): ItemStack? {
+    ): ItemStack {
         val generatorKey = config.getString("g", "")
         val generator = generators.firstOrNull { generatorKey == it.name }
             ?: throw NullPointerException("无效的物品生成器 $generatorKey")
@@ -51,13 +55,21 @@ object ItemPlant {
         return generator.build(entity, config,map).apply {
             // 写入nbt
             val itemTag = getItemTag()
-            itemTag["oa-key"] = ItemTagData(config.name)
+            itemTag[KEY] = ItemTagData(config.name)
 
             val event = ItemCreatedEvent(entity, config, this, generator, itemTag)
             event.call()
 
             event.itemTag.saveTo(event.itemStack)
         }
+    }
+
+    fun parseItem(itemStack: ItemStack) : String? {
+        val itemTag = itemStack.getItemTag()
+        if (itemTag.containsKey(KEY)) {
+            return itemTag[KEY]?.asString()!!
+        }
+        return null
     }
 
 

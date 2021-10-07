@@ -20,12 +20,12 @@ import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.info
 import taboolib.common.platform.function.submit
 import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
 
 
-@Awake(LifeCycle.ENABLE)
 object OnListener {
 
 

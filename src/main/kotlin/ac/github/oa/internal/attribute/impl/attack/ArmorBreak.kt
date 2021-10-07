@@ -23,13 +23,16 @@ class ArmorBreak : SingleAttributeAdapter(AttributeType.ATTACK) {
     override val type: ValueType
         get() = ValueType.PERCENT
 
-    @SubscribeEvent
-    fun e(e: EntityDamageEvent) {
-        if (e.priorityEnum == PriorityEnum.POST) {
-            val damageMemory: DamageMemory = e.damageMemory
-            if (damageMemory.labels.containsKey(ArmorBreak::class.java) && damageMemory.labels.containsKey(Armor::class.java)) {
-                val result = damageMemory.labels.get(Armor::class.java) as Double
-                damageMemory.addDamage("armor-break-damage", -(result * 0.5))
+    companion object {
+
+        @SubscribeEvent
+        fun e(e: EntityDamageEvent) {
+            if (e.priorityEnum == PriorityEnum.POST) {
+                val damageMemory: DamageMemory = e.damageMemory
+                if (damageMemory.labels.containsKey(ArmorBreak::class.java) && damageMemory.labels.containsKey(Armor::class.java)) {
+                    val result = damageMemory.labels.get(Armor::class.java) as Double
+                    damageMemory.addDamage("armor-break-damage", -(result * 0.5))
+                }
             }
         }
     }

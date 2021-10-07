@@ -12,6 +12,7 @@ import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
 import taboolib.common.platform.event.SubscribeEvent
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.roundToLong
 
 /**
@@ -19,6 +20,19 @@ import kotlin.math.roundToLong
  * 1 吸血量
  */
 class BloodSucking : AttributeAdapter(2, AttributeType.ATTACK) {
+
+    companion object {
+
+        @SubscribeEvent
+        fun e(e: EntityDamageEvent) {
+            val priorityEnum = e.priorityEnum
+            if (priorityEnum == PriorityEnum.POST && !e.isCancelled() && e.damageMemory.labels.containsKey(BloodSucking::class.java)) {
+                val any = e.damageMemory.labels[BloodSucking::class.java]!!.toString().toDouble()
+                e.damageMemory.attacker.health =
+                    min(e.damageMemory.attacker.health + any, e.damageMemory.attacker.maxHealth)
+            }
+        }
+    }
 
     override fun defaultOption(config: BaseConfig) {
         config.select(this)
@@ -35,16 +49,6 @@ class BloodSucking : AttributeAdapter(2, AttributeType.ATTACK) {
         baseDoubles[1].merge(baseConfig.analysis("blood-sucking-value", string, ValueType.ALL))
     }
 
-    @SubscribeEvent
-    fun e(e: EntityDamageEvent) {
-        val priorityEnum = e.priorityEnum
-        if (priorityEnum == PriorityEnum.POST && !e.isCancelled() && e.damageMemory.labels.containsKey(BloodSucking::class.java)) {
-            val any = e.damageMemory.labels[BloodSucking::class.java]!!.toString().toDouble()
-            e.damageMemory.attacker.health =
-                max(e.damageMemory.attacker.health + any, e.damageMemory.attacker.maxHealth)
-        }
-    }
-
     override fun format(entity: LivingEntity, s: String, baseDoubles: Array<BaseDouble>): Any {
         return baseDoubles[if (s.equals("p", ignoreCase = true)) 0 else 1].number()
     }
@@ -53,7 +57,7 @@ class BloodSucking : AttributeAdapter(2, AttributeType.ATTACK) {
         if (eventMemory is DamageMemory) {
             val damageMemory: DamageMemory = eventMemory
             if (baseDoubles[0].random()) {
-                val eval = baseDoubles[0].globalEval(damageMemory.damage)
+                val eval = baseDoubles[1].globalEval(damageMemory.damage)
                 damageMemory.setLabel(BloodSucking::class.java, eval)
 
             }

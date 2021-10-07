@@ -59,16 +59,16 @@ class Damage : AttributeAdapter(4, AttributeType.ATTACK) {
             baseDoubles[1].merge(baseConfig.analysis(this, string, ValueType.NUMBER))
         }
 
-        baseDoubles[1].merge(baseConfig.analysis("damage-pvp", string, ValueType.PERCENT))
-        baseDoubles[2].merge(baseConfig.analysis("damage-pve", string, ValueType.PERCENT))
+        baseDoubles[2].merge(baseConfig.analysis("damage-pvp", string, ValueType.PERCENT))
+        baseDoubles[3].merge(baseConfig.analysis("damage-pve", string, ValueType.PERCENT))
     }
 
     override fun format(entity: LivingEntity, s: String, baseDoubles: Array<BaseDouble>): Any {
         return when (s) {
             "min" -> baseDoubles[0].number()
             "max" -> baseDoubles[1].number()
-            "pvp" -> baseDoubles[1].number()
-            "pve" -> baseDoubles[2].number()
+            "pvp" -> baseDoubles[2].number()
+            "pve" -> baseDoubles[3].number()
             else -> "${baseDoubles[0].number()} - ${baseDoubles[1].number()}"
         }
     }
@@ -79,9 +79,9 @@ class Damage : AttributeAdapter(4, AttributeType.ATTACK) {
             damageMemory.addDamage("damage", random(baseDoubles[0].number(), baseDoubles[1].number()))
             val injured: LivingEntity = damageMemory.injured
             if (injured is Player) {
-                damageMemory.addDamage("damage-pvp", baseDoubles[1].eval(damageMemory.damage))
+                damageMemory.addDamage("damage-pvp", baseDoubles[2].eval(damageMemory.damage))
             } else {
-                damageMemory.addDamage("damage-pve", baseDoubles[2].eval(damageMemory.damage))
+                damageMemory.addDamage("damage-pve", baseDoubles[3].eval(damageMemory.damage))
             }
         }
     }

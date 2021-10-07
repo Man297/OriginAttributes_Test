@@ -17,7 +17,7 @@ class DamageMemory(
 ) : EventMemory {
 
     var arrow = event.damager is Arrow
-    var damage = event.damage
+    var damage = 0.0
     val labels = mutableMapOf<Any, Any>()
 
     fun setLabel(key: Any, value: Any): DamageMemory {
