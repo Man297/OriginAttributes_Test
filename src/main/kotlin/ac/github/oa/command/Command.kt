@@ -13,6 +13,7 @@ import taboolib.common.LifeCycle
 import taboolib.common.io.newFile
 import taboolib.common.platform.*
 import taboolib.common.platform.command.command
+import taboolib.common5.Coerce
 import taboolib.module.configuration.SecuredFile
 import taboolib.module.nms.getItemTag
 import taboolib.platform.util.sendLang
@@ -92,9 +93,18 @@ object Command {
                         suggestion<ProxyCommandSender> { sender, context ->
                             ItemPlant.configs.map { it.name }
                         }
-
+                        execute<ProxyCommandSender> { sender, context, argument ->
+                            val playerExact = Bukkit.getPlayerExact(context.argument(-1)!!)!!
+                            giveItem(playerExact, argument, 1)
+                        }
+                        dynamic {
+                            execute<ProxyCommandSender> { sender, context, argument ->
+                                val playerExact = Bukkit.getPlayerExact(context.argument(-2)!!)!!
+                                val item = context.argument(-1)!!
+                                giveItem(playerExact, item, Coerce.toInteger(argument))
+                            }
+                        }
                     }
-
                 }
             }
 
@@ -105,7 +115,7 @@ object Command {
 
                     // key
                     dynamic {
-                        execute<Player> {sender, context, argument ->
+                        execute<Player> { sender, context, argument ->
                             val filename = context.argument(0)!!
                             val newFile = newFile(ItemPlant.folder, "$filename .yml")
                             if (!newFile.exists()) {

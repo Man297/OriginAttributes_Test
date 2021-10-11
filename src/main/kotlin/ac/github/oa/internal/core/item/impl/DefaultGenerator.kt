@@ -38,7 +38,6 @@ class DefaultGenerator : ItemGenerator {
 
         config.getStringList("create-pre")?.forEach { it.random(wrapper, entity) }
 
-
         val id = config.getString("id").random(wrapper, entity)
         val data = config.getString("data", "0").random(wrapper, entity)
         val name = config.getString("name", "name null").random(wrapper, entity)

@@ -29,9 +29,8 @@ class TimeCondition : ICondition {
                     list.any { s ->
                         if (it.contains(s)) {
                             keyword = s
-                            return true
-                        }
-                        return false
+                            true
+                        } else false
                     }
                 }
 
