@@ -68,3 +68,6 @@ attributes:
   - Special
   - AttackSpeed
   - ArmorBreak
+  - RangeDamage
+  - ShieldRecovery
+  - Shield

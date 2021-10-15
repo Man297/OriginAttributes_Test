@@ -58,7 +58,9 @@ object OriginAttribute : Plugin() {
         Special().register()
         AttackSpeed().register()
         ArmorBreak().register()
-
+        RangeDamage().register()
+        Shield().register()
+        ShieldRecovery().register()
         Metrics(12489, BukkitPlugin.getInstance().description.version, Platform.BUKKIT)
 
 
