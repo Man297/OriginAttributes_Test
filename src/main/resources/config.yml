@@ -57,6 +57,7 @@ attributes:
   - Damage
   - BloodSucking
   - Crit
+  - JumpDamage
   - Hit
   - Armor
   - Dodge
