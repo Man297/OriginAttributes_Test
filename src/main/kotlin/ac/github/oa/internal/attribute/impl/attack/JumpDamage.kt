@@ -1,5 +1,7 @@
 package ac.github.oa.internal.attribute.impl.attack
 
+import ac.github.oa.api.OriginAttributeAPI
+import ac.github.oa.api.event.entity.EntityDamageEvent
 import ac.github.oa.internal.attribute.AttributeType
 import ac.github.oa.internal.attribute.abst.SingleAttributeAdapter
 import ac.github.oa.internal.base.BaseDouble
@@ -25,23 +27,20 @@ class JumpDamage : SingleAttributeAdapter(AttributeType.ATTACK) {
             cache.add(e.player)
         }
 
-    }
-
-    var task: PlatformExecutor.PlatformTask? = null
-
-    fun Player.isJump() = cache.contains(this)
-
-    override fun enable() {
-        super.enable()
-        task = submit(period = 5, async = true) {
-            cache.removeIf {
-                val location = it.location
-                it.world.getBlockAt(location.clone().add(0.0, 0.5, 0.0)).type != Material.AIR
+        @SubscribeEvent
+        fun e(e: EntityDamageEvent) {
+            val attacker = e.damageMemory.attacker
+            if (cache.contains(attacker)){
+                val location = attacker.location
+                if (attacker.world.getBlockAt(location.add(0.0,-0.5,0.0)).type != Material.AIR){
+                    cache.remove(attacker)
+                    attacker.isOnGround
+                    OriginAttributeAPI.callUpdate(attacker)
+                }
             }
         }
 
     }
-
 
     override val strings: Array<String>
         get() = arrayOf("跳跃加成")
@@ -51,8 +50,9 @@ class JumpDamage : SingleAttributeAdapter(AttributeType.ATTACK) {
     override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {
         if (eventMemory is DamageMemory && eventMemory.attacker is Player) {
             val attacker = eventMemory.attacker
-            if (attacker.isJump()) {
-                eventMemory.addDamage(baseDoubles[0].eval(eventMemory.damage))
+            if (cache.contains(attacker)) {
+                eventMemory.addDamage(baseDoubles[0].number())
+                eventMemory.arrow
             }
         }
     }
