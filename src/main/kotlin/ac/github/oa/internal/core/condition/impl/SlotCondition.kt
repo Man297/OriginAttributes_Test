@@ -19,7 +19,7 @@ class SlotCondition : ICondition {
 
             val item = adaptItem.item
 
-            val list = options("level").getStringList("keyword")
+            val list = options("slot").getStringList("keyword")
             val lore = item.itemMeta!!.lore!!
 
             val slot = adaptItem.slot
