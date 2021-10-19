@@ -19,6 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
+import taboolib.platform.BukkitPlugin
 import kotlin.math.roundToLong
 
 class ShieldRecovery : SingleAttributeAdapter(AttributeType.OTHER) {
@@ -37,31 +38,29 @@ class ShieldRecovery : SingleAttributeAdapter(AttributeType.OTHER) {
     override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {}
 
     override fun enable() {
-        Bukkit.getPluginManager().getPlugin("OriginAttribute")?.let {
-            object : BukkitRunnable(){
-                override fun run() {
-                    for (player in ArrayList<Player>(Bukkit.getOnlinePlayers())){
-                        if (!player.isDead && player.isOnline){
-                            val attributeData: AttributeData = OriginAttributeAPI.getAttributeData(player)
-                            val maxShield: Double = attributeData.find(Shield::class.java)[0].number()
-                            val shieldRecovery: Double = attributeData.find(ShieldRecovery::class.java)[0].number()
-                            var shield: Double = 0.0
-                            if (map.containsKey(player)){
-                                shield = map[player]!!
-                            }else{
-                                map[player] = maxShield;
-                                shield = map[player]!!
-                            }
-                            if (shield + shieldRecovery < maxShield){
-                                map[player] = shield + shieldRecovery
-                            }else{
-                                map[player] = maxShield
-                            }
+        object : BukkitRunnable(){
+            override fun run() {
+                for (player in ArrayList<Player>(Bukkit.getOnlinePlayers())){
+                    if (!player.isDead && player.isOnline){
+                        val attributeData: AttributeData = OriginAttributeAPI.getAttributeData(player)
+                        val maxShield: Double = attributeData.find(Shield::class.java)[0].number()
+                        val shieldRecovery: Double = attributeData.find(ShieldRecovery::class.java)[0].number()
+                        var shield: Double = 0.0
+                        if (map.containsKey(player)){
+                            shield = map[player]!!
+                        }else{
+                            map[player] = maxShield;
+                            shield = map[player]!!
+                        }
+                        if (shield + shieldRecovery < maxShield){
+                            map[player] = shield + shieldRecovery
+                        }else{
+                            map[player] = maxShield
                         }
                     }
                 }
-            }.runTaskTimerAsynchronously(it, 20, baseConfig.select(this).any("period").asNumber().toLong())
-        }
+            }
+        }.runTaskTimerAsynchronously(BukkitPlugin.getInstance(), 20, baseConfig.select(this).any("period").asNumber().toLong())
     }
 
     override fun count(baseDoubles: Array<BaseDouble>): Long {

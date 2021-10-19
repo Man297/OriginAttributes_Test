@@ -20,6 +20,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerExpChangeEvent
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.platform.BukkitPlugin
 import kotlin.math.roundToLong
 
 class RangeDamage : SingleAttributeAdapter(AttributeType.ATTACK) {
@@ -31,7 +32,7 @@ class RangeDamage : SingleAttributeAdapter(AttributeType.ATTACK) {
         if (range >= 1)
         for (entity in damageMemory.attacker.getNearbyEntities(range, range, range)){
             if (entity is LivingEntity){
-                Bukkit.getPluginManager().getPlugin("OriginAttribute")?.let { Bukkit.getScheduler().runTask(it, damage(entity, damageMemory.damage, damageMemory.attacker)) }
+                Bukkit.getScheduler().runTask(BukkitPlugin.getInstance(), damage(entity, damageMemory.damage, damageMemory.attacker))
             }
         }
     }
