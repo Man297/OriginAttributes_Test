@@ -16,7 +16,7 @@ import taboolib.common.platform.service.PlatformExecutor
 import taboolib.platform.event.PlayerJumpEvent
 import java.util.*
 
-class JumpDamage : SingleAttributeAdapter(AttributeType.ATTACK) {
+class JumpDamage : SingleDamageAdapter() {
 
     companion object {
 
@@ -30,9 +30,9 @@ class JumpDamage : SingleAttributeAdapter(AttributeType.ATTACK) {
         @SubscribeEvent
         fun e(e: EntityDamageEvent) {
             val attacker = e.damageMemory.attacker
-            if (cache.contains(attacker)){
+            if (cache.contains(attacker)) {
                 val location = attacker.location
-                if (attacker.world.getBlockAt(location.add(0.0,-0.5,0.0)).type != Material.AIR){
+                if (attacker.world.getBlockAt(location.add(0.0, -0.5, 0.0)).type != Material.AIR) {
                     cache.remove(attacker)
                     attacker.isOnGround
                     OriginAttributeAPI.callUpdate(attacker)
@@ -42,19 +42,17 @@ class JumpDamage : SingleAttributeAdapter(AttributeType.ATTACK) {
 
     }
 
+    override fun doScreen(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>): Boolean {
+        if (eventMemory is DamageMemory && eventMemory.attacker is Player) {
+            val attacker = eventMemory.attacker
+            return cache.contains(attacker)
+        }
+        return false
+    }
+
 
     override val strings: Array<String>
         get() = arrayOf("跳跃加成")
     override val type: ValueType
         get() = ValueType.ALL
-
-    override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {
-        if (eventMemory is DamageMemory && eventMemory.attacker is Player) {
-            val attacker = eventMemory.attacker
-            if (cache.contains(attacker)) {
-                eventMemory.addDamage(baseDoubles[0].number())
-                eventMemory.arrow
-            }
-        }
-    }
 }

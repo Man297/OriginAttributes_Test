@@ -42,7 +42,7 @@ class BaseConfig(var parent: ConfigurationSection?, var config: ConfigurationSec
         force: Boolean = false
     ): BaseDouble {
         val simpleName: String = attributeAdapter::class.java.simpleName
-        return this.analysis(Strings.parseLowerString(simpleName), s, valueType,force)
+        return this.analysis(Strings.parseLowerString(simpleName), s, valueType, force)
     }
 
     fun superior(): BaseConfig {
@@ -60,6 +60,10 @@ class BaseConfig(var parent: ConfigurationSection?, var config: ConfigurationSec
 
     fun setStrings(vararg values: Any): BaseConfig {
         return setList("strings", *values)
+    }
+
+    fun setCombatPower(value: Double): BaseConfig {
+        return set("combat-power", value)
     }
 
     fun setList(string: String, vararg values: Any): BaseConfig {

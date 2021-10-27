@@ -24,15 +24,15 @@ class Damage : AttributeAdapter(4, AttributeType.ATTACK) {
     override fun defaultOption(config: BaseConfig) {
         config.select(this)
             .setStrings("攻击力")
-            .set("combat-power",1)
+            .setCombatPower(1.0)
             .superior()
             .select("damage-pvp")
             .setStrings("对玩家增伤")
-            .set("combat-power",1)
+            .setCombatPower(1.0)
             .superior()
             .select("damage-pve")
             .setStrings("对怪物增伤")
-            .set("combat-power",1)
+            .setCombatPower(1.0)
     }
 
 
