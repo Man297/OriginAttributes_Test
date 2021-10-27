@@ -4,6 +4,7 @@ import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.DataPair
 import ac.github.oa.util.ArrayUtils
 import org.bukkit.inventory.EntityEquipment
+import taboolib.common.platform.function.info
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 
@@ -18,7 +19,12 @@ class AttributeData {
         combatPower = 0
         AttributeManager.attributes.forEach {
             val arrayOfBaseDoubles = this.find(it)
-            combatPower += it.count(arrayOfBaseDoubles)
+            try {
+                combatPower += it.count(arrayOfBaseDoubles)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                info(it)
+            }
         }
     }
 

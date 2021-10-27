@@ -18,7 +18,7 @@ import kotlin.math.roundToLong
  *  0 最大护盾
  *  1 阻挡伤害
  */
-class Shield : AttributeAdapter(3, AttributeType.DEFENSE) {
+class Shield : AttributeAdapter(2, AttributeType.DEFENSE) {
     override fun defaultOption(config: BaseConfig) {
         config.select(this)
                 .setStrings("最大护盾值")
@@ -63,7 +63,7 @@ class Shield : AttributeAdapter(3, AttributeType.DEFENSE) {
                             damageMemory.event.isCancelled = true
                         }
                     }else{
-                        var damage: Double = ShieldRecovery.map[eventMemory.injured]!!
+                        val damage: Double = ShieldRecovery.map[eventMemory.injured]!!
                         damageMemory.setLabel(Shield::class.java, damage).addDamage(-damage)
                         ShieldRecovery.map[eventMemory.injured] = 0.0
                     }

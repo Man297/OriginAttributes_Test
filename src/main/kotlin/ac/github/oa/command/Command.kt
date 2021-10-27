@@ -1,6 +1,7 @@
 package ac.github.oa.command
 
 import ac.github.oa.OriginAttribute
+import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.core.item.ItemPlant
 import ac.github.oa.internal.core.item.random.RandomPlant
 import ac.github.oa.internal.core.script.content.JavaScriptPlant
@@ -16,6 +17,7 @@ import taboolib.common.platform.command.command
 import taboolib.common5.Coerce
 import taboolib.module.configuration.SecuredFile
 import taboolib.module.nms.getItemTag
+import taboolib.platform.event.PlayerJumpEvent
 import taboolib.platform.util.sendLang
 import java.io.File
 
@@ -152,6 +154,13 @@ object Command {
                     sender.sendMessage("reload successful.")
                 }
             }
+
+            literal("attrs") {
+                execute<ProxyCommandSender> { sender, _, _ ->
+                    sender.sendMessage("Enable attributes [" + AttributeManager.attributes.joinToString(",") { it.name } + "]")
+                }
+            }
+
         }
     }
 

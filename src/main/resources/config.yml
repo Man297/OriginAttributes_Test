@@ -52,7 +52,6 @@ options:
   remotes:
     - BOW
 
-
 attributes:
   - Damage
   - BloodSucking
@@ -72,3 +71,4 @@ attributes:
   - RangeDamage
   - ShieldRecovery
   - Shield
+  - Power

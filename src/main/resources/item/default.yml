@@ -11,3 +11,11 @@ def0:
     - '&c来源: &f{papi:%player_name%}'
     - ''
     - '{random:group:描述}'
+  item-flags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_DESTROYS
+    - HIDE_PLACED_ON
+    - HIDE_POTION_EFFECTS
+    - HIDE_DYE

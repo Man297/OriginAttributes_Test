@@ -42,6 +42,7 @@ class JumpDamage : SingleAttributeAdapter(AttributeType.ATTACK) {
 
     }
 
+
     override val strings: Array<String>
         get() = arrayOf("跳跃加成")
     override val type: ValueType

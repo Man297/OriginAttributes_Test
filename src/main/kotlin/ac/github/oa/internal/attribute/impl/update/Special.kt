@@ -19,32 +19,46 @@ import org.bukkit.event.Listener
 import taboolib.common.platform.event.SubscribeEvent
 import java.util.ArrayList
 import kotlin.math.floor
+import kotlin.math.roundToLong
 
 class Special : AttributeAdapter(0, AttributeType.UPDATE) {
-    var list: MutableList<SpecialAttribute> = ArrayList()
+
+    companion object {
+        var list: MutableList<SpecialAttribute> = ArrayList()
+
+        @SubscribeEvent
+        fun e(e: OriginPluginEnableEvent?) {
+            for (specialAttribute in list) {
+                AttributeManager.register(specialAttribute)
+            }
+        }
+
+        @SubscribeEvent
+        fun e(e: EntityGetterDataEvent) {
+            val attributeData: AttributeData = e.attributeData
+            AttributeManager.attributes
+                .stream()
+                .filter { attributeAdapter -> attributeAdapter is SpecialAttribute }
+                .forEach { attributeAdapter ->
+                    val specialAttribute = attributeAdapter as SpecialAttribute
+                    val baseDoubles: Array<BaseDouble> = attributeData.find(specialAttribute.name)
+                    val number: Double = baseDoubles[0].number()
+                    val strings: List<String> = ArrayUtils.read(specialAttribute.entries, floor(number).toInt())
+                    val data: AttributeData = OriginAttributeAPI.loadList(e.livingEntity, strings)
+                    e.attributeData.merge(data)
+                }
+        }
+
+    }
+
     override fun defaultOption(config: BaseConfig) {
         config.select("Power")
             .set("placeholder", "Power")
             .set("combat-power", 0.5)
             .setStrings("力量")
-            .setList("entries", "攻击力 +{ct:{i}*0.1}")
+            .setList("entries", "攻击力 +{eval:{map:value}*0.1}")
     }
 
-    @SubscribeEvent
-    fun e(e: EntityGetterDataEvent) {
-        val attributeData: AttributeData = e.attributeData
-        AttributeManager.attributes
-            .stream()
-            .filter { attributeAdapter -> attributeAdapter is SpecialAttribute }
-            .forEach { attributeAdapter ->
-                val specialAttribute = attributeAdapter as SpecialAttribute
-                val baseDoubles: Array<BaseDouble> = attributeData.find(specialAttribute.name)
-                val number: Double = baseDoubles[0].number()
-                val strings: List<String> = ArrayUtils.read(specialAttribute.entries, floor(number).toInt())
-                val data: AttributeData = OriginAttributeAPI.loadList(e.livingEntity, strings)
-                e.attributeData.merge(data)
-            }
-    }
 
     override fun enable() {
         val config: ConfigurationSection = baseConfig.config
@@ -53,18 +67,20 @@ class Special : AttributeAdapter(0, AttributeType.UPDATE) {
             val placeholder: String = baseConfig.any("placeholder").asString()!!
             val entries: List<String> = baseConfig.any("entries").asStringList()
             val strings: List<String> = baseConfig.any("strings").asStringList()
+            val combatPower = baseConfig.any("combat-power").asNumber().toInt()
             val specialAttribute: SpecialAttribute =
-                object : SpecialAttribute(key, placeholder, strings.toTypedArray(), entries, AttributeType.OTHER) {}
+                object : SpecialAttribute(
+                    key,
+                    placeholder,
+                    strings.toTypedArray(),
+                    combatPower,
+                    entries,
+                    AttributeType.OTHER
+                ) {}
             list.add(specialAttribute)
         }
     }
 
-    @SubscribeEvent
-    fun e(e: OriginPluginEnableEvent?) {
-        for (specialAttribute in list) {
-            AttributeManager.register(specialAttribute)
-        }
-    }
 
     override fun inject(entity: LivingEntity?, string: String, baseDoubles: Array<BaseDouble>) {}
 
@@ -80,6 +96,7 @@ class Special : AttributeAdapter(0, AttributeType.UPDATE) {
         override val name: String,
         var placeholder: String,
         override var strings: Array<String>,
+        val combatPower: Int,
         var entries: List<String>,
         vararg attributeTypes: AttributeType
     ) : SingleAttributeAdapter(*attributeTypes) {
@@ -93,6 +110,10 @@ class Special : AttributeAdapter(0, AttributeType.UPDATE) {
                 }) {
                 baseDoubles[0].merge(getNumber(string, type))
             }
+        }
+
+        override fun count(baseDoubles: Array<BaseDouble>): Long {
+            return ((baseDoubles[0].number() * combatPower).roundToLong())
         }
 
         override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {}
