@@ -27,6 +27,8 @@ object AttributeManager {
         return map.computeIfAbsent(uuid) { u: UUID? -> AttributeData() }
     }
 
+    fun isEnabled(c: Class<out AttributeAdapter>): Boolean = attributes.any { it::class.java.simpleName == c.simpleName }
+
     operator fun set(uuid: UUID, attributeData: AttributeData) {
         map[uuid] = attributeData
     }

@@ -29,6 +29,9 @@ object OriginAttributeAPI {
     var map: MutableMap<UUID, MutableMap<String, AttributeData>> = HashMap<UUID, MutableMap<String, AttributeData>>()
 
 
+    /**
+     *
+     */
     fun getAttributeData(livingEntity: LivingEntity): AttributeData {
         val attributeData = AttributeData()
         val data = AttributeManager[livingEntity.uniqueId]

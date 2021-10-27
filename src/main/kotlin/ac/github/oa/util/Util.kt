@@ -1,5 +1,7 @@
 package ac.github.oa.util
 
+import ac.github.oa.internal.attribute.AttributeAdapter
+import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.core.item.random.RandomPlant
 import ac.github.oa.internal.core.script.hoop.MapScript
 import org.bukkit.entity.LivingEntity
@@ -15,6 +17,10 @@ fun newfolder(root: File, name: String, files: List<String>): File {
         files.forEach { saveDefaultFile(file, it) }
     }
     return file
+}
+
+fun Class<out AttributeAdapter>.isEnabled(): Boolean {
+    return AttributeManager.isEnabled(this)
 }
 
 fun File.listFile(suffix: String = ""): List<File> {
