@@ -66,7 +66,7 @@ fun MutableList<String>.random(wrapper: MapScript.Wrapper, entity: LivingEntity?
         forEachIndexed { index, s ->
             this[index] = s.random(wrapper, entity)
         }
-    }.filter { it !== EmptyScript.NAMESPACE }
+    }.filter { it.contains(EmptyScript.NAMESPACE) }
 }
 
 
