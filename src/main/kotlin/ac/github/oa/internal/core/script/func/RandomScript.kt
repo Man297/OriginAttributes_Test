@@ -82,7 +82,7 @@ class RandomScript : InternalScript<MapScript.Wrapper> {
                 if (indexOf != -1) {
                     val random = s.substring(0, indexOf).random(wrapper, entity)
                     if (random(random.toDouble())) {
-                        return s.substring(indexOf + 1)
+                        return s.substring(indexOf + 1).random()
                     } else {
                         mutableList[index] = s.substring(indexOf + 1)
                     }
