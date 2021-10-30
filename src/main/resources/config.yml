@@ -4,6 +4,7 @@ options:
   time-format: 'yyyy-MM-dd HH:mm:ss'
   operator-add: '+'
   operator-take: '-'
+  original: true
   sell:
     title: '物品回收'
     keyword:
@@ -73,3 +74,4 @@ attributes:
   - Shield
   - Power
   - DirectionDamage
+  - AttackDistance

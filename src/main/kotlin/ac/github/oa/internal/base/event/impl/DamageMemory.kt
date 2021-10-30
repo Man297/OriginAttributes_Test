@@ -1,23 +1,24 @@
 package ac.github.oa.internal.base.event.impl
 
+import ac.github.oa.OriginAttribute
+import ac.github.oa.api.event.entity.OriginCustomDamageEvent
 import ac.github.oa.internal.attribute.AttributeAdapter
 import ac.github.oa.internal.attribute.AttributeData
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.util.Strings
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.LivingEntity
-import org.bukkit.event.entity.EntityDamageByEntityEvent
 
 class DamageMemory(
     val attacker: LivingEntity,
     val injured: LivingEntity,
-    val event: EntityDamageByEntityEvent,
+    val event: OriginCustomDamageEvent,
     val attackAttributeData: AttributeData,
     val injuredAttributeData: AttributeData
 ) : EventMemory {
 
-    var arrow = event.damager is Arrow
-    var damage = event.getDamage()
+    var arrow = attacker is Arrow
+    var damage = if (OriginAttribute.original) event.damage else 0.0
     val labels = mutableMapOf<Any, Any>()
 
     fun setLabel(key: Any, value: Any): DamageMemory {

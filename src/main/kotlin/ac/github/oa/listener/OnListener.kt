@@ -3,11 +3,14 @@ package ac.github.oa.listener
 import ac.github.oa.OriginAttribute
 import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.api.event.entity.EntityDamageEvent
+import ac.github.oa.api.event.entity.OriginCustomDamageEvent
 import ac.github.oa.api.event.render.AttributeRenderStringEvent
+import ac.github.oa.command.Command
 import ac.github.oa.internal.attribute.AttributeData
 import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -28,31 +31,32 @@ import taboolib.type.BukkitEquipment
 
 object OnListener {
 
-
     @SubscribeEvent
-    fun e(e: EntityDamageByEntityEvent) {
+    fun e(e: OriginCustomDamageEvent) {
         var damager: LivingEntity? = null
         var entity: LivingEntity? = null
 
         if (e.entity is LivingEntity) {
-            entity = e.entity as LivingEntity
+            entity = e.entity
         }
 
         if (e.damager is Projectile) {
-            val projectile = e.damager as Projectile
+            val projectile = e.damager
             val shooter = projectile.shooter
             if (shooter is LivingEntity) {
                 damager = shooter
             }
         } else if (e.damager is LivingEntity) {
-            damager = e.damager as LivingEntity
+            damager = e.damager
         }
 
         if (damager != null && entity != null) {
 
             if (e.damager !is Projectile) {
                 val itemStack = BukkitEquipment.HAND.getItem(damager)
-                if (itemStack != null && itemStack.isNotAir() && OriginAttribute.config.getStringList("options.remotes").any { it == itemStack.type.name }) {
+                if (itemStack != null && itemStack.isNotAir() && OriginAttribute.config.getStringList("options.remotes")
+                        .any { it == itemStack.type.name }
+                ) {
                     e.isCancelled = true
                     return
                 }
@@ -71,8 +75,25 @@ object OnListener {
                 // POST CALL
                 if (!entityDamageEvent.isCancelled) {
                     e.damage = damageMemory.damage.coerceAtLeast(1.0)
+                    if (damager is Player && Command.isDebugEnable(damager)) {
+                        (0..10).forEach { _ -> damager.sendMessage(" ") }
+                        damager.sendMessage("${entity.name}: Damage logs.")
+                        damageMemory.labels.forEach {
+                            damager.sendMessage("1.${it.key} = ${it.value}")
+                        }
+                    }
                 }
             }
+        }
+    }
+
+
+    @SubscribeEvent
+    fun e(e: EntityDamageByEntityEvent) {
+        val event = OriginCustomDamageEvent(e.damager, e.entity, e.damage, e)
+        event.call()
+        if (!event.isCancelled) {
+            e.damage = event.damage
         }
     }
 

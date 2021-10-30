@@ -5,6 +5,7 @@ import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.attribute.impl.attack.*
 import ac.github.oa.internal.attribute.impl.defense.*
 import ac.github.oa.internal.attribute.impl.other.*
+import ac.github.oa.internal.attribute.impl.other.AttackDistance
 import ac.github.oa.internal.attribute.impl.update.*
 import ac.github.oa.internal.core.hook.MythicMobsHook
 import com.google.gson.Gson
@@ -57,6 +58,7 @@ object OriginAttribute : Plugin() {
         MoveSpeed().register()
         Special().register()
         AttackSpeed().register()
+        AttackDistance().register()
         ArmorBreak().register()
         RangeDamage().register()
         Shield().register()
@@ -66,6 +68,9 @@ object OriginAttribute : Plugin() {
 
 
     }
+
+    val original: Boolean
+        get() = config.getBoolean("original")
 
     override fun onEnable() {
         // Plugin startup logic

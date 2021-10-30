@@ -71,7 +71,6 @@ class Crit : AttributeAdapter(3, AttributeType.ATTACK) {
                     .percent(ValueType.NUMBER)
                 damageMemory.setLabel(Crit::class.java, true)
                     .setLabel("crit-damage", encapsulation)
-                println("crit 1 = ${damageMemory.damage} 2 = $encapsulation")
                 damageMemory.damage = encapsulation
             }
         }

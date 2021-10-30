@@ -14,6 +14,7 @@ import taboolib.common.LifeCycle
 import taboolib.common.io.newFile
 import taboolib.common.platform.*
 import taboolib.common.platform.command.command
+import taboolib.common.platform.function.info
 import taboolib.common5.Coerce
 import taboolib.module.configuration.SecuredFile
 import taboolib.module.nms.getItemTag
@@ -22,6 +23,11 @@ import taboolib.platform.util.sendLang
 import java.io.File
 
 object Command {
+
+
+    val map = mutableMapOf<Player, Boolean>()
+
+    fun isDebugEnable(player: Player) = map[player] ?: false
 
     @Awake(LifeCycle.ENABLE)
     fun reg() {
@@ -142,6 +148,7 @@ object Command {
                     val itemTag = mainHand.getItemTag()
                     val asString = itemTag.asString()
                     sender.sendMessage("json = $asString")
+                    info(asString)
                 }
             }
 
@@ -158,6 +165,13 @@ object Command {
             literal("attrs") {
                 execute<ProxyCommandSender> { sender, _, _ ->
                     sender.sendMessage("Enable attributes [" + AttributeManager.attributes.joinToString(",") { it.name } + "]")
+                }
+            }
+
+            literal("debug") {
+                execute<Player> { sender, _, _ ->
+                    map[sender] = !isDebugEnable(sender)
+                    sender.sendMessage("Debug status switch to " + isDebugEnable(sender))
                 }
             }
 

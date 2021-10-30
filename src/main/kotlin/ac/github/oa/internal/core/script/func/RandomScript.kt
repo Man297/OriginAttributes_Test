@@ -69,7 +69,7 @@ class RandomScript : InternalScript<MapScript.Wrapper> {
                     return any.random(wrapper, entity)
                 }
                 is List<*> -> {
-                    return firstOrList(any.map { it.toString() }, entity, wrapper)
+                    return firstOrList(any.map { it.toString() }, entity, wrapper)?.random(wrapper, entity)
                 }
                 else -> null
             }
@@ -82,7 +82,7 @@ class RandomScript : InternalScript<MapScript.Wrapper> {
                 if (indexOf != -1) {
                     val random = s.substring(0, indexOf).random(wrapper, entity)
                     if (random(random.toDouble())) {
-                        return s.substring(indexOf + 1).random(wrapper, entity)
+                        return s.substring(indexOf + 1)
                     } else {
                         mutableList[index] = s.substring(indexOf + 1)
                     }

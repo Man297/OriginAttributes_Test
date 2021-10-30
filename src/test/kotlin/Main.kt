@@ -17,7 +17,8 @@ class Main {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            val string = "攻击力 +10"
+            val list = listOf("123", "123", "123{\\n}456", "455").flatMap { it.split("{\\n}") }
+            println(list)
 
         }
     }

@@ -28,7 +28,6 @@ object OriginAttributeAPI {
 
     var map: MutableMap<UUID, MutableMap<String, AttributeData>> = HashMap<UUID, MutableMap<String, AttributeData>>()
 
-
     /**
      *
      */
@@ -64,6 +63,7 @@ object OriginAttributeAPI {
         listOf.add(AdaptItem(BreastPlate(BukkitEquipment.CHEST.getItem(livingEntity))))
         listOf.add(AdaptItem(Gaiter(BukkitEquipment.LEGS.getItem(livingEntity))))
         listOf.add(AdaptItem(Boot(BukkitEquipment.FEET.getItem(livingEntity))))
+
         return listOf
     }
 

@@ -14,6 +14,9 @@ class TimeScript : InternalScript<BaseWrapper> {
         get() = "time"
 
     override fun execute(entity: Entity?, wrapper: BaseWrapper, config: InternalConfig, string: String): String? {
-        return OriginAttribute.simpleDateFormat.format(string.toLong())
+
+        val l = if (string === "") System.currentTimeMillis() else string.toLong()
+
+        return OriginAttribute.simpleDateFormat.format(l)
     }
 }
