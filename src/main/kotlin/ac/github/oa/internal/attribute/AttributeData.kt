@@ -71,6 +71,8 @@ class AttributeData {
     }
 
     fun find(attributeAdapter: AttributeAdapter): Array<BaseDouble> {
+        println(attributeAdapter)
+        println(attributeAdapter.priority)
         return doubles[attributeAdapter.priority]
     }
 
@@ -80,4 +82,4 @@ class AttributeData {
         }
     }
 
-}
+} 
