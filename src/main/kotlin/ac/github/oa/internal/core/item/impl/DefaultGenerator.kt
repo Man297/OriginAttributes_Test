@@ -74,7 +74,7 @@ class DefaultGenerator : ItemGenerator {
             }
 
             if (config.isString("skull-texture")) {
-
+                XMaterial.PLAYER_HEAD
                 skullTexture = ItemBuilder.SkullTexture(
                     config.getString("skull-texture").random(wrapper, entity),
                     UUID.randomUUID()

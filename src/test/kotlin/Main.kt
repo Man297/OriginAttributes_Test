@@ -17,7 +17,7 @@ class Main {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            val list = listOf("123", "123", "123{\\n}456", "455").flatMap { it.split("{\\n}") }
+            val list = listOf("123", "123", "§f百分之三十几率出现轻灵羽翼{\\n}每次命中敌人将会获得速度II的效果{\\n}11", "455").flatMap { it.split("{\\n}") }
             println(list)
 
         }

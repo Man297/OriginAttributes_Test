@@ -64,6 +64,7 @@ object OriginAttribute : Plugin() {
         Shield().register()
         ShieldRecovery().register()
         JumpDamage().register()
+        DirectionDamage().register()
         Metrics(12489, BukkitPlugin.getInstance().description.version, Platform.BUKKIT)
 
 

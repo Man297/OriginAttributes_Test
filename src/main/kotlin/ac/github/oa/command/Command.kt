@@ -2,6 +2,7 @@ package ac.github.oa.command
 
 import ac.github.oa.OriginAttribute
 import ac.github.oa.internal.attribute.AttributeManager
+import ac.github.oa.internal.core.container.SellContainer
 import ac.github.oa.internal.core.item.ItemPlant
 import ac.github.oa.internal.core.item.random.RandomPlant
 import ac.github.oa.internal.core.script.content.JavaScriptPlant
@@ -15,6 +16,7 @@ import taboolib.common.io.newFile
 import taboolib.common.platform.*
 import taboolib.common.platform.command.command
 import taboolib.common.platform.function.info
+import taboolib.common.platform.function.onlinePlayers
 import taboolib.common5.Coerce
 import taboolib.module.configuration.SecuredFile
 import taboolib.module.nms.getItemTag
@@ -175,6 +177,16 @@ object Command {
                 }
             }
 
+            literal("sell") {
+                dynamic {
+                    suggestion<ProxyCommandSender> { _, _ ->
+                        onlinePlayers().map { it.name }
+                    }
+                    execute<ProxyCommandSender> { _, _, argument ->
+                        Bukkit.getPlayerExact(argument)?.let { SellContainer(it).open() }
+                    }
+                }
+            }
         }
     }
 

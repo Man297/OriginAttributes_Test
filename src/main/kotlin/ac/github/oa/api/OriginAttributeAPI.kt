@@ -1,5 +1,6 @@
 package ac.github.oa.api
 
+import ac.github.oa.OriginAttribute
 import ac.github.oa.api.event.entity.EntityGetterDataEvent
 import ac.github.oa.api.event.entity.EntityUpdateEvent
 import ac.github.oa.api.event.entity.EntityLoadEquipmentEvent
@@ -16,8 +17,10 @@ import ac.github.oa.internal.base.event.impl.UpdateMemory
 import ac.github.oa.internal.core.condition.ConditionManager
 import ac.github.oa.internal.core.equip.*
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.inventory.EntityEquipment
 import org.bukkit.inventory.EquipmentSlot
+import taboolib.common.platform.function.info
 import taboolib.common.platform.function.submit
 import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
@@ -63,6 +66,17 @@ object OriginAttributeAPI {
         listOf.add(AdaptItem(BreastPlate(BukkitEquipment.CHEST.getItem(livingEntity))))
         listOf.add(AdaptItem(Gaiter(BukkitEquipment.LEGS.getItem(livingEntity))))
         listOf.add(AdaptItem(Boot(BukkitEquipment.FEET.getItem(livingEntity))))
+
+        // baubles load.
+        if (livingEntity is Player) {
+            val inventory = livingEntity.inventory
+            OriginAttribute.config.getStringList("options.condition.slot.pattern.InventorySlot")?.forEach {
+                val split = it.split(" ")
+                val slot = split[0].toInt()
+                val itemStack = inventory.getItem(slot)
+                listOf.add(AdaptItem(InventorySlot(slot, itemStack)))
+            }
+        }
 
         return listOf
     }

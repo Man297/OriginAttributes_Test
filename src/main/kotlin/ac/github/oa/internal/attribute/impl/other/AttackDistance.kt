@@ -30,7 +30,6 @@ class AttackDistance : SingleAttributeAdapter(AttributeType.OTHER) {
                 IntRange(0, number).forEach { it ->
                     // 步进
                     location.add(location.direction.multiply(2.5 + it))
-                    player.world.spawnParticle(Particle.FLAME, location, 0, 0.0, 0.0, 1.0)
                     // 获取周围1格内的实体
                     val list = player.world.getNearbyEntities(location, 1.0, 1.0, 1.0).filterIsInstance<LivingEntity>()
 

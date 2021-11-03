@@ -6,6 +6,7 @@ import ac.github.oa.internal.core.item.random.RandomPlant
 import ac.github.oa.internal.core.script.func.EmptyScript
 import ac.github.oa.internal.core.script.hoop.MapScript
 import org.bukkit.entity.LivingEntity
+import taboolib.common.platform.function.info
 import taboolib.platform.BukkitPlugin
 import java.io.File
 import java.lang.reflect.ParameterizedType
@@ -38,6 +39,8 @@ fun File.listFile(suffix: String = ""): List<File> {
     return listOf
 }
 
+fun any(list: List<String>, keyword: List<String>) = list.any { keyword.any { s -> it.contains(s) } }
+
 fun saveDefaultFile(file: File, name: String) {
     BukkitPlugin.getInstance().saveResource("${file.name}/$name", false)
 }
@@ -67,7 +70,7 @@ fun MutableList<String>.random(wrapper: MapScript.Wrapper, entity: LivingEntity?
             this[index] = s.random(wrapper, entity)
         }
     }.filter { !it.contains(EmptyScript.NAMESPACE) }
-        .flatMap { it.split("{\\n}") }
+        .flatMap { it.split("%n%") }
 }
 
 

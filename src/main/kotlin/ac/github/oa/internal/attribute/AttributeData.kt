@@ -19,12 +19,7 @@ class AttributeData {
         combatPower = 0
         AttributeManager.attributes.forEach {
             val arrayOfBaseDoubles = this.find(it)
-            try {
-                combatPower += it.count(arrayOfBaseDoubles)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                info(it)
-            }
+            combatPower += it.count(arrayOfBaseDoubles)
         }
     }
 

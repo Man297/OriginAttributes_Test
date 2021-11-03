@@ -7,6 +7,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import taboolib.library.xseries.XMaterial
 import taboolib.platform.util.buildItem
+import taboolib.platform.util.sendLang
 
 interface ISlot
 
@@ -23,9 +24,12 @@ abstract class Slot(
 }
 
 interface SlotCondition {
-
     fun screen(string: String, keyword: List<String>): Boolean
+}
 
+interface SlotVariation {
+
+    fun examine(livingEntity: LivingEntity, adaptItem: AdaptItem, patterns: List<String>): Boolean
 }
 
 
@@ -35,16 +39,19 @@ class Helmet(itemStack: ItemStack?) : Slot(itemStack)
 class BreastPlate(itemStack: ItemStack?) : Slot(itemStack)
 class Gaiter(itemStack: ItemStack?) : Slot(itemStack)
 class Boot(itemStack: ItemStack?) : Slot(itemStack)
-class InventorySlot(val index: Int, itemStack: ItemStack?) : Slot(itemStack) {
-    override fun screen(string: String, keyword: List<String>): Boolean {
-        val map = keyword.map {
-            val split = it.split(' ')
-            DataPair(split[0], split[1])
-        }
-        val dataPair = map.find { it.key.toInt() == index }
-        if (dataPair != null) {
-            return string.contains(dataPair.key)
+class InventorySlot(private val index: Int, itemStack: ItemStack?) : Slot(itemStack), SlotVariation {
+
+    override fun examine(livingEntity: LivingEntity, adaptItem: AdaptItem, patterns: List<String>): Boolean {
+        val orNull = patterns.firstOrNull { it.split(" ")[0].toInt() == index }
+        if (orNull != null) {
+            val split = orNull.split(" ")
+            if (!any(adaptItem.item.itemMeta?.lore ?: arrayListOf(), listOf(split[1]))) {
+                livingEntity.sendLang("condition-slot-not-enough", item.itemMeta!!.displayName, split[1])
+                return false
+            }
         }
         return true
     }
+
+    fun any(list: List<String>, keyword: List<String>) = list.any { keyword.any { s -> it.contains(s) } }
 }

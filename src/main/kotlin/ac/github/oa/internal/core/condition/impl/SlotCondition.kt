@@ -4,6 +4,7 @@ import ac.github.oa.internal.attribute.AttributeAdapter
 import ac.github.oa.internal.core.condition.ICondition
 import ac.github.oa.internal.core.equip.AdaptItem
 import ac.github.oa.internal.core.equip.InventorySlot
+import ac.github.oa.internal.core.equip.SlotVariation
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
@@ -25,9 +26,15 @@ class SlotCondition : ICondition {
             val slot = adaptItem.slot
             val simpleName = slot::class.simpleName
             val stringList = options("slot").getStringList("pattern.$simpleName")
+
+
             if (any(lore, list)) {
+
+                if (slot is SlotVariation) return slot.examine(livingEntity, adaptItem,stringList)
+
                 val string = lore.first { list.any { s -> it.contains(s) } }
                 if (!slot.screen(string, stringList)) {
+
                     livingEntity.sendLang("condition-slot-not-enough", item.itemMeta!!.displayName, stringList[0])
                     return false
                 }
