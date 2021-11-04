@@ -157,7 +157,7 @@ object OnListener {
     }
 
     @SubscribeEvent(bind = "io.lumine.xikage.mythicmobs.api.bukkit.events.EntityDeathEvent")
-    fun handMythicDeath(ope: OptionalEvent) {
+    fun handleMythicDeath(ope: OptionalEvent) {
         val event = ope.get<MythicMobSpawnEvent>()
         val entity: Entity = event.entity
         if (entity is LivingEntity) {
