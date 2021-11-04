@@ -6,6 +6,7 @@ import ac.github.oa.internal.base.BaseConfig
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.event.Listener
+import taboolib.common.platform.function.info
 import taboolib.platform.BukkitPlugin
 import java.io.File
 import java.io.IOException
@@ -15,10 +16,9 @@ import java.util.logging.Level
 
 object AttributeManager {
 
+    private var folder: File = File(BukkitPlugin.getInstance().dataFolder, "attributes")
 
-    var folder: File = File(BukkitPlugin.getInstance().dataFolder, "attributes")
-
-    var map: MutableMap<UUID, AttributeData> = ConcurrentHashMap()
+    private var map: MutableMap<UUID, AttributeData> = ConcurrentHashMap()
 
     var list: MutableList<AttributeAdapter> = ArrayList()
     var attributes: MutableList<AttributeAdapter> = ArrayList()
@@ -27,7 +27,11 @@ object AttributeManager {
         return map.computeIfAbsent(uuid) { u: UUID? -> AttributeData() }
     }
 
+    fun count() = map.size
+
     fun isEnabled(c: Class<out AttributeAdapter>): Boolean = attributes.any { it::class.java.simpleName == c.simpleName }
+
+    fun remove(uuid: UUID) = map.remove(uuid)
 
     operator fun set(uuid: UUID, attributeData: AttributeData) {
         map[uuid] = attributeData

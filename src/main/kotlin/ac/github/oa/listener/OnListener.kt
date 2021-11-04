@@ -3,28 +3,27 @@ package ac.github.oa.listener
 import ac.github.oa.OriginAttribute
 import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.api.event.entity.EntityDamageEvent
+import ac.github.oa.api.event.entity.EntityDeathEvent
 import ac.github.oa.api.event.entity.OriginCustomDamageEvent
 import ac.github.oa.api.event.render.AttributeRenderStringEvent
 import ac.github.oa.command.Command
 import ac.github.oa.internal.attribute.AttributeData
 import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.event.impl.DamageMemory
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
+import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
-import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
+import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
-import taboolib.common.platform.function.submit
 import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
 
@@ -87,13 +86,18 @@ object OnListener {
         }
     }
 
-
     @SubscribeEvent
     fun e(e: EntityDamageByEntityEvent) {
-        val event = OriginCustomDamageEvent(e.damager, e.entity, e.damage, e)
+        val entity = e.entity
+        val event = OriginCustomDamageEvent(e.damager, entity, e.damage, e)
         event.call()
         if (!event.isCancelled) {
             e.damage = event.damage
+
+            if (entity is LivingEntity && entity.health - e.damage <= 0) {
+                EntityDeathEvent(entity, event).call()
+            }
+
         }
     }
 
@@ -142,40 +146,23 @@ object OnListener {
         asyncUpdate(e.player)
     }
 
-    //
-//    @SubscribeEvent
-//    fun onItemSpawnEvent(event: ItemSpawnEvent) {
-//        if (event.isCancelled() || !OriginAttribute.instance.getConfig().getBoolean("options.item-display-name") ||
-//            event.getEntity().isCustomNameVisible()
-//        ) return
-//        val item: Item = event.getEntity()
-//        val itemStack = item.itemStack
-//        if (!event.isCancelled() && itemStack.hasItemMeta() && itemStack.itemMeta!!.hasDisplayName()) {
-//            item.isCustomNameVisible = true
-//            if (itemStack.amount > 1) {
-//                item.customName = itemStack.itemMeta!!.displayName + " §b*" + itemStack.amount
-//            } else {
-//                item.customName = itemStack.itemMeta!!.displayName
-//            }
-//        }
-//    }
+    @SubscribeEvent(bind = "io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent")
+    fun handleMythicSpawn(ope: OptionalEvent) {
+        val event = ope.get<MythicMobSpawnEvent>()
+        val entity: Entity = event.entity
 
-    @SubscribeEvent
-    fun e(e: CreatureSpawnEvent) {
-        val entity: LivingEntity = e.getEntity()
-
-        entity.isInvulnerable = true
-        submit {
-            entity.isInvulnerable = true
-            OriginAttributeAPI.loadEntityEquipment(entity)
-            OriginAttributeAPI.callUpdate(entity)
-            entity.isInvulnerable = false
+        if (entity is LivingEntity) {
+            asyncUpdate(entity)
         }
     }
 
-    @SubscribeEvent
-    fun e(e: EntityDeathEvent) {
-        OriginAttributeAPI.remove(e.entity.uniqueId)
+    @SubscribeEvent(bind = "io.lumine.xikage.mythicmobs.api.bukkit.events.EntityDeathEvent")
+    fun handMythicDeath(ope: OptionalEvent) {
+        val event = ope.get<MythicMobSpawnEvent>()
+        val entity: Entity = event.entity
+        if (entity is LivingEntity) {
+            OriginAttributeAPI.remove(entity.uniqueId)
+        }
     }
 
     fun asyncUpdate(entity: LivingEntity) {

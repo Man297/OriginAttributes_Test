@@ -47,13 +47,13 @@ object OriginAttributeAPI {
     }
 
     fun async(task: () -> Unit) {
-        submit {
+        submit(async = true) {
             task()
         }
     }
 
     fun remove(uuid: UUID) {
-        AttributeManager.map.remove(uuid)
+        AttributeManager.remove(uuid)
         map.remove(uuid)
     }
 
@@ -111,7 +111,7 @@ object OriginAttributeAPI {
 
         val event = AttributeRenderStringEvent(livingEntity, list)
         event.call()
-        if (!event.isCancelled()) {
+        if (!event.isCancelled) {
             for (s in event.list) {
                 for (attribute in AttributeManager.attributes) {
                     val doubles: Array<BaseDouble> = attributeData.find(attribute)
@@ -163,13 +163,17 @@ object OriginAttributeAPI {
 
     fun loadList(entity: LivingEntity?, list: List<String>): AttributeData {
         val attributeData = AttributeData()
+        loadList(entity, list, attributeData)
+        return attributeData
+    }
+
+    fun loadList(entity: LivingEntity?, list: List<String>, origin: AttributeData) {
         for (s in list) {
             for (attribute in AttributeManager.attributes) {
-                val doubles: Array<BaseDouble> = attributeData.find(attribute)
+                val doubles: Array<BaseDouble> = origin.find(attribute)
                 attribute.inject(entity, s, doubles)
             }
         }
-        return attributeData
     }
 
     fun removeExtra(uuid: UUID, c: String) {

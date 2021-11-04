@@ -33,9 +33,9 @@ class BaseDouble : HashMap<ValueType, Double>() {
         return globalEval(0.0, 0.0, value)
     }
 
-    fun globalEval(addionNumber: Double, addionPercent: Double, value: Double): Double {
-        var result = value(ValueType.NUMBER) + addionNumber
-        result += value * (percent() + addionPercent / 100)
+    fun globalEval(addonNumber: Double, addonPercent: Double, value: Double): Double {
+        var result = value(ValueType.NUMBER) + addonNumber
+        result += value * (percent() + addonPercent / 100)
         return result
     }
 
