@@ -71,7 +71,7 @@ object OriginAttribute : Plugin() {
     }
 
     val original: Boolean
-        get() = config.getBoolean("original")
+        get() = config.getBoolean("options.original")
 
     override fun onEnable() {
         // Plugin startup logic
