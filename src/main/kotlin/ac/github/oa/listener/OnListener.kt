@@ -25,6 +25,7 @@ import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
 import taboolib.platform.util.isNotAir
+import taboolib.platform.util.sendMessage
 import taboolib.type.BukkitEquipment
 
 
@@ -77,28 +78,37 @@ object OnListener {
                     if (damager is Player && Command.isDebugEnable(damager)) {
                         (0..10).forEach { _ -> damager.sendMessage(" ") }
                         damager.sendMessage("${entity.name}: Damage logs.")
-                        damageMemory.labels.forEach {
-                            damager.sendMessage("1.${it.key} = ${it.value}")
+                        damageMemory.labels.onEachIndexed { index, entry ->
+                            damager.sendMessage("${index}.${entry.key} = ${entry.value}")
                         }
+                        damager.sendMessage("Total amount ${e.damage}")
                     }
                 }
             }
         }
     }
 
+    val damageCauses: List<String>
+        get() = OriginAttribute.config.getStringList("options.damage-cause")
+
     @SubscribeEvent
     fun e(e: EntityDamageByEntityEvent) {
-        val entity = e.entity
-        val event = OriginCustomDamageEvent(e.damager, entity, e.damage, e)
-        event.call()
-        if (!event.isCancelled) {
-            e.damage = event.damage
 
-            if (entity is LivingEntity && entity.health - e.damage <= 0) {
-                EntityDeathEvent(entity, event).call()
+        val cause = e.cause
+        if (damageCauses.contains(cause.name)) {
+            val entity = e.entity
+            val event = OriginCustomDamageEvent(e.damager, entity, e.damage, e)
+            event.call()
+            if (!event.isCancelled) {
+                e.damage = event.damage
+
+                if (entity is LivingEntity && entity.health - e.damage <= 0) {
+                    EntityDeathEvent(entity, event).call()
+                }
+
             }
-
         }
+
     }
 
 

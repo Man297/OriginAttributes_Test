@@ -50,6 +50,7 @@ tasks.withType<JavaCompile> {
 tasks.withType<Jar> {
 //    destinationDir = file("F:/Server/spigot 1.17/plugins")
     destinationDir = file("F:/Server/Spigot 1.12.2 - 测试/plugins")
+//    destinationDir = file("F:/Server/spigot 1.17/plugins")
 }
 
 configure<JavaPluginConvention> {
