@@ -45,12 +45,12 @@ class InventorySlot(private val index: Int, itemStack: ItemStack?) : Slot(itemSt
         val orNull = patterns.firstOrNull { it.split(" ")[0].toInt() == index }
         if (orNull != null) {
             val split = orNull.split(" ")
-            if (!any(adaptItem.item.itemMeta?.lore ?: arrayListOf(), listOf(split[1]))) {
+            return if (!any(adaptItem.item.itemMeta?.lore ?: arrayListOf(), listOf(split[1]))) {
                 livingEntity.sendLang("condition-slot-not-enough", item.itemMeta!!.displayName, split[1])
-                return false
-            }
+                false
+            } else true
         }
-        return true
+        return false
     }
 
     fun any(list: List<String>, keyword: List<String>) = list.any { keyword.any { s -> it.contains(s) } }

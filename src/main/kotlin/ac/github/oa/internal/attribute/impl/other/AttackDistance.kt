@@ -15,6 +15,7 @@ import org.bukkit.inventory.EquipmentSlot
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
 import taboolib.common5.Coerce
+import taboolib.platform.BukkitPlugin
 
 class AttackDistance : SingleAttributeAdapter(AttributeType.OTHER) {
 

@@ -82,6 +82,7 @@ object OnListener {
                             damager.sendMessage("${index}.${entry.key} = ${entry.value}")
                         }
                         damager.sendMessage("Total amount ${e.damage}")
+                        damager.sendMessage("Is cancel ${e.isCancelled}")
                     }
                 }
             }

@@ -25,11 +25,13 @@ import taboolib.common.platform.function.submit
 import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Consumer
 
 object OriginAttributeAPI {
 
-    var map: MutableMap<UUID, MutableMap<String, AttributeData>> = HashMap<UUID, MutableMap<String, AttributeData>>()
+    var map: MutableMap<UUID, MutableMap<String, AttributeData>> =
+        ConcurrentHashMap<UUID, MutableMap<String, AttributeData>>()
 
     /**
      *

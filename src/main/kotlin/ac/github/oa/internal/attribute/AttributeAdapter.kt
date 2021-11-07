@@ -43,7 +43,6 @@ abstract class AttributeAdapter(
 
     open fun count(baseDoubles: Array<BaseDouble>): Long = 0
 
-
     open fun register() {
 
         AttributeManager.register(this)

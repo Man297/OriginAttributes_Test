@@ -10,7 +10,7 @@ import ac.github.oa.internal.base.event.impl.DamageMemory
 /**
  * 0 附加伤害
  */
-class AddionDamage : SingleAttributeAdapter(AttributeType.ATTACK) {
+class AddonDamage : SingleAttributeAdapter(AttributeType.ATTACK) {
 
     override val strings: Array<String>
         get() = arrayOf("附加攻击")

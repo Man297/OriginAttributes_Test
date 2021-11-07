@@ -38,22 +38,24 @@ class Damage : AttributeAdapter(4, AttributeType.ATTACK) {
 
     override fun count(baseDoubles: Array<BaseDouble>): Long {
         return (baseDoubles[0].number() * baseConfig.select(this).any("combat-power").asNumber().toDouble() +
-                baseDoubles[1].number() * baseConfig.select("damage-pvp").any("combat-power").asNumber().toDouble() +
-                baseDoubles[2].number() * baseConfig.select("damage-pve").any("combat-power").asNumber().toDouble()
+                baseDoubles[2].number() * baseConfig.select("damage-pvp").any("combat-power").asNumber().toDouble() +
+                baseDoubles[3].number() * baseConfig.select("damage-pve").any("combat-power").asNumber().toDouble()
                 ).roundToLong()
     }
 
     override fun inject(entity: LivingEntity?, string: String, baseDoubles: Array<BaseDouble>) {
-
-        if (string.contains("-")) {
-
-            val list = baseConfig.select(this).any("strings").asStringList()
+        val list = baseConfig.select(this).any("strings").asStringList()
+        if (string.contains("%")) {
+            if (list.any { string.contains(it) }) {
+                baseDoubles[0].merge(baseConfig.analysis(this, string, ValueType.NUMBER))
+                baseDoubles[1].merge(baseConfig.analysis(this, string, ValueType.NUMBER))
+            }
+        } else if (string.contains("-")) {
             if (list.any { string.contains(it) }) {
                 val split = string.split("-")
                 baseDoubles[0].merge(baseConfig.analysis(this, split[0], ValueType.NUMBER, true))
                 baseDoubles[1].merge(baseConfig.analysis(this, split[1], ValueType.NUMBER, true))
             }
-
         } else {
             baseDoubles[0].merge(baseConfig.analysis(this, string, ValueType.NUMBER))
             baseDoubles[1].merge(baseConfig.analysis(this, string, ValueType.NUMBER))
