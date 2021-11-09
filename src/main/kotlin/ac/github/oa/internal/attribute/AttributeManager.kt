@@ -29,7 +29,8 @@ object AttributeManager {
 
     fun count() = map.size
 
-    fun isEnabled(c: Class<out AttributeAdapter>): Boolean = attributes.any { it::class.java.simpleName == c.simpleName }
+    fun isEnabled(c: Class<out AttributeAdapter>): Boolean =
+        attributes.any { it::class.java.simpleName == c.simpleName }
 
     fun remove(uuid: UUID) = map.remove(uuid)
 
@@ -87,7 +88,8 @@ object AttributeManager {
 
 
     fun getPriority(attributeAdapter: AttributeAdapter): Int {
-        return BukkitPlugin.getInstance().config.getStringList("attributes").indexOf(attributeAdapter.name)
+        return BukkitPlugin.getInstance().config.getStringList("attributes")
+            .indexOf(attributeAdapter.name)
     }
 
     fun getFile(attributeAdapter: AttributeAdapter): File {

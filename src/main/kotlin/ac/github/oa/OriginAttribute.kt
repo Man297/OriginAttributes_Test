@@ -7,20 +7,14 @@ import ac.github.oa.internal.attribute.impl.defense.*
 import ac.github.oa.internal.attribute.impl.other.*
 import ac.github.oa.internal.attribute.impl.other.AttackDistance
 import ac.github.oa.internal.attribute.impl.update.*
-import ac.github.oa.internal.core.hook.MythicMobsHook
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import org.bukkit.Bukkit
-import org.bukkit.inventory.EquipmentSlot
 import taboolib.common.platform.Platform
 import taboolib.common.platform.Plugin
-import taboolib.common.platform.event.OptionalEvent
-import taboolib.common.platform.function.info
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.SecuredFile
 import taboolib.module.metrics.Metrics
 import taboolib.platform.BukkitPlugin
-import java.text.DateFormat
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.function.Consumer
@@ -52,7 +46,7 @@ object OriginAttribute : Plugin() {
         Armor().register()
         Dodge().register()
         Rebound().register()
-        ExpAddion().register()
+        ExpAddon().register()
         HealthRecovery().register()
         Health().register()
         MoveSpeed().register()

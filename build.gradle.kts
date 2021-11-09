@@ -26,6 +26,7 @@ taboolib {
             name("PlaceholderAPI").optional(true)
             name("MythicMobs").optional(true)
             name("Chemdah").optional(true)
+            name("ProtocolLib").optional(true)
         }
     }
 
@@ -49,8 +50,8 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Jar> {
 //    destinationDir = file("F:/Server/spigot 1.17/plugins")
-//    destinationDir = file("F:/Server/Spigot 1.12.2 - 测试/plugins")
-    destinationDir = file("F:/Server/spigot 1.17/plugins")
+    destinationDir = file("F:/Server/Spigot 1.12.2 - 测试/plugins")
+//    destinationDir = file("F:/Server/spigot 1.17/plugins")
 }
 
 configure<JavaPluginConvention> {

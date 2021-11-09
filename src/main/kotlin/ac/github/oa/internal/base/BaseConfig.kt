@@ -4,6 +4,7 @@ import ac.github.oa.internal.attribute.AttributeAdapter
 import ac.github.oa.internal.base.enums.ValueType
 import ac.github.oa.util.Strings
 import org.bukkit.configuration.ConfigurationSection
+import taboolib.common.platform.function.info
 
 class BaseConfig(var parent: ConfigurationSection?, var config: ConfigurationSection) {
 
@@ -22,8 +23,7 @@ class BaseConfig(var parent: ConfigurationSection?, var config: ConfigurationSec
     }
 
     operator fun contains(string: String): Boolean {
-        return config.getStringList("strings")
-            .stream().anyMatch { s: String? -> string.contains(s!!) }
+        return config.getStringList("strings").stream().anyMatch { s: String? -> string.contains(s!!) }
     }
 
     fun analysis(name: String, s: String, valueType: ValueType, force: Boolean = false): BaseDouble {

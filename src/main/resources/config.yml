@@ -2,6 +2,7 @@ options:
   random-split-char: '#'
   decimal-format: '#.##'
   time-format: 'yyyy-MM-dd HH:mm:ss'
+  damage-effect-limit: true
   operator-add: '+'
   operator-take: '-'
   original: true
@@ -64,7 +65,7 @@ attributes:
   - Armor
   - Dodge
   - Rebound
-  - ExpAddion
+  - ExpAddon
   - HealthRecovery
   - Health
   - MoveSpeed
