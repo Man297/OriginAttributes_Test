@@ -40,7 +40,7 @@ object OriginAttributeAPI {
         val attributeData = AttributeData()
         val data = AttributeManager[livingEntity.uniqueId]
         attributeData.merge(data)
-        attributeData.entityEquipment = data.entityEquipment
+        attributeData.adaptItems = data.adaptItems
         getExtras(livingEntity.uniqueId).values.forEach(attributeData::merge)
         val event = EntityGetterDataEvent(livingEntity, attributeData)
         event.call()
@@ -91,11 +91,11 @@ object OriginAttributeAPI {
     }
 
     fun loadEntityEquipment(livingEntity: LivingEntity) {
-        val equipment = livingEntity.equipment
         val attributeData = AttributeData()
-        attributeData.entityEquipment = equipment
 
         val items = loadInventory(livingEntity)
+        attributeData.adaptItems.clear()
+        attributeData.adaptItems.addAll(items)
 
         val list: MutableList<String> = ArrayList()
 

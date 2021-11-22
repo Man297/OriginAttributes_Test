@@ -10,6 +10,11 @@ options:
     - ENTITY_ATTACK
     - ENTITY_SWEEP_ATTACK
     - PROJECTILE
+  skip-strings:
+    - 'prefix 装备效果'
+    - 'prefix 套装效果'
+    - 'suffix xxx'
+    - 'regex \[[0-9]+].*'
   sell:
     title: '物品回收'
     keyword:

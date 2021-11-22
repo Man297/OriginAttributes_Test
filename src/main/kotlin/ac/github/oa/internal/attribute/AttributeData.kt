@@ -2,6 +2,7 @@ package ac.github.oa.internal.attribute
 
 import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.DataPair
+import ac.github.oa.internal.core.equip.AdaptItem
 import ac.github.oa.util.ArrayUtils
 import org.bukkit.inventory.EntityEquipment
 import taboolib.common.platform.function.info
@@ -10,7 +11,7 @@ import java.util.stream.IntStream
 
 class AttributeData {
 
-    var entityEquipment: EntityEquipment? = null
+    var adaptItems = mutableListOf<AdaptItem>()
 
     var combatPower: Long = 0
 

@@ -67,6 +67,10 @@ object OriginAttribute : Plugin() {
     val original: Boolean
         get() = config.getBoolean("options.original")
 
+    val skipStrings: List<String>
+        get() = config.getStringList("options.skip-strings")
+
+
     override fun onEnable() {
         // Plugin startup logic
 
