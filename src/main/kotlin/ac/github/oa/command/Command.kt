@@ -18,6 +18,7 @@ import taboolib.common.platform.command.command
 import taboolib.common.platform.function.info
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common5.Coerce
+import taboolib.library.xseries.XMaterial
 import taboolib.module.configuration.SecuredFile
 import taboolib.module.nms.getItemTag
 import taboolib.platform.event.PlayerJumpEvent
@@ -51,7 +52,7 @@ object Command {
                     dynamic {
                         execute<Player> { sender, context, argument ->
                             try {
-                                val itemKey = context.argument(-1)!!
+                                val itemKey = context.argument(-1)
                                 val map = OriginAttribute.json.fromJson<Map<String, String>>(
                                     argument.replace("/s", " "),
                                     Map::class.java
@@ -110,7 +111,7 @@ object Command {
                         dynamic {
                             execute<ProxyCommandSender> { sender, context, argument ->
                                 val playerExact = Bukkit.getPlayerExact(context.argument(-2)!!)!!
-                                val item = context.argument(-1)!!
+                                val item = context.argument(-1)
                                 giveItem(playerExact, item, Coerce.toInteger(argument))
                             }
                         }
@@ -196,12 +197,16 @@ object Command {
             return
         }
 
-        val items = createItems(sender, item, amount, map)
-        items.forEach { sender.inventory.addItem(it.key) }
+
+
+        val items = createItems(sender, item, amount, map).apply {
+            forEach { sender.inventory.addItem(it) }
+        }
         mutableMapOf<String, Int>().apply {
+
             items.map {
-                val displayName = it.key.itemMeta!!.displayName
-                this[displayName] = (this[displayName] ?: 0) + it.value
+                val displayName = it.itemMeta!!.displayName
+                this[displayName] = (this[displayName] ?: 0) + it.amount
             }
 
             this.forEach {
@@ -215,14 +220,15 @@ object Command {
         key: String,
         amount: Int,
         map: MutableMap<String, String> = mutableMapOf()
-    ): Map<ItemStack, Int> {
-        val mapOf = mutableMapOf<ItemStack, Int>()
+    ): List<ItemStack> {
+        val list = mutableListOf<ItemStack>()
         (0 until amount).forEach { _ ->
             val itemStack = ItemPlant.build(target, key, map)
-            if (itemStack != null) {
-                mapOf[itemStack] = (mapOf[itemStack] ?: 0) + 1
-            }
+            list.add(ItemPlant.build(target, key, map) ?: XMaterial.AIR.parseItem()!!)
         }
-        return mapOf
+        return list
     }
+
+    class ItemData(val itemStack: ItemStack)
+
 }

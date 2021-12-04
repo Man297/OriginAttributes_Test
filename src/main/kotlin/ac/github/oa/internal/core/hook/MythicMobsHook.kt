@@ -10,6 +10,7 @@ import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.Awake
 import taboolib.common.platform.event.OptionalEvent
@@ -17,18 +18,23 @@ import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
 import taboolib.common.platform.function.submit
 import taboolib.common.util.random
+import taboolib.module.nms.ItemTagData
+import taboolib.module.nms.getItemTag
+import taboolib.module.nms.setItemTag
 import taboolib.platform.BukkitPlugin
 import taboolib.type.BukkitEquipment
 
 object MythicMobsHook {
 
-
     @SubscribeEvent(bind = "io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent")
     fun e(ope: OptionalEvent) {
+        info("mythic mob death")
         val event = ope.get<MythicMobDeathEvent>()
         if (event.killer is Player) {
             val mm = event.mobType
             val drops = event.drops
+            val dropLockKiller = mm.config.getBoolean("OriginOptions.drop-lock-killer", false)
+
             for (str in mm.config.getStringList("OriginOptions.Drops")) {
                 if (str.contains(" ")) {
                     val args = str.split(" ")
@@ -54,7 +60,7 @@ object MythicMobsHook {
                         }
                     }
                     repeat((0 until amount).count()) {
-                        ItemPlant.build(event.entity as? LivingEntity, args[0])?.let {
+                        ItemPlant.build(if (dropLockKiller) event.killer else null, args[0])?.let {
                             drops.add(it)
                         } ?: info("MythicMobs - Drop No Item: " + mm.displayName + " - " + args[0])
                     }

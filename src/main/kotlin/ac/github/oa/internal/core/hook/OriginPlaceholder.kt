@@ -7,7 +7,6 @@ import ac.github.oa.internal.attribute.AttributeData
 import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.base.BaseDouble
 import org.bukkit.entity.Player
-import taboolib.common.platform.Awake
 import taboolib.platform.BukkitPlugin
 import taboolib.platform.compat.PlaceholderExpansion
 import java.util.*
@@ -21,11 +20,12 @@ object OriginPlaceholder : PlaceholderExpansion {
     override val identifier: String
         get() = "rpg"
 
-    override fun onPlaceholderRequest(p: Player, params: String): String {
+
+    override fun onPlaceholderRequest(p: Player?, params: String): String {
         val split = params.split(":").toTypedArray()
         val key = split[0]
         val args = if (split.size == 1) "" else split[1]
-        val attributeData: AttributeData = OriginAttributeAPI.getAttributeData(p)
+        val attributeData: AttributeData = OriginAttributeAPI.getAttributeData(p!!)
 
         if (params == "combat-power") {
             return attributeData.combatPower.toString()

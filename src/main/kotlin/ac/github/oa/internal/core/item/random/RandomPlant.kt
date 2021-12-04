@@ -25,7 +25,7 @@ object RandomPlant {
             SecuredFile.loadConfiguration(it).apply {
                 getKeys(true).forEach {
                     if (this.isString(it)) {
-                        configs[it] = getString(it)
+                        configs[it] = getString(it)!!
                     } else if (this.isList(it)) {
                         configs[it] = getStringList(it)
                     }

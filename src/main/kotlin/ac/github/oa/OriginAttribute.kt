@@ -5,14 +5,13 @@ import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.attribute.impl.attack.*
 import ac.github.oa.internal.attribute.impl.defense.*
 import ac.github.oa.internal.attribute.impl.other.*
-import ac.github.oa.internal.attribute.impl.other.AttackDistance
 import ac.github.oa.internal.attribute.impl.update.*
 import com.google.gson.Gson
 import org.bukkit.Bukkit
 import taboolib.common.platform.Platform
 import taboolib.common.platform.Plugin
 import taboolib.module.configuration.Config
-import taboolib.module.configuration.SecuredFile
+import taboolib.module.configuration.Configuration
 import taboolib.module.metrics.Metrics
 import taboolib.platform.BukkitPlugin
 import java.text.DecimalFormat
@@ -23,13 +22,13 @@ import java.util.function.Consumer
 object OriginAttribute : Plugin() {
 
     @Config("config.yml", migrate = true)
-    lateinit var config: SecuredFile
+    lateinit var config: Configuration
 
     val decimalFormat: DecimalFormat
         get() = DecimalFormat(config.getString("options.decimal-format"))
 
     val simpleDateFormat: SimpleDateFormat
-        get() = SimpleDateFormat(config.getString("options.time-format"))
+        get() = SimpleDateFormat(config.getString("options.time-format")!!)
 
     val json = Gson()
 
@@ -52,15 +51,14 @@ object OriginAttribute : Plugin() {
         MoveSpeed().register()
         Special().register()
         AttackSpeed().register()
-        AttackDistance().register()
+//        AttackDistance().register()
         ArmorBreak().register()
-        RangeDamage().register()
-        Shield().register()
-        ShieldRecovery().register()
+//        RangeDamage().register()
+//        Shield().register()
+//        ShieldRecovery().register()
         JumpDamage().register()
         DirectionDamage().register()
         Metrics(12489, BukkitPlugin.getInstance().description.version, Platform.BUKKIT)
-
 
     }
 

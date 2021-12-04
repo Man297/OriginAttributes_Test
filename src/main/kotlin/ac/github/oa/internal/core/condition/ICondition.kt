@@ -46,9 +46,9 @@ interface ICondition {
 
 
     val options: ConfigurationSection
-        get() = OriginAttribute.config.getConfigurationSection("options.condition")
+        get() = OriginAttribute.config.getConfigurationSection("options.condition")!!
 
-    fun options(string: String): ConfigurationSection = options.getConfigurationSection(string)
+    fun options(string: String): ConfigurationSection = options.getConfigurationSection(string)!!
 
     fun any(list: List<String>, keyword: List<String>) = list.any { keyword.any { s -> it.contains(s) } }
 

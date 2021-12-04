@@ -32,7 +32,7 @@ class SellContainer(val player: Player) {
 
 
         val templateButtons = getTemplateButtons()
-        player.openMenu<Linked<ItemTemplateButton>>(title = conf.getString("title")) {
+        player.openMenu<Linked<ItemTemplateButton>>(title = conf.getString("title")!!) {
 
             rows(conf.getInt("rows", 6))
 
@@ -51,12 +51,12 @@ class SellContainer(val player: Player) {
 
     private fun getTemplateButtons(): ArrayList<ItemTemplateButton> {
         val list = arrayListOf<ItemTemplateButton>()
-        val itemStack = builder.build(player, conf.getConfigurationSection("template-s"), mutableMapOf())
+        val itemStack = builder.build(player, conf.getConfigurationSection("template-s")!!, mutableMapOf())
         list.add(SubmitTemplateButton(itemStack, conf.getIntegerList("slots") ?: arrayListOf()))
         conf.getKeys(false).filter { it.startsWith("template") && it.endsWith("s") }.forEach {
             list.add(
                 ItemTemplateButton(
-                    builder.build(player, conf.getConfigurationSection(it), mutableMapOf()),
+                    builder.build(player, conf.getConfigurationSection(it)!!, mutableMapOf()),
                     conf.getIntegerList("slots") ?: arrayListOf()
                 )
             )

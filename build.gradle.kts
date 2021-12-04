@@ -14,8 +14,9 @@ taboolib {
     install("module-lang")
     install("module-configuration")
     install("module-metrics")
+    install("module-kether")
     classifier = null
-    version = "6.0.3-23"
+    version = "6.0.6-13"
 
     description {
         contributors {

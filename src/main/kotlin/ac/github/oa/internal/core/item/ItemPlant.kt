@@ -7,6 +7,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.function.info
 import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.configuration.SecuredFile
 import taboolib.module.nms.ItemTagData
@@ -29,7 +30,7 @@ object ItemPlant {
         folder.listFile("yml").forEach {
             SecuredFile.loadConfiguration(it).apply {
                 getKeys(false).forEach {
-                    configs.add(this.getConfigurationSection(it))
+                    configs.add(this.getConfigurationSection(it)!!)
                 }
             }
         }
@@ -39,7 +40,7 @@ object ItemPlant {
     fun hasKey(key: String): Boolean = configs.any { it.name == key }
 
     fun build(entity: LivingEntity?, key: String, map: MutableMap<String, String> = mutableMapOf()): ItemStack? =
-        build(entity, configs.first { it.name == key }, map)
+        build(entity, configs.firstOrNull { it.name == key } ?: throw NullPointerException("未发现${key}对应物品配置."), map)
 
     fun getConfig(key: String) = configs.first { it.name == key }
 
@@ -52,7 +53,7 @@ object ItemPlant {
         val generator = generators.firstOrNull { generatorKey == it.name }
             ?: throw NullPointerException("无效的物品生成器 $generatorKey")
 
-        return generator.build(entity, config,map).apply {
+        return generator.build(entity, config, map).apply {
             // 写入nbt
             val itemTag = getItemTag()
             itemTag[KEY] = ItemTagData(config.name)
@@ -64,7 +65,7 @@ object ItemPlant {
         }
     }
 
-    fun parseItem(itemStack: ItemStack) : String? {
+    fun parseItem(itemStack: ItemStack): String? {
         val itemTag = itemStack.getItemTag()
         if (itemTag.containsKey(KEY)) {
             return itemTag[KEY]?.asString()!!

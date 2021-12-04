@@ -133,9 +133,9 @@ object OnListener {
             matchResult?.apply {
                 this.groupValues.forEach {
                     string =
-                        s.replace(it, it.replace(OriginAttribute.config.getString("options.operator-add", "+"), "+"))
+                        s.replace(it, it.replace(OriginAttribute.config.getString("options.operator-add", "+")!!, "+"))
                     string =
-                        s.replace(it, it.replace(OriginAttribute.config.getString("options.operator-take", "-"), "+"))
+                        s.replace(it, it.replace(OriginAttribute.config.getString("options.operator-take", "-")!!, "+"))
                 }
             }
             e.list[index] = string

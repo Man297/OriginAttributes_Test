@@ -36,15 +36,15 @@ class DefaultGenerator : ItemGenerator {
 
         val wrapper = MapScript.Wrapper().apply { putAll(map) }
 
-        config.getStringList("create-pre")?.forEach { it.random(wrapper, entity) }
+        config.getStringList("create-pre").forEach { it.random(wrapper, entity) }
 
-        val id = config.getString("id").random(wrapper, entity)
-        val data = config.getString("data", "0").random(wrapper, entity)
-        val name = config.getString("name", "name null").random(wrapper, entity)
-        val lore = config.getStringList("lore").random(wrapper, entity).rebuild()
-        val enchantments = config.getStringList("enchantments").random(wrapper, entity).rebuild()
-        val itemFlags = config.getStringList("item-flags").random(wrapper, entity).rebuild()
-        val unbreakable = config.getString("unbreakable", "false").random(wrapper, entity)
+        val id = config.getString("id")!!.random(wrapper, entity)
+        val data = config.getString("data", "0")!!.random(wrapper, entity)
+        val name = config.getString("name", "name null")!!.random(wrapper, entity)
+        val lore = config.getStringList("lore").toMutableList().random(wrapper, entity).rebuild()
+        val enchantments = config.getStringList("enchantments").toMutableList().random(wrapper, entity).rebuild()
+        val itemFlags = config.getStringList("item-flags").toMutableList().random(wrapper, entity).rebuild()
+        val unbreakable = config.getString("unbreakable", "false")!!.random(wrapper, entity)
         val optional = XMaterial.matchXMaterial(id)
 
         val material = if (optional.isPresent) {
@@ -70,19 +70,19 @@ class DefaultGenerator : ItemGenerator {
             this.isUnbreakable = unbreakable.toBoolean()
 
             if (config.isString("skull-owner")) {
-                skullOwner = config.getString("skull-owner").random(wrapper, entity)
+                skullOwner = config.getString("skull-owner")!!.random(wrapper, entity)
             }
 
             if (config.isString("skull-texture")) {
                 XMaterial.PLAYER_HEAD
                 skullTexture = ItemBuilder.SkullTexture(
-                    config.getString("skull-texture").random(wrapper, entity),
+                    config.getString("skull-texture")!!.random(wrapper, entity),
                     UUID.randomUUID()
                 )
             }
 
             if (config.isString("color")) {
-                color = config.getString("color").random(wrapper, entity)?.run {
+                color = config.getString("color")!!.random(wrapper, entity)?.run {
                     val split = this.split(",")
                     Color.fromBGR(split[0].toInt(), split[1].toInt(), split[2].toInt())
                 }

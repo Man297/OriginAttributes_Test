@@ -12,15 +12,15 @@ import taboolib.platform.util.buildItem
 class Sell(player: Player) {
 
     init {
-        val config = OriginAttribute.config.getConfigurationSection("options.sell")
-        val layout = config.getStringList("layout")
-        buildMenu<Basic>(title = config.getString("title")) {
+        val config = OriginAttribute.config.getConfigurationSection("options.sell")!!
+        val layout = config.getStringList("layout")!!
+        buildMenu<Basic>(title = config.getString("title")!!) {
             rows(layout.size)
             map(*layout.toTypedArray())
             config.getKeys(false).forEach {
                 if (it.startsWith("template")) {
                     val char = it.split("-")[0]
-                    set(char.toCharArray()[0], ItemPlant.build(null, config.getString(it)) ?: buildItem(XMaterial.AIR))
+                    set(char.toCharArray()[0], ItemPlant.build(null, config.getString(it)!!) ?: buildItem(XMaterial.AIR))
                 }
             }
 
