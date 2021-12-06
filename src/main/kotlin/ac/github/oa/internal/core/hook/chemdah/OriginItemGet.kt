@@ -30,17 +30,11 @@ object OriginItemGet : ObjectiveCountableI<ItemCreatedEvent>() {
         addCondition0("item") { e ->
             toInferItem().isItem(e.itemStack)
         }
-        addCondition0("amount") { e ->
-            toInt() <= e.itemStack.amount
-        }
 
         addCondition0("group") { e ->
             toString() == e.config.getString("group")
         }
 
-        addConditionVariable("amount") {
-            it.itemStack.amount
-        }
     }
 
     /**
@@ -48,7 +42,7 @@ object OriginItemGet : ObjectiveCountableI<ItemCreatedEvent>() {
      * 简化版本
      */
     fun addCondition0(name: String, func: Data.(ItemCreatedEvent) -> Boolean) {
-        addCondition(name,object : Function2<Data,ItemCreatedEvent,Boolean> {
+        addSimpleCondition(name,object : Function2<Data,ItemCreatedEvent,Boolean> {
             override fun invoke(input1: Data, input2: ItemCreatedEvent): Boolean {
                 return func(input1, input2)
             }

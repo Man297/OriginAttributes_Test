@@ -28,7 +28,6 @@ object MythicMobsHook {
 
     @SubscribeEvent(bind = "io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent")
     fun e(ope: OptionalEvent) {
-        info("mythic mob death")
         val event = ope.get<MythicMobDeathEvent>()
         if (event.killer is Player) {
             val mm = event.mobType
