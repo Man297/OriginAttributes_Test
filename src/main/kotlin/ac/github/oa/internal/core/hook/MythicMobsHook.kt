@@ -32,7 +32,7 @@ object MythicMobsHook {
         if (event.killer is Player) {
             val mm = event.mobType
             val drops = event.drops
-            val dropLockKiller = mm.config.getBoolean("OriginOptions.drop-lock-killer", false)
+            val dropLockKiller = mm.config.getBoolean("OriginOptions.DropLockKiller", false)
 
             for (str in mm.config.getStringList("OriginOptions.Drops")) {
                 if (str.contains(" ")) {

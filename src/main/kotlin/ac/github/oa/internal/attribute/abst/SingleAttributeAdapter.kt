@@ -18,7 +18,8 @@ abstract class SingleAttributeAdapter(vararg attributeTypes: AttributeType) :
     }
 
     override fun format(entity: LivingEntity, s: String, baseDoubles: Array<BaseDouble>): Any {
-        return baseDoubles[0].number()
+        return if (type == ValueType.ALL && s.endsWith(":p")) baseDoubles[0].value(ValueType.NUMBER) else
+            baseDoubles[0].value(ValueType.PERCENT)
     }
 
     override fun count(baseDoubles: Array<BaseDouble>): Long {
