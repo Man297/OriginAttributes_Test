@@ -1,6 +1,7 @@
 package ac.github.oa.command
 
 import ac.github.oa.OriginAttribute
+import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.core.container.SellContainer
 import ac.github.oa.internal.core.item.ItemPlant
@@ -188,6 +189,15 @@ object Command {
                     }
                 }
             }
+
+            literal("test") {
+                execute<Player> { sender, context, argument ->
+                    OriginAttributeAPI.setExtra(sender.uniqueId,"test0",OriginAttributeAPI.loadList(listOf("经验加成 +20%")))
+                    OriginAttributeAPI.callUpdate(sender)
+                    sender.sendMessage("call")
+                }
+            }
+
         }
     }
 
@@ -196,7 +206,6 @@ object Command {
             sender.sendLang("item-key-is-null")
             return
         }
-
 
 
         val items = createItems(sender, item, amount, map).apply {
