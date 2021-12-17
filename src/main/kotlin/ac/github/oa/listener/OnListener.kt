@@ -51,7 +51,6 @@ object OnListener {
         }
 
         if (damager != null && entity != null) {
-
             if (e.damager !is Projectile) {
                 val itemStack = BukkitEquipment.HAND.getItem(damager)
                 if (itemStack != null && itemStack.isNotAir() && OriginAttribute.config.getStringList("options.remotes")

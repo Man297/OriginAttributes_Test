@@ -7,11 +7,4 @@ import taboolib.common.platform.Awake
 
 object ChemdahHook {
 
-    @Awake(LifeCycle.ENABLE)
-    fun e() {
-        if (Bukkit.getPluginManager().isPluginEnabled("Chemdah")) {
-            OriginItemGet.register()
-        }
-    }
-
 }

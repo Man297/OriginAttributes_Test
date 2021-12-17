@@ -8,6 +8,7 @@ import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.util.Strings
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 
 class DamageMemory(
     val attacker: LivingEntity,
@@ -18,7 +19,9 @@ class DamageMemory(
 ) : EventMemory {
 
     var arrow = attacker is Arrow
-    var damage = if (OriginAttribute.original) event.damage else 0.0
+
+    // 如果关闭原版属性 并且玩家是玩家 则启用
+    var damage = if (!OriginAttribute.original && attacker is Player) 0.0 else event.damage
     val labels = mutableMapOf<Any, Any>()
 
     fun setLabel(key: Any, value: Any): DamageMemory {

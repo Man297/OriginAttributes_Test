@@ -106,15 +106,29 @@ object Command {
                             ItemPlant.configs.map { it.name }
                         }
                         execute<ProxyCommandSender> { sender, context, argument ->
-                            val playerExact = Bukkit.getPlayerExact(context.argument(-1)!!)!!
+                            val playerExact = Bukkit.getPlayerExact(context.argument(-1))!!
                             giveItem(playerExact, argument, 1)
                         }
                         dynamic {
                             execute<ProxyCommandSender> { sender, context, argument ->
-                                val playerExact = Bukkit.getPlayerExact(context.argument(-2)!!)!!
+                                val playerExact = Bukkit.getPlayerExact(context.argument(-2))!!
                                 val item = context.argument(-1)
                                 giveItem(playerExact, item, Coerce.toInteger(argument))
                             }
+
+                            // options
+                            dynamic {
+                                execute<ProxyCommandSender>{sender, context, argument ->
+                                    val playerExact = Bukkit.getPlayerExact(context.argument(-3))!!
+                                    val item = context.argument(-2)
+                                    val map = OriginAttribute.json.fromJson<Map<String, String>>(
+                                        argument.replace("/s", " "),
+                                        Map::class.java
+                                    )
+                                    giveItem(playerExact, item, Coerce.toInteger(argument),map.toMutableMap())
+                                }
+                            }
+
                         }
                     }
                 }
