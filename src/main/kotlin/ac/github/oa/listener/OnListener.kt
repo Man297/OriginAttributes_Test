@@ -66,6 +66,7 @@ object OnListener {
             val damageMemory = DamageMemory(damager, entity, e, a, d)
             val entityDamageEvent = EntityDamageEvent(damageMemory, PriorityEnum.PRE)
             entityDamageEvent.call()
+            e.isCancelled = entityDamageEvent.isCancelled
             if (!entityDamageEvent.isCancelled) {
                 OriginAttributeAPI.callDamage(damageMemory)
                 entityDamageEvent.priorityEnum = PriorityEnum.POST
@@ -110,6 +111,7 @@ object OnListener {
             val entity = e.entity
             val event = OriginCustomDamageEvent(e.damager, entity, e.damage, e)
             event.call()
+            e.isCancelled = event.isCancelled
             if (!event.isCancelled) {
                 e.damage = event.damage
 

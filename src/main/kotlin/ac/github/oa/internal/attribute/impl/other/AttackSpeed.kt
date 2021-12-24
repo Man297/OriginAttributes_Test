@@ -48,11 +48,11 @@ class AttackSpeed : SingleAttributeAdapter(AttributeType.OTHER) {
                     if (end(player)) {
                         val baseDoubles: Array<BaseDouble> =
                             damageMemory.attackAttributeData.find(AttackSpeed::class.java)
-                        val number: Double = baseDoubles[0].number()
+                        var number: Double = baseDoubles[0].number()
                         if (number <= 0) {
-                            return
+                            number = 1.0
                         }
-                        val value = 1000 / number
+                        val value = 5000 / number
                         insert(player, (System.currentTimeMillis() + value).toLong())
                     } else {
                         e.isCancelled = true
