@@ -101,7 +101,7 @@ object Command {
                     }
 
                     // [item]
-                    dynamic {
+                    dynamic(commit = "item") {
                         suggestion<ProxyCommandSender> { sender, context ->
                             ItemPlant.configs.map { it.name }
                         }
@@ -109,8 +109,8 @@ object Command {
                             val playerExact = Bukkit.getPlayerExact(context.argument(-1))!!
                             giveItem(playerExact, argument, 1)
                         }
-                        dynamic {
-                            execute<ProxyCommandSender> { sender, context, argument ->
+                        dynamic() {
+                            execute<ProxyCommandSender> { _, context, argument ->
                                 val playerExact = Bukkit.getPlayerExact(context.argument(-2))!!
                                 val item = context.argument(-1)
                                 giveItem(playerExact, item, Coerce.toInteger(argument))
@@ -118,14 +118,19 @@ object Command {
 
                             // options
                             dynamic {
-                                execute<ProxyCommandSender>{sender, context, argument ->
+                                execute<ProxyCommandSender> { sender, context, argument ->
                                     val playerExact = Bukkit.getPlayerExact(context.argument(-3))!!
                                     val item = context.argument(-2)
                                     val map = OriginAttribute.json.fromJson<Map<String, String>>(
                                         argument.replace("/s", " "),
                                         Map::class.java
                                     )
-                                    giveItem(playerExact, item, Coerce.toInteger(argument),map.toMutableMap())
+                                    giveItem(
+                                        playerExact,
+                                        item,
+                                        Coerce.toInteger(context.argument(-1)),
+                                        map.toMutableMap()
+                                    )
                                 }
                             }
 
@@ -206,7 +211,11 @@ object Command {
 
             literal("test") {
                 execute<Player> { sender, context, argument ->
-                    OriginAttributeAPI.setExtra(sender.uniqueId,"test0",OriginAttributeAPI.loadList(listOf("经验加成 +20%")))
+                    OriginAttributeAPI.setExtra(
+                        sender.uniqueId,
+                        "test0",
+                        OriginAttributeAPI.loadList(listOf("经验加成 +20%"))
+                    )
                     OriginAttributeAPI.callUpdate(sender)
                     sender.sendMessage("call")
                 }
@@ -222,9 +231,7 @@ object Command {
         }
 
 
-        val items = createItems(sender, item, amount, map).apply {
-            forEach { sender.inventory.addItem(it) }
-        }
+        val items = createItems(sender, item, amount, map).onEach { sender.inventory.addItem(it) }
         mutableMapOf<String, Int>().apply {
 
             items.map {
@@ -246,7 +253,6 @@ object Command {
     ): List<ItemStack> {
         val list = mutableListOf<ItemStack>()
         (0 until amount).forEach { _ ->
-            val itemStack = ItemPlant.build(target, key, map)
             list.add(ItemPlant.build(target, key, map) ?: XMaterial.AIR.parseItem()!!)
         }
         return list

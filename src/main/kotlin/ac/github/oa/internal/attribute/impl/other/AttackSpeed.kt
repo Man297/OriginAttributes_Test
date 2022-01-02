@@ -52,7 +52,7 @@ class AttackSpeed : SingleAttributeAdapter(AttributeType.OTHER) {
                         if (number <= 0) {
                             number = 1.0
                         }
-                        val value = 5000 / number
+                        val value = 1000 / number
                         insert(player, (System.currentTimeMillis() + value).toLong())
                     } else {
                         e.isCancelled = true
