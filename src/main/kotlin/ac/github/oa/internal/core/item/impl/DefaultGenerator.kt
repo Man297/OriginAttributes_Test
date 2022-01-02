@@ -9,6 +9,7 @@ import org.bukkit.Color
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffectType
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.library.configuration.ConfigurationSection
@@ -80,11 +81,10 @@ class DefaultGenerator : ItemGenerator {
                     UUID.randomUUID()
                 )
             }
-
             if (config.isString("color")) {
-                color = config.getString("color")!!.random(wrapper, entity)?.run {
+                color = config.getString("color")!!.random(wrapper, entity).run {
                     val split = this.split(",")
-                    Color.fromBGR(split[0].toInt(), split[1].toInt(), split[2].toInt())
+                    Color.fromRGB(split[0].toInt(), split[1].toInt(), split[2].toInt())
                 }
             }
 

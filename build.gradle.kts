@@ -16,7 +16,7 @@ taboolib {
     install("module-metrics")
     install("module-kether")
     classifier = null
-    version = "6.0.6-13"
+    version = "6.0.7-13"
 
     description {
         contributors {
@@ -51,7 +51,7 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Jar> {
 //    destinationDir = file("F:/Server/spigot 1.17/plugins")
-//    destinationDir = file("F:/Server/Spigot 1.12.2 - 赏金测试/plugins")
+    destinationDir = file("F:/Server/Spigot 1.12.2 - 赏金测试/plugins")
 //    destinationDir = file("F:/Server/spigot 1.17/plugins")
 }
 

@@ -13,6 +13,7 @@ import taboolib.module.configuration.SecuredFile
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import taboolib.platform.BukkitPlugin
+import java.io.File
 import java.util.logging.Level
 
 object ItemPlant {
@@ -23,13 +24,15 @@ object ItemPlant {
     val configs = arrayListOf<ConfigurationSection>()
 
     val folder = newfolder(BukkitPlugin.getInstance().dataFolder, "item", listOf("default.yml"))
+    val cacheFiles = mutableMapOf<File, List<String>>()
 
     @Awake(LifeCycle.ENABLE)
     fun init() {
         configs.clear()
-        folder.listFile("yml").forEach {
-            SecuredFile.loadConfiguration(it).apply {
-                getKeys(false).forEach {
+        cacheFiles.clear()
+        folder.listFile("yml").forEach { file ->
+            SecuredFile.loadConfiguration(file).apply {
+                getKeys(false).apply { cacheFiles[file] = this.toMutableList() }.forEach {
                     configs.add(this.getConfigurationSection(it)!!)
                 }
             }
