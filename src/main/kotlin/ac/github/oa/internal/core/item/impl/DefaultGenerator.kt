@@ -24,7 +24,7 @@ import java.util.*
 import java.util.logging.Level
 
 @Awake(LifeCycle.LOAD)
-class DefaultGenerator : ItemGenerator {
+open class DefaultGenerator : ItemGenerator {
 
     override val name: String
         get() = ""

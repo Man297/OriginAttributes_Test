@@ -6,6 +6,10 @@ options:
   operator-add: '+'
   operator-take: '-'
   original: true
+  generator:
+    single:
+      append:
+        - '&b! &e该物品不代表最终品质，仅作为展示'
   damage-cause:
     - ENTITY_ATTACK
     - ENTITY_SWEEP_ATTACK

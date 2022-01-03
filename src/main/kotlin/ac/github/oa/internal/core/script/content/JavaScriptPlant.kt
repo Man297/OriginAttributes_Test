@@ -1,12 +1,10 @@
 package ac.github.oa.internal.core.script.content
 
-import ac.github.oa.internal.core.item.ItemPlant
 import ac.github.oa.util.listFile
 import ac.github.oa.util.newfolder
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common5.compileJS
-import taboolib.module.configuration.Config
 import taboolib.platform.BukkitPlugin
 import java.io.File
 import javax.script.CompiledScript

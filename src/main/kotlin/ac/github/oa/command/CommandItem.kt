@@ -19,9 +19,13 @@ import taboolib.module.ui.openMenu
 import taboolib.module.ui.type.Linked
 import taboolib.platform.util.buildItem
 import java.io.File
+import kotlin.math.ceil
 
 @CommandHeader("rpgItem", aliases = ["item", "ri"])
 object CommandItem {
+
+    val slots = IntRange(0, 54).map { it }
+
 
     @CommandBody
     val manager = subCommand {
@@ -36,6 +40,8 @@ object CommandItem {
         val cacheFiles = ItemPlant.cacheFiles.map { ItemRootFile(it.key, it.value) }
         openMenu<Linked<ItemRootFile>>(title = "§dItemManager") {
             elements { cacheFiles }
+            rows(ceil(cacheFiles.size / 9.0).toInt())
+            slots(slots)
             cacheFiles.forEachIndexed { index, itemRootFile ->
                 set(index, buildItem(XMaterial.BOOK) {
                     name = "§7${itemRootFile.file.name} §f*${itemRootFile.keys.size}"
@@ -51,8 +57,10 @@ object CommandItem {
     }
 
     fun Player.openSubManageMenu(itemRootFile: ItemRootFile) {
-        val itemElements = itemRootFile.keys.map { ItemElement(itemRootFile,it) }
+        val itemElements = itemRootFile.keys.map { ItemElement(itemRootFile, it) }
         openMenu<Linked<ItemElement>>(title = "§d${itemRootFile.file.name}") {
+            slots(slots)
+            rows(ceil(itemElements.size / 9.0).toInt())
             elements { itemElements }
             itemElements.forEachIndexed { index, itemElement ->
                 set(index, itemElement.build(this@openSubManageMenu)!!)
@@ -67,7 +75,7 @@ object CommandItem {
 
     class ItemRootFile(val file: File, val keys: List<String>)
 
-    class ItemElement(val root : ItemRootFile,val key: String) {
+    class ItemElement(val root: ItemRootFile, val key: String) {
         fun build(player: Player) = ItemPlant.build(player, key)
     }
 
