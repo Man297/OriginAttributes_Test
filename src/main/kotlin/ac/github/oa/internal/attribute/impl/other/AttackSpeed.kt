@@ -22,19 +22,7 @@ class AttackSpeed : SingleAttributeAdapter(AttributeType.OTHER) {
 
     companion object {
 
-        var map: MutableMap<Player, Long> = ConcurrentHashMap<Player, Long>()
-        fun insert(player: Player, stamp: Long) {
-            map[player] = stamp
-        }
-
-        fun end(player: Player): Boolean {
-            if (!map.containsKey(player)) {
-                return true
-            }
-            val aLong = map[player]
-            val currentTimeMillis = System.currentTimeMillis()
-            return currentTimeMillis > aLong!!
-        }
+        var map: MutableMap<Player, Spot> = ConcurrentHashMap<Player, Spot>()
 
         @SubscribeEvent
         fun e(e: EntityDamageEvent) {
@@ -44,21 +32,38 @@ class AttackSpeed : SingleAttributeAdapter(AttributeType.OTHER) {
             val attacker: LivingEntity = damageMemory.attacker
             if (attacker is Player) {
                 val player: Player = attacker
-                if (e.priorityEnum == PriorityEnum.PRE) {
-                    if (end(player)) {
-                        val baseDoubles: Array<BaseDouble> =
-                            damageMemory.attackAttributeData.find(AttackSpeed::class.java)
-                        var number: Double = baseDoubles[0].number()
-                        if (number <= 0) {
-                            number = 1.0
+                if (e.priorityEnum == PriorityEnum.POST) {
+                    val base = when (val spot = map[player]) {
+                        null -> 1.0
+                        else -> {
+                            if (spot.isValid()) spot.task() else 1.0
                         }
-                        val value = 1000 / number
-                        insert(player, (System.currentTimeMillis() + value).toLong())
-                    } else {
-                        e.isCancelled = true
                     }
+                    e.damageMemory.damage = e.damageMemory.damage * base
+                    val baseDoubles: Array<BaseDouble> = damageMemory.attackAttributeData.find(AttackSpeed::class.java)
+                    val number: Double = baseDoubles[0].number() + 1.0
+                    map[player] = Spot((1000 / number).toLong())
+
                 }
             }
+        }
+    }
+
+
+    class Spot(val survival: Long) {
+
+        val stamp = System.currentTimeMillis()
+
+        fun isValid(): Boolean {
+            return surplus() > 0
+        }
+
+        fun surplus(): Long {
+            return stamp + survival - System.currentTimeMillis()
+        }
+
+        fun task(): Double {
+            return 1.0 - surplus().toDouble().div(survival.toDouble())
         }
     }
 

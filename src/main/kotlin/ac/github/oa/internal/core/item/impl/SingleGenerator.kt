@@ -53,7 +53,7 @@ class SingleGenerator : ItemGenerator {
                         this.amount = amount
                         val itemMeta = itemMeta
                         val lore = itemMeta!!.lore ?: arrayListOf()
-                        lore.addAll(appendLore.map { it.replace("&","§") })
+                        lore.addAll(appendLore.map { it.replace("&", "§") })
                         itemMeta.lore = lore
                         this.itemMeta = itemMeta
                     }
@@ -66,7 +66,7 @@ class SingleGenerator : ItemGenerator {
                     val integer = Coerce.toInteger(strings.getOrElse(1) { "1" })
                     (0 until integer).forEach { _ ->
                         ItemPlant.build(player, strings[0])?.let { result ->
-                            player.world.dropItem(player.location, result)
+                            player.inventory.addItem(result)
                         }
                     }
                 }

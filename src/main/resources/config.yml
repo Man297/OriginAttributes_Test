@@ -79,6 +79,6 @@ attributes:
   - Health
   - MoveSpeed
   - Special
-  - AttackSpeed
   - ArmorBreak
   - Power
+  - AttackSpeed

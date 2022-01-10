@@ -18,6 +18,7 @@ class Health : SingleAttributeAdapter(AttributeType.UPDATE) {
         config.select(this)["default"] = 40.0
     }
 
+
     override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {
         if (eventMemory is UpdateMemory && eventMemory.livingEntity is Player) {
             val updateMemory: UpdateMemory = eventMemory

@@ -1,12 +1,8 @@
-import ac.github.oa.internal.base.BaseDouble
-import ac.github.oa.internal.base.enums.ValueType
-import ac.github.oa.internal.base.render.IRenderRule
-import ac.github.oa.internal.base.render.RenderRuleHandler
-import com.google.gson.GsonBuilder
-import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import java.text.DateFormat
-import java.util.concurrent.CompletableFuture
+import ac.github.oa.internal.attribute.impl.other.AttackSpeed
+import ac.github.oa.internal.core.hook.OriginPlaceholder
+import java.math.BigDecimal
+import java.math.MathContext
+import java.text.DecimalFormat
 
 class Main {
 
@@ -14,13 +10,38 @@ class Main {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            val stripColor = ChatColor.stripColor("§f[§a3§f]攻击力 +20")!!
-            val listOf = arrayListOf("§f[§a3§f]攻击力 +20", "xasfasf", "4d5as45d")
-            listOf.removeIf { RenderRuleHandler.proof(ChatColor.stripColor(it)!!, listOf("regex \\[[0-9]+\\].*")) }
-            println(listOf)
-//            val proof = RenderRuleHandler.proof(ChatColor.stripColor("§f[§a3§f]攻击力 +20")!!, listOf("regex \\[[0-9]+\\]\\s.*"))
-//            println(proof)
+
+            val spot = Spot(5000)
+
+            val a = 10
+
+            (0 until 8).forEach {
+                val base = if (spot.isValid()) spot.task().apply { println(this) } else 1.0
+                println(a * base)
+                Thread.sleep(1000)
+            }
+        }
+
+
+    }
+
+
+    class Spot(val survival: Long) {
+
+        val stamp = System.currentTimeMillis()
+
+        fun isValid(): Boolean {
+            return surplus() > 0
+        }
+
+        fun surplus(): Long {
+            return stamp + survival - System.currentTimeMillis()
+        }
+
+        fun task(): Double {
+            return 1.0 - surplus().toDouble().div(survival.toDouble())
         }
     }
+
 
 }
