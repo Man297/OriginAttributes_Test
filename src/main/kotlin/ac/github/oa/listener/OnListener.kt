@@ -103,8 +103,10 @@ object OnListener {
     val damageCauses: List<String>
         get() = OriginAttribute.config.getStringList("options.damage-cause")
 
-    @SubscribeEvent
+    @SubscribeEvent(ignoreCancelled = false)
     fun e(e: EntityDamageByEntityEvent) {
+
+        if (e.isCancelled) return
 
         val cause = e.cause
         if (damageCauses.contains(cause.name) || e.entity::class.java.simpleName != "PlayerNPC") {
