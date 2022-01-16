@@ -74,24 +74,6 @@ object MythicMobsHook {
         val mobType = event.mobType
         val wrapper = MapScript.Wrapper()
         val entity = event.entity as LivingEntity
-//
-//        // 覆盖实体属性
-//        mobType.config.getStringList("OriginOptions.Attributes")?.random(wrapper, entity)?.apply {
-//
-//            val list = this
-//
-//            submit(delay = 20) {
-//                val invulnerable = entity.isInvulnerable
-//                val attributeData = OriginAttributeAPI.loadList(entity, list)
-//                entity.isInvulnerable = true
-//                OriginAttributeAPI.setExtra(
-//                    event.entity.uniqueId, MythicMobsHook::class.simpleName!!, attributeData
-//                )
-//                OriginAttributeAPI.callUpdate(entity)
-//                entity.isInvulnerable = invulnerable
-//            }
-//
-//        }
         // 覆盖背包物品
         mobType.config.getStringList("OriginOptions.Equipment")?.forEach {
             val split = it.split(" ")

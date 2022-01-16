@@ -34,7 +34,7 @@ object OriginAttributeAPI {
         ConcurrentHashMap<UUID, MutableMap<String, AttributeData>>()
 
     /**
-     *
+     * 获取实体属性
      */
     fun getAttributeData(livingEntity: LivingEntity): AttributeData {
         val attributeData = AttributeData()
@@ -48,17 +48,27 @@ object OriginAttributeAPI {
         return attributeData
     }
 
+    /**
+     * 执行异步任务
+     */
     fun async(task: () -> Unit) {
         submit(async = true) {
             task()
         }
     }
 
+    /**
+     * 删除uuid对应属性
+     */
     fun remove(uuid: UUID) {
         AttributeManager.remove(uuid)
         map.remove(uuid)
     }
 
+    /**
+     * 加载实体所需要的物品
+     * 物品栏 萌芽(软)
+     */
     fun loadItems(livingEntity: LivingEntity): List<AdaptItem> {
         val listOf = arrayListOf<AdaptItem>()
 
@@ -83,6 +93,9 @@ object OriginAttributeAPI {
         return listOf
     }
 
+    /**
+     * 加载实体物品容器
+     */
     fun loadInventory(livingEntity: LivingEntity): List<AdaptItem> {
         val items = this.loadItems(livingEntity)
         val event = EntityLoadEquipmentEvent(livingEntity, items)
@@ -126,12 +139,18 @@ object OriginAttributeAPI {
 
     }
 
+    /**
+     * 处理攻击逻辑
+     */
     fun callDamage(damageMemory: DamageMemory) {
         // 优先触发攻击者
         call(AttributeType.ATTACK, damageMemory)
         call(AttributeType.DEFENSE, damageMemory)
     }
 
+    /**
+     * 处理属性刷新逻辑
+     */
     fun callUpdate(entity: LivingEntity) {
         val entityUpdateEvent = EntityUpdateEvent(entity, getAttributeData(entity))
         entityUpdateEvent.call()
@@ -159,15 +178,22 @@ object OriginAttributeAPI {
     }
 
 
+    /**
+     * 读取list加载属性
+     */
     fun loadList(list: List<String>): AttributeData {
         return loadList(null, list)
     }
 
+    /**
+     * 根据实体 读取list加载属性
+     */
     fun loadList(entity: LivingEntity?, list: List<String>): AttributeData {
         val attributeData = AttributeData()
         loadList(entity, list, attributeData)
         return attributeData
     }
+
 
     fun loadList(entity: LivingEntity?, list: List<String>, origin: AttributeData) {
         for (s in list) {

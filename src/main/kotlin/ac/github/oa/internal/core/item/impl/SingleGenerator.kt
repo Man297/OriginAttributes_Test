@@ -44,7 +44,8 @@ class SingleGenerator : ItemGenerator {
             if (e.hand === EquipmentSlot.HAND && e.action == Action.RIGHT_CLICK_AIR) {
                 val player = e.player
                 val item = e.item ?: return
-                val config = ItemPlant.getConfig(ItemPlant.parseItem(item) ?: return)
+                val configKey = ItemPlant.parseItem(item) ?: return
+                val config = ItemPlant.getConfig(configKey)
                 val stringList = config.getStringList("group").map { it.split(" ") }
                 val list = stringList.mapNotNull {
                     val key = it[0]
