@@ -23,11 +23,8 @@ import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.common.platform.function.info
 import taboolib.platform.util.isNotAir
-import taboolib.platform.util.sendMessage
 import taboolib.type.BukkitEquipment
-
 
 object OnListener {
 

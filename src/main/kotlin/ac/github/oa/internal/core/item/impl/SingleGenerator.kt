@@ -27,6 +27,7 @@ import taboolib.module.ui.type.Linked
 import taboolib.platform.BukkitPlugin
 import taboolib.platform.util.ItemBuilder
 import taboolib.platform.util.buildItem
+import taboolib.platform.util.isAir
 import java.util.*
 import java.util.logging.Level
 import kotlin.math.ceil
@@ -44,6 +45,7 @@ class SingleGenerator : ItemGenerator {
             if (e.hand === EquipmentSlot.HAND && e.action == Action.RIGHT_CLICK_AIR) {
                 val player = e.player
                 val item = e.item ?: return
+                if (item.isAir()) return
                 val configKey = ItemPlant.parseItem(item) ?: return
                 val config = ItemPlant.getConfig(configKey)
                 val stringList = config.getStringList("group").map { it.split(" ") }
