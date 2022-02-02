@@ -15,9 +15,10 @@ taboolib {
     install("module-configuration")
     install("module-metrics")
     install("module-kether")
+    install("module-chat")
     install("expansion-javascript")
     classifier = null
-    version = "6.0.7-13"
+    version = "6.0.7-26"
 
     description {
         contributors {

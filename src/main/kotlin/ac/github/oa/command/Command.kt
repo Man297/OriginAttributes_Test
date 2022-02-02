@@ -43,7 +43,7 @@ object Command {
                 // [item]
                 // demo = def0 {"品质": "战士"}
                 dynamic {
-                    suggestion<Player> { _, _ -> ItemPlant.configs.map { it.name } }
+                    suggestion<Player> { _, _ -> ItemPlant.configs.map { it.key } }
 
                     // amount = 1
                     execute<Player> { sender, _, argument ->
@@ -69,22 +69,22 @@ object Command {
                     dynamic(optional = true) {
                         execute<Player> { sender, context, argument ->
                             try {
-                                giveItem(sender, context.argument(-1)!!, argument.toInt())
-                            } catch (e: Exception) {
+                                giveItem(sender, context.argument(-1), argument.toInt())
+                            } catch (_: Exception) {
                             }
                         }
 
                         dynamic {
                             execute<Player> { sender, context, argument ->
                                 try {
-                                    val itemKey = context.argument(-2)!!
-                                    val amount = context.argument(-1)!!
+                                    val itemKey = context.argument(-2)
+                                    val amount = context.argument(-1)
                                     val map = OriginAttribute.json.fromJson<Map<String, String>>(
                                         argument.replace("/s", " "),
                                         Map::class.java
                                     )
                                     giveItem(sender, itemKey, amount.toInt(), map.toMutableMap())
-                                } catch (e: Exception) {
+                                } catch (_: Exception) {
                                 }
                             }
                         }
@@ -96,16 +96,16 @@ object Command {
             // give
             literal("give") {
                 dynamic {
-                    suggestion<ProxyCommandSender> { sender, context ->
+                    suggestion<ProxyCommandSender> { _, _ ->
                         Bukkit.getOnlinePlayers().map { it.name }
                     }
 
                     // [item]
                     dynamic(commit = "item") {
-                        suggestion<ProxyCommandSender> { sender, context ->
-                            ItemPlant.configs.map { it.name }
+                        suggestion<ProxyCommandSender> { _, _ ->
+                            ItemPlant.configs.map { it.key }
                         }
-                        execute<ProxyCommandSender> { sender, context, argument ->
+                        execute<ProxyCommandSender> { _, context, argument ->
                             val playerExact = Bukkit.getPlayerExact(context.argument(-1))!!
                             giveItem(playerExact, argument, 1)
                         }
@@ -118,7 +118,7 @@ object Command {
 
                             // options
                             dynamic {
-                                execute<ProxyCommandSender> { sender, context, argument ->
+                                execute<ProxyCommandSender> { _, context, argument ->
                                     val playerExact = Bukkit.getPlayerExact(context.argument(-3))!!
                                     val item = context.argument(-2)
                                     val map = OriginAttribute.json.fromJson<Map<String, String>>(
@@ -146,7 +146,7 @@ object Command {
 
                     // key
                     dynamic {
-                        execute<Player> { sender, context, argument ->
+                        execute<Player> { _, context, _ ->
                             val filename = context.argument(0)!!
                             val newFile = newFile(ItemPlant.folder, "$filename .yml")
                             if (!newFile.exists()) {
@@ -176,7 +176,7 @@ object Command {
             }
 
             literal("reload") {
-                execute<ProxyCommandSender> { sender, context, argument ->
+                execute<ProxyCommandSender> { sender, _, _ ->
                     ItemPlant.init()
                     RandomPlant.init()
                     JavaScriptPlant.init()
@@ -204,13 +204,13 @@ object Command {
                         onlinePlayers().map { it.name }
                     }
                     execute<ProxyCommandSender> { _, _, argument ->
-                        Bukkit.getPlayerExact(argument)?.let { SellContainer(it).open() }
+                        Bukkit.getPlayerExact(argument)?.let { SellContainer(it) }
                     }
                 }
             }
 
             literal("test") {
-                execute<Player> { sender, context, argument ->
+                execute<Player> { sender, _, _ ->
                     OriginAttributeAPI.setExtra(
                         sender.uniqueId,
                         "test0",

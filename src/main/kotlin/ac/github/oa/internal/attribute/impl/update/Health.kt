@@ -15,7 +15,7 @@ import org.bukkit.entity.Player
 class Health : SingleAttributeAdapter(AttributeType.UPDATE) {
     override fun defaultOption(config: BaseConfig) {
         super.defaultOption(config)
-        config.select(this)["default"] = 40.0
+        config.select(this).set("default", 40.0).set("health-scale", 20.0)
     }
 
 
@@ -33,6 +33,15 @@ class Health : SingleAttributeAdapter(AttributeType.UPDATE) {
             if (attribute.getBaseValue() != number) {
                 attribute.setBaseValue(number)
             }
+//            if (livingEntity is Player) {
+//                val select = baseConfig.select(this)
+//                if (select.config.contains("health-scale")) {
+//                    val double = select.any("health-scale").asNumber().toDouble()
+//                    livingEntity.healthScale = double
+//                }
+//                baseConfig.select(this).any("health-scale").asNumber().toDouble()
+//                livingEntity.healthScale =
+//            }
         }
     }
 

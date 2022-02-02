@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import org.bukkit.Bukkit
 import taboolib.common.platform.Platform
 import taboolib.common.platform.Plugin
+import taboolib.common.platform.function.info
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.Configuration
 import taboolib.module.metrics.Metrics
@@ -59,7 +60,6 @@ object OriginAttribute : Plugin() {
         JumpDamage().register()
         DirectionDamage().register()
         Metrics(12489, BukkitPlugin.getInstance().description.version, Platform.BUKKIT)
-
     }
 
     val original: Boolean

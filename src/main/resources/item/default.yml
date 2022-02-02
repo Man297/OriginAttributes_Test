@@ -18,3 +18,7 @@ def0:
     - HIDE_DESTROYS
     - HIDE_PLACED_ON
     - HIDE_POTION_EFFECTS
+  actions:
+    - $e: on right air
+      action:
+        - tell *"123"

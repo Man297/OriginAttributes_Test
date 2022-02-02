@@ -1,14 +1,23 @@
 package ac.github.oa.internal.core.item
 
 import ac.github.oa.api.event.item.ItemCreatedEvent
+import ac.github.oa.internal.attribute.AttributeManager
+import ac.github.oa.internal.core.equip.Slot
+import ac.github.oa.internal.core.item.action.ActionEventLoader
+import ac.github.oa.internal.core.item.action.ActionEventLoader.handleEvent
+import ac.github.oa.internal.core.item.action.IActionEvent
+import ac.github.oa.internal.core.item.generator.ItemGenerator
 import ac.github.oa.util.listFile
 import ac.github.oa.util.newfolder
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
+import org.bukkit.event.Event
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
-import taboolib.common.platform.function.info
 import taboolib.library.configuration.ConfigurationSection
+import taboolib.library.xseries.XMaterial
 import taboolib.module.configuration.SecuredFile
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
@@ -19,9 +28,10 @@ import java.util.logging.Level
 object ItemPlant {
 
     const val KEY = "oa-key"
+    const val HASCODE = "oa-hasCode"
 
     val generators = arrayListOf<ItemGenerator>()
-    val configs = arrayListOf<ConfigurationSection>()
+    val configs = arrayListOf<Item>()
 
     val folder = newfolder(BukkitPlugin.getInstance().dataFolder, "item", listOf("default.yml"))
     val cacheFiles = mutableMapOf<File, List<String>>()
@@ -33,48 +43,52 @@ object ItemPlant {
         folder.listFile("yml").forEach { file ->
             SecuredFile.loadConfiguration(file).apply {
                 getKeys(false).apply { cacheFiles[file] = this.toMutableList() }.forEach {
-                    configs.add(this.getConfigurationSection(it)!!)
+                    configs += Item(this.getConfigurationSection(it)!!)
                 }
             }
         }
         BukkitPlugin.getInstance().logger.log(Level.INFO, "|- 共加载物品 ${configs.size} 个配置")
     }
 
-    fun hasKey(key: String): Boolean = configs.any { it.name == key }
+    fun hasKey(key: String): Boolean = configs.any { it.key == key }
 
     fun build(entity: LivingEntity?, key: String, map: MutableMap<String, String> = mutableMapOf()): ItemStack? =
-        build(entity, configs.firstOrNull { it.name == key } ?: throw NullPointerException("未发现${key}对应物品配置."), map)
+        build(entity, configs.firstOrNull { it.key == key } ?: throw NullPointerException("未发现${key}对应物品配置."), map)
 
-    fun getConfig(key: String) = configs.first { it.name == key }
+    fun getConfig(key: String): Item? = configs.firstOrNull { it.key == key }
 
     fun build(
         entity: LivingEntity?,
-        config: ConfigurationSection,
+        item: Item,
         map: MutableMap<String, String> = mutableMapOf()
     ): ItemStack {
-        val generatorKey = config.getString("g", "")
-        val generator = generators.firstOrNull { generatorKey == it.name }
-            ?: throw NullPointerException("无效的物品生成器 $generatorKey")
-
-        return generator.build(entity, config, map).apply {
+        val generator = generators.firstOrNull { item.generator == it.name }
+            ?: throw NullPointerException("无效的物品生成器 ${item.generator}")
+        return generator.build(entity, item, map).apply {
             // 写入nbt
             val itemTag = getItemTag()
-            itemTag[KEY] = ItemTagData(config.name)
+            itemTag[KEY] = ItemTagData(item.config.name)
+            itemTag[HASCODE] = ItemTagData(item.hasCode)
 
-            val event = ItemCreatedEvent(entity, config, this, generator, itemTag)
+            val event = ItemCreatedEvent(entity, item, this, generator, itemTag)
             event.call()
 
             event.itemTag.saveTo(event.itemStack)
         }
     }
 
-    fun parseItem(itemStack: ItemStack): String? {
+    fun parseItem(itemStack: ItemStack): Item? {
         val itemTag = itemStack.getItemTag()
         if (itemTag.containsKey(KEY)) {
-            return itemTag[KEY]?.asString()!!
+            return getConfig(itemTag[KEY]?.asString() ?: "__null__")
         }
         return null
     }
 
+    fun handleEvent(player: Player, action: IActionEvent<*>, event: Any) {
+        AttributeManager[player.uniqueId].adaptItems
+            .mapNotNull { it.instance() }
+            .forEach { it.handleEvent(player, action, event as Event) }
+    }
 
 }

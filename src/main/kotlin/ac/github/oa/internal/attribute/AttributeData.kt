@@ -15,7 +15,6 @@ class AttributeData {
 
     var combatPower: Long = 0
 
-
     fun autoCombatPower() {
         combatPower = 0
         AttributeManager.attributes.forEach {

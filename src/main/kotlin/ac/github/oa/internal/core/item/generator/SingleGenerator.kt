@@ -1,7 +1,7 @@
-package ac.github.oa.internal.core.item.impl
+package ac.github.oa.internal.core.item.generator
 
 import ac.github.oa.OriginAttribute
-import ac.github.oa.internal.core.item.ItemGenerator
+import ac.github.oa.internal.core.item.Item
 import ac.github.oa.internal.core.item.ItemPlant
 import ac.github.oa.util.rebuild
 import org.bukkit.Color
@@ -16,9 +16,7 @@ import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.common.platform.function.info
 import taboolib.common5.Coerce
-import taboolib.library.configuration.ConfigurationSection
 import taboolib.library.xseries.XEnchantment
 import taboolib.library.xseries.XMaterial
 import taboolib.module.ui.ClickEvent
@@ -46,8 +44,8 @@ class SingleGenerator : ItemGenerator {
                 val player = e.player
                 val item = e.item ?: return
                 if (item.isAir()) return
-                val configKey = ItemPlant.parseItem(item) ?: return
-                val config = ItemPlant.getConfig(configKey)
+                val itemInstance = ItemPlant.parseItem(item) ?: return
+                val config = itemInstance.config
                 val stringList = config.getStringList("group").map { it.split(" ") }
                 val list = stringList.mapNotNull {
                     val key = it[0]
@@ -106,10 +104,10 @@ class SingleGenerator : ItemGenerator {
 
     override fun build(
         entity: LivingEntity?,
-        config: ConfigurationSection,
+        item: Item,
         map: MutableMap<String, String>
     ): ItemStack {
-
+        val config = item.config
         val id = config.getString("id")!!
         val data = config.getString("data", "0")!!
         val name = config.getString("name", "name null")!!

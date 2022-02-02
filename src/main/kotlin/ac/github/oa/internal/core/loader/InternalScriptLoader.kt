@@ -1,7 +1,7 @@
 package ac.github.oa.internal.core.loader
 
 import ac.github.oa.internal.core.script.InternalScript
-import ac.github.oa.internal.core.item.ItemGenerator
+import ac.github.oa.internal.core.item.generator.ItemGenerator
 import ac.github.oa.internal.core.item.ItemPlant
 import taboolib.common.LifeCycle
 import taboolib.common.inject.Injector
