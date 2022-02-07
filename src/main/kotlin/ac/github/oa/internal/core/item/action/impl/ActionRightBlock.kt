@@ -18,7 +18,6 @@ object ActionRightBlock : IActionEvent<PlayerInteractEvent>() {
     override fun test(e: PlayerInteractEvent): Player? {
         return when {
             e.hasItem() && e.hand == EquipmentSlot.HAND && e.action == Action.RIGHT_CLICK_AIR -> {
-                e.isCancelled = true
                 e.player
             }
             else -> null

@@ -15,8 +15,11 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
+import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
+import org.bukkit.event.entity.ItemMergeEvent
+import org.bukkit.event.entity.ItemSpawnEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
@@ -123,6 +126,32 @@ object OnListener {
 
     }
 
+
+    @SubscribeEvent
+    fun e(event: ItemSpawnEvent) {
+        if (event.isCancelled || event.entity.isCustomNameVisible) return
+        val item = event.entity
+        val itemStack = item.itemStack
+        if (!event.isCancelled && itemStack.hasItemMeta() && itemStack.itemMeta!!.hasDisplayName()) {
+            item.isCustomNameVisible = true
+            if (itemStack.amount > 1) {
+                item.customName = itemStack.itemMeta!!.displayName + " §b*" + itemStack.amount
+            } else {
+                item.customName = itemStack.itemMeta!!.displayName
+            }
+        }
+    }
+
+    @SubscribeEvent
+    fun e(event: ItemMergeEvent) {
+        if (event.isCancelled) return
+        val item = event.target
+        val oldItem = event.entity
+        if (item.isCustomNameVisible) {
+            item.customName =
+                item.itemStack.itemMeta!!.displayName + " §b*" + (item.itemStack.amount + oldItem.itemStack.amount)
+        }
+    }
 
     @SubscribeEvent
     fun e(e: AttributeRenderStringEvent) {
