@@ -25,22 +25,3 @@ object InternalScriptLoader : Injector.Classes {
 
     override fun postInject(clazz: Class<*>, instance: Supplier<*>) {}
 }
-
-@Awake(LifeCycle.INIT)
-object ItemGeneratorLoader : Injector.Classes {
-
-    override val lifeCycle: LifeCycle
-        get() = LifeCycle.INIT
-    override val priority: Byte
-        get() = 1
-
-    override fun inject(clazz: Class<*>, instance: Supplier<*>) {
-        val any = instance.get()
-        if (ItemGenerator::class.isInstance(any)) {
-            val generator = any as ItemGenerator
-            ItemPlant.generators.add(generator)
-        }
-    }
-
-    override fun postInject(clazz: Class<*>, instance: Supplier<*>) {}
-}

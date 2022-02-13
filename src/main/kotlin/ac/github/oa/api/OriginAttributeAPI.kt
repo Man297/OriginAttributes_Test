@@ -4,6 +4,7 @@ import ac.github.oa.OriginAttribute
 import ac.github.oa.api.event.entity.EntityGetterDataEvent
 import ac.github.oa.api.event.entity.EntityUpdateEvent
 import ac.github.oa.api.event.entity.EntityLoadEquipmentEvent
+import ac.github.oa.api.event.item.ItemDurabilityDamageEvent
 import ac.github.oa.api.event.render.AttributeRenderStringEvent
 import ac.github.oa.internal.attribute.AttributeAdapter
 import ac.github.oa.internal.attribute.AttributeData
@@ -20,13 +21,18 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.EntityEquipment
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.function.info
 import taboolib.common.platform.function.submit
+import taboolib.module.nms.ItemTagData
+import taboolib.module.nms.getItemTag
 import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Consumer
+import kotlin.math.max
+import kotlin.math.min
 
 object OriginAttributeAPI {
 
@@ -215,6 +221,5 @@ object OriginAttributeAPI {
     fun getExtras(uuid: UUID): MutableMap<String, AttributeData> {
         return map.computeIfAbsent(uuid) { HashMap<String, AttributeData>() }
     }
-
 
 }

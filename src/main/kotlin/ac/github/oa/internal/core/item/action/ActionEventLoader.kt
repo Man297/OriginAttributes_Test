@@ -24,7 +24,6 @@ object ActionEventLoader {
     fun <E : Any> loadTriggers() {
         runningClasses.forEach {
             if (IActionEvent::class.java.isAssignableFrom(it)) {
-                info(it)
                 val iTrigger = (it.getInstance()?.get())
                 if (iTrigger != null) {
                     (iTrigger as IActionEvent<*>).register()

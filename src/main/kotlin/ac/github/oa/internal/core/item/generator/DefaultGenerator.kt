@@ -2,6 +2,7 @@ package ac.github.oa.internal.core.item.generator
 
 import ac.github.oa.OriginAttribute
 import ac.github.oa.internal.core.item.Item
+import ac.github.oa.internal.core.item.Translator
 import ac.github.oa.internal.core.script.hoop.MapScript
 import ac.github.oa.util.random
 import ac.github.oa.util.rebuild
@@ -14,6 +15,7 @@ import taboolib.common.platform.Awake
 import taboolib.library.xseries.XEnchantment
 import taboolib.library.xseries.XMaterial
 import taboolib.module.nms.ItemTagData
+import taboolib.module.nms.ItemTagList
 import taboolib.module.nms.getItemTag
 import taboolib.platform.BukkitPlugin
 import taboolib.platform.util.ItemBuilder
@@ -89,11 +91,19 @@ open class DefaultGenerator : ItemGenerator {
 
             colored()
         }.apply {
-
-
             val itemTag = getItemTag()
             val json = OriginAttribute.json.toJson(wrapper)
             itemTag["oa-session"] = ItemTagData(json)
+
+            if (config.isConfigurationSection("nbt")) {
+                config.getConfigurationSection("nbt")!!.getKeys(false).forEach {
+                    itemTag[it] = Translator.toNBTBase(config["nbt.$it"])
+                }
+            }
+            if (item.isClearDefault) {
+                itemTag["AttributeModifiers"] = ItemTagData(ItemTagList())
+            }
+
             itemTag.saveTo(this)
         }
     }

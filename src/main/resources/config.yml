@@ -8,6 +8,8 @@ options:
   operator-add: '+'
   operator-take: '-'
   original: true
+  durability: '耐久'
+  durability-char: '/'
   generator:
     single:
       append:
@@ -35,6 +37,9 @@ options:
     level:
       keyword:
         - '使用等级'
+    durability:
+      keyword:
+        - '耐久'
     time:
       keyword:
         - '使用期限'

@@ -13,8 +13,7 @@ import taboolib.platform.util.sendLang
 import java.time.LocalDateTime
 import java.util.*
 
-@Awake(LifeCycle.ENABLE)
-class TimeCondition : ICondition {
+object TimeCondition : ICondition {
     override fun post(livingEntity: LivingEntity, adaptItem: AdaptItem): Boolean {
 
         if (livingEntity is Player) {

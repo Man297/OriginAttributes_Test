@@ -22,6 +22,7 @@ import taboolib.module.configuration.SecuredFile
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import taboolib.platform.BukkitPlugin
+import taboolib.platform.util.isAir
 import java.io.File
 import java.util.logging.Level
 
@@ -77,7 +78,8 @@ object ItemPlant {
         }
     }
 
-    fun parseItem(itemStack: ItemStack): Item? {
+    fun parseItem(itemStack: ItemStack?): Item? {
+        if (itemStack == null || itemStack.isAir()) return null
         val itemTag = itemStack.getItemTag()
         if (itemTag.containsKey(KEY)) {
             return getConfig(itemTag[KEY]?.asString() ?: "__null__")
