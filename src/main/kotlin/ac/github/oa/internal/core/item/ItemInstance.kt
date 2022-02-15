@@ -8,6 +8,4 @@ import org.bukkit.inventory.ItemStack
 
 class ItemInstance(val itemStack: ItemStack, val item: Item, val slot: Slot) {
 
-
-
 }

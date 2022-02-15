@@ -5,6 +5,7 @@ import ac.github.oa.internal.core.item.action.ItemAction
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
+import org.bukkit.inventory.ItemStack
 import taboolib.library.configuration.ConfigurationSection
 
 class Item(val config: ConfigurationSection) {
@@ -33,7 +34,11 @@ class Item(val config: ConfigurationSection) {
     }
 
     // 创建
-    fun create(entity: LivingEntity?) = ItemPlant.build(entity, key)
+    fun create(entity: LivingEntity?, options: MutableMap<String, String> = mutableMapOf()): ItemStack? {
+        return ItemPlant.build(entity, key, options)
+    }
 
+
+    fun builder() = ItemBuilder(this)
 
 }

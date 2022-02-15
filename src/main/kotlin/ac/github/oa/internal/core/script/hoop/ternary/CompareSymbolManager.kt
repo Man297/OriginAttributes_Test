@@ -1,7 +1,5 @@
 package ac.github.oa.internal.core.script.hoop.ternary
 
-import ac.github.oa.internal.core.script.hoop.ternary.CompareSymbolGE
-
 
 object CompareSymbolManager {
 

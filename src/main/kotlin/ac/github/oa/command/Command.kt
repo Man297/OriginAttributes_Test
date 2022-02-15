@@ -3,6 +3,7 @@ package ac.github.oa.command
 import ac.github.oa.OriginAttribute
 import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.internal.attribute.AttributeManager
+import ac.github.oa.internal.core.item.ItemBuilder
 import ac.github.oa.internal.core.item.ItemPlant
 import ac.github.oa.internal.core.item.random.RandomPlant
 import ac.github.oa.internal.core.script.content.JavaScriptPlant
@@ -168,11 +169,8 @@ object Command {
             sender.sendLang("item-key-is-null")
             return
         }
-
-
-        val items = createItems(sender, item, amount, map).onEach { sender.inventory.addItem(it) }
+        val items = ItemPlant.getConfig(item)!!.builder().to(sender, amount, map)
         mutableMapOf<String, Int>().apply {
-
             items.map {
                 val displayName = it.itemMeta!!.displayName
                 this[displayName] = (this[displayName] ?: 0) + it.amount
@@ -182,18 +180,7 @@ object Command {
                 sender.sendLang("sender-get-item", it.key, it.value)
             }
         }
-
         OriginAttributeAPI.callUpdate(sender)
-    }
-
-    fun createItems(
-        target: LivingEntity, key: String, amount: Int, map: MutableMap<String, String> = mutableMapOf()
-    ): List<ItemStack> {
-        val list = mutableListOf<ItemStack>()
-        (0 until amount).forEach { _ ->
-            list.add(ItemPlant.build(target, key, map) ?: XMaterial.AIR.parseItem()!!)
-        }
-        return list
     }
 
 
