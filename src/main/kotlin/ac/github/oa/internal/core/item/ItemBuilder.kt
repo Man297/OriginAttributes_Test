@@ -10,14 +10,11 @@ import taboolib.library.xseries.XMaterial
 
 class ItemBuilder(val item: Item) {
 
-    fun create(
-        target: LivingEntity?,
-        amount: Int = 1,
-        options: MutableMap<String, String> = mutableMapOf()
-    ): MutableList<ItemStack> {
-        return (0 until amount).mapNotNull {
-            item.create(target, options)
-        }.toMutableList()
+    /**
+     * 创建物品
+     */
+    fun create(target: LivingEntity?, amount: Int = 1, options: MutableMap<String, String> = mutableMapOf()): MutableList<ItemStack> {
+        return (0 until amount).mapNotNull { item.create(target, options) }.toMutableList()
     }
 
     fun to(target: Player, amount: Int = 1, options: MutableMap<String, String> = mutableMapOf()): List<ItemStack> {

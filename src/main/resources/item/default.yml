@@ -21,4 +21,7 @@ def0:
   actions:
     - $e: on right air
       action:
-        - tell *"123"
+        - |-
+          if check inventory hand is "minecraft:*[lore=关键字]" then {
+            skillapi cast "skill"
+          }

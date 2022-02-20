@@ -23,7 +23,11 @@ object ActionEventLoader {
     @Awake(LifeCycle.ENABLE)
     fun <E : Any> loadTriggers() {
         runningClasses.forEach {
-            if (IActionEvent::class.java.isAssignableFrom(it)) {
+            if (IActionEvent::class.java.isAssignableFrom(it) && !it.isAnnotationPresent(Skip::class.java)) {
+
+
+
+
                 val iTrigger = (it.getInstance()?.get())
                 if (iTrigger != null) {
                     (iTrigger as IActionEvent<*>).register()

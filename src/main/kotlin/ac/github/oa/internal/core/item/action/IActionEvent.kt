@@ -14,6 +14,6 @@ abstract class IActionEvent<E : Any> {
 
     abstract fun test(e: E): Player?
 
-    abstract fun inject(context: ScriptContext, e: E)
+    open fun inject(context: ScriptContext, e: E) {  }
 
 }
