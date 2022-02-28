@@ -1,6 +1,7 @@
 package ac.github.oa.command
 
 import ac.github.oa.OriginAttribute
+import ac.github.oa.api.ItemAPI
 import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.core.item.ItemBuilder
@@ -145,6 +146,9 @@ object Command {
             RandomPlant.init()
             JavaScriptPlant.init()
             OriginAttribute.config.reload()
+            Bukkit.getOnlinePlayers().forEach {
+                ItemAPI.checkUpdate(it, it.inventory)
+            }
             sender.sendMessage("reload successful.")
         }
     }

@@ -24,10 +24,6 @@ object ActionEventLoader {
     fun <E : Any> loadTriggers() {
         runningClasses.forEach {
             if (IActionEvent::class.java.isAssignableFrom(it) && !it.isAnnotationPresent(Skip::class.java)) {
-
-
-
-
                 val iTrigger = (it.getInstance()?.get())
                 if (iTrigger != null) {
                     (iTrigger as IActionEvent<*>).register()
@@ -61,6 +57,7 @@ object ActionEventLoader {
     fun <E : Any> IActionEvent<E>.register() {
         triggers.add(this)
         registerBukkitListener(event, EventPriority.HIGHEST, false) { e ->
+
             val player = test(e as E) ?: return@registerBukkitListener
             ItemPlant.handleEvent(player, this@register, e)
         }
