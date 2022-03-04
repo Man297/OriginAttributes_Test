@@ -2,6 +2,7 @@ package ac.github.oa.internal.attribute.impl.other
 
 
 import ac.github.oa.api.OriginAttributeAPI
+import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.attribute.AttributeType
 import ac.github.oa.internal.attribute.abst.SingleAttributeAdapter
 import ac.github.oa.internal.base.BaseConfig
@@ -24,6 +25,10 @@ class HealthRecovery : SingleAttributeAdapter(AttributeType.OTHER) {
     }
 
     override fun enable() {
+
+        if (AttributeManager.isEnabled(this::class.java)) {
+            return
+        }
 
         submit(delay = baseConfig.select(this).any("period").asNumber().toLong()) {
             for (player in ArrayList<Player>(Bukkit.getOnlinePlayers())) {
