@@ -120,12 +120,13 @@ object OriginAttributeAPI {
 
         items.forEach {
             val itemStack = it.item
-            if (itemStack.isNotAir()) {
+            if (it.isValid) {
                 // conditioning...
-
                 if (ConditionManager.pre(livingEntity, it) && ConditionManager.screen(livingEntity, it)) {
                     it.enable = true
-                    list.addAll(itemStack.itemMeta?.lore ?: listOf())
+                    if (it.isValid) {
+                        list.addAll(itemStack.itemMeta?.lore ?: emptyList())
+                    }
                 }
             }
         }
