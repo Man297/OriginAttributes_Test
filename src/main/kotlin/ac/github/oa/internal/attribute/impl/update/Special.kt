@@ -116,6 +116,11 @@ class Special : AttributeAdapter(0, AttributeType.UPDATE) {
             return ((baseDoubles[0].number() * combatPower).roundToLong())
         }
 
+        override fun format(entity: LivingEntity, s: String, baseDoubles: Array<BaseDouble>): Any {
+            return baseDoubles[0].number()
+
+        }
+
         override fun method(eventMemory: EventMemory, baseDoubles: Array<BaseDouble>) {}
 
         override val type: ValueType
