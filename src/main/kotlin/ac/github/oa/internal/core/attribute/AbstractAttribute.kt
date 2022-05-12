@@ -3,13 +3,14 @@ package ac.github.oa.internal.core.attribute
 import taboolib.common.platform.function.getDataFolder
 import taboolib.common.platform.function.info
 import taboolib.common.platform.function.releaseResourceFile
+import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.configuration.ConfigFile
 import taboolib.module.configuration.Configuration
 import java.io.File
 
 abstract class AbstractAttribute : Attribute {
 
-    lateinit var root: ConfigFile
+    open lateinit var root: ConfigurationSection
     val entries = mutableListOf<Attribute.Entry>()
     abstract val types: Array<AttributeType>
     open var index = 0
@@ -19,7 +20,7 @@ abstract class AbstractAttribute : Attribute {
         if (!file.exists()) {
             releaseResourceFile(toRootPath(), true)
         }
-        root = Configuration.loadFromFile(file)
+        root = Configuration.loadFromFile(file) as ConfigurationSection
         this::class.java.declaredFields.forEach {
             if (Attribute.Entry::class.java.isAssignableFrom(it.type)) {
                 it.isAccessible = true
@@ -65,7 +66,7 @@ abstract class AbstractAttribute : Attribute {
         return entries[index]
     }
 
-    override fun getEntry(name : String) : Attribute.Entry {
+    override fun getEntry(name: String): Attribute.Entry {
         return toEntities().first { it.name == name }
     }
 

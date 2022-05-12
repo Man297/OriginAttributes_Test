@@ -32,8 +32,8 @@ interface Attribute {
 
         var index: Int = -1
         open val type = Type.SINGLE
-        lateinit var name : String
-        lateinit var node: Attribute
+        open lateinit var name : String
+        open lateinit var node: Attribute
         open fun onEnable() {}
 
         abstract fun handler(memory: EventMemory, data: AttributeData.Data)

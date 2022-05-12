@@ -1,0 +1,5 @@
+script:
+  def0:
+    types: ATTACK
+    keywords:
+      - '真实伤害'

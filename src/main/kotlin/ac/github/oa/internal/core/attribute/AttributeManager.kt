@@ -5,12 +5,19 @@ import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.io.runningClasses
 import taboolib.common.platform.Awake
+import taboolib.module.configuration.Config
+import taboolib.module.configuration.Configuration
 import java.util.*
 
 object AttributeManager {
 
     val attributeInstances = mutableListOf<Attribute>()
     val usableAttributes = sortedMapOf<Int, Attribute>()
+
+
+    @Config("attribute/config.yml")
+    lateinit var config: Configuration
+
 
     private val table = mutableMapOf<UUID, AttributeData>()
 
@@ -46,8 +53,6 @@ object AttributeManager {
 
     @Awake(LifeCycle.ENABLE)
     fun registerAll() {
-        attributeInstances.clear()
-        usableAttributes.clear()
         this.loadAttributeClass()
         usableAttributes.forEach {
             it.value.onLoad()
