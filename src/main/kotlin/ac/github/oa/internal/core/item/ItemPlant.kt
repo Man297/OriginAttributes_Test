@@ -1,9 +1,7 @@
 package ac.github.oa.internal.core.item
 
 import ac.github.oa.api.event.item.ItemCreatedEvent
-import ac.github.oa.internal.attribute.AttributeManager
-import ac.github.oa.internal.core.equip.Slot
-import ac.github.oa.internal.core.item.action.ActionEventLoader
+import ac.github.oa.internal.core.attribute.AttributeManager
 import ac.github.oa.internal.core.item.action.ActionEventLoader.handleEvent
 import ac.github.oa.internal.core.item.action.IActionEvent
 import ac.github.oa.internal.core.item.generator.ItemGenerator
@@ -88,7 +86,8 @@ object ItemPlant {
     }
 
     fun handleEvent(player: Player, action: IActionEvent<*>, event: Any) {
-        AttributeManager[player.uniqueId].adaptItems
+
+        AttributeManager.get(player).items
             .mapNotNull { it.instance() }
             .forEach { it.handleEvent(player, action, event as Event) }
     }

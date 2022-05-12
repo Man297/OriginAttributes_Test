@@ -4,7 +4,7 @@ import ac.github.oa.OriginAttribute
 import ac.github.oa.api.event.entity.OriginCustomDamageEvent
 import ac.github.oa.api.event.item.ItemDurabilityDamageEvent
 import ac.github.oa.api.event.item.ItemUpdateEvent
-import ac.github.oa.internal.attribute.AttributeManager
+import ac.github.oa.internal.core.attribute.AttributeManager
 import ac.github.oa.internal.core.equip.Hand
 import ac.github.oa.internal.core.equip.OffHand
 import ac.github.oa.internal.core.item.ItemPlant
@@ -60,8 +60,9 @@ object ItemAPI {
         if (e.isCancelled) return
         // 扣除攻击者的主手副手耐久
         (e.damager as? Player)?.let { player ->
-            val attributeData = AttributeManager[player.uniqueId]
-            attributeData.adaptItems.forEach {
+
+            val attributeData = AttributeManager.get(player)
+            attributeData.items.forEach {
                 if (it.enable && (it.slot is Hand || it.slot is OffHand)) {
                     it.item.takeDurability(player, 1)
                 }
@@ -69,8 +70,8 @@ object ItemAPI {
         }
         // 扣除被攻击者的身体物品耐久
         (e.entity as? Player)?.let { player ->
-            val attributeData = AttributeManager[player.uniqueId]
-            attributeData.adaptItems.forEach {
+            val attributeData = AttributeManager.get(player)
+            attributeData.items.forEach {
                 if (it.enable && (it.slot !is Hand)) {
                     it.item.takeDurability(player, 1)
                 }

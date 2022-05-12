@@ -7,7 +7,6 @@ import ac.github.oa.api.event.entity.EntityDeathEvent
 import ac.github.oa.api.event.entity.OriginCustomDamageEvent
 import ac.github.oa.api.event.render.AttributeRenderStringEvent
 import ac.github.oa.command.Command
-import ac.github.oa.internal.attribute.AttributeData
 import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
@@ -61,8 +60,8 @@ object OnListener {
                 }
             }
 
-            val a: AttributeData = OriginAttributeAPI.getAttributeData(damager)
-            val d: AttributeData = OriginAttributeAPI.getAttributeData(entity)
+            val a = OriginAttributeAPI.getAttributeData(damager)
+            val d = OriginAttributeAPI.getAttributeData(entity)
             val damageMemory = DamageMemory(damager, entity, e, a, d)
             val entityDamageEvent = EntityDamageEvent(damageMemory, PriorityEnum.PRE)
             entityDamageEvent.call()

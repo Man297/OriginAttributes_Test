@@ -1,7 +1,6 @@
 package ac.github.oa.internal.core.condition.impl
 
 import ac.github.oa.OriginAttribute
-import ac.github.oa.internal.attribute.AttributeAdapter
 import ac.github.oa.internal.core.condition.ICondition
 import ac.github.oa.internal.core.equip.AdaptItem
 import ac.github.oa.util.TimeUtil

@@ -2,10 +2,9 @@ package ac.github.oa.internal.base.event.impl
 
 import ac.github.oa.OriginAttribute
 import ac.github.oa.api.event.entity.OriginCustomDamageEvent
-import ac.github.oa.internal.attribute.AttributeAdapter
-import ac.github.oa.internal.attribute.AttributeData
 import ac.github.oa.internal.base.event.EventMemory
-import ac.github.oa.util.Strings
+import ac.github.oa.internal.core.attribute.Attribute
+import ac.github.oa.internal.core.attribute.AttributeData
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -29,8 +28,8 @@ class DamageMemory(
         return this
     }
 
-    fun addDamage(attributeAdapter: AttributeAdapter, value: Double): DamageMemory {
-        return addDamage(Strings.parseLowerString(attributeAdapter::class.java.simpleName), value)
+    fun addDamage(attribute: Attribute, value: Double): DamageMemory {
+        return addDamage(attribute.toLocalName(), value)
     }
 
     fun addDamage(key: Any, value: Double): DamageMemory {

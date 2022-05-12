@@ -1,6 +1,5 @@
 package ac.github.oa.internal.core.condition.impl
 
-import ac.github.oa.internal.base.DataPair
 import ac.github.oa.internal.core.condition.ICondition
 import ac.github.oa.internal.core.equip.AdaptItem
 import org.bukkit.entity.LivingEntity
@@ -19,11 +18,11 @@ object OccupationCondition : ICondition {
             if (any(lore, list)) {
                 val map = config.getStringList("pattern").map {
                     val split = it.split(" ")
-                    DataPair(split[0], split[1])
+                    Pair(split[0], split[1])
                 }
-                val data = map.firstOrNull { lore.any { s -> s.contains(it.key) } }
-                if (data != null && !livingEntity.hasPermission(data.value)) {
-                    livingEntity.sendLang("condition-occupation-not-enough", item.itemMeta!!.displayName, data.key)
+                val data = map.firstOrNull { lore.any { s -> s.contains(it.first) } }
+                if (data != null && !livingEntity.hasPermission(data.second)) {
+                    livingEntity.sendLang("condition-occupation-not-enough", item.itemMeta!!.displayName, data.first)
                     return false
                 }
             }

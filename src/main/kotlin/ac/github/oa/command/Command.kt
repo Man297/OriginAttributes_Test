@@ -3,7 +3,6 @@ package ac.github.oa.command
 import ac.github.oa.OriginAttribute
 import ac.github.oa.api.ItemAPI
 import ac.github.oa.api.OriginAttributeAPI
-import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.core.item.ItemBuilder
 import ac.github.oa.internal.core.item.ItemPlant
 import ac.github.oa.internal.core.item.random.RandomPlant
@@ -150,13 +149,6 @@ object Command {
                 ItemAPI.checkUpdate(it, it.inventory)
             }
             sender.sendMessage("reload successful.")
-        }
-    }
-
-    @CommandBody
-    val attrs = subCommand {
-        execute<ProxyCommandSender> { sender, _, _ ->
-            sender.sendMessage("Enable attributes [" + AttributeManager.attributes.joinToString(",") { it.name } + "]")
         }
     }
 

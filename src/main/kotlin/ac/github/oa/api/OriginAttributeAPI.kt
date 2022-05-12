@@ -4,35 +4,20 @@ import ac.github.oa.OriginAttribute
 import ac.github.oa.api.event.entity.EntityGetterDataEvent
 import ac.github.oa.api.event.entity.EntityUpdateEvent
 import ac.github.oa.api.event.entity.EntityLoadEquipmentEvent
-import ac.github.oa.api.event.item.ItemDurabilityDamageEvent
 import ac.github.oa.api.event.render.AttributeRenderStringEvent
-import ac.github.oa.internal.attribute.AttributeAdapter
-import ac.github.oa.internal.attribute.AttributeData
-import ac.github.oa.internal.attribute.AttributeManager
-import ac.github.oa.internal.attribute.AttributeType
-import ac.github.oa.internal.base.BaseDouble
 import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import ac.github.oa.internal.base.event.impl.UpdateMemory
+import ac.github.oa.internal.core.attribute.*
 import ac.github.oa.internal.core.condition.ConditionManager
 import ac.github.oa.internal.core.equip.*
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.inventory.EntityEquipment
-import org.bukkit.inventory.EquipmentSlot
-import org.bukkit.inventory.ItemStack
-import taboolib.common.platform.function.info
 import taboolib.common.platform.function.submit
-import taboolib.module.nms.ItemTagData
-import taboolib.module.nms.getItemTag
-import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.function.Consumer
-import kotlin.math.max
-import kotlin.math.min
 
 object OriginAttributeAPI {
 
@@ -44,9 +29,9 @@ object OriginAttributeAPI {
      */
     fun getAttributeData(livingEntity: LivingEntity): AttributeData {
         val attributeData = AttributeData()
-        val data = AttributeManager[livingEntity.uniqueId]
+        val data = AttributeManager.get(livingEntity.uniqueId)
         attributeData.merge(data)
-        attributeData.adaptItems = data.adaptItems
+        attributeData.items + data.items
         getExtras(livingEntity.uniqueId).values.forEach(attributeData::merge)
         val event = EntityGetterDataEvent(livingEntity, attributeData)
         event.call()
@@ -113,8 +98,8 @@ object OriginAttributeAPI {
         val attributeData = AttributeData()
 
         val items = loadInventory(livingEntity)
-        attributeData.adaptItems.clear()
-        attributeData.adaptItems.addAll(items)
+        attributeData.items.clear()
+        attributeData.items + items
 
         val list: MutableList<String> = ArrayList()
 
@@ -125,7 +110,7 @@ object OriginAttributeAPI {
                 if (ConditionManager.pre(livingEntity, it) && ConditionManager.screen(livingEntity, it)) {
                     it.enable = true
                     if (it.isValid) {
-                        list.addAll(itemStack.itemMeta?.lore ?: emptyList())
+                        list += itemStack.itemMeta?.lore ?: emptyList()
                     }
                 }
             }
@@ -134,15 +119,15 @@ object OriginAttributeAPI {
         val event = AttributeRenderStringEvent(livingEntity, list)
         event.call()
         if (!event.isCancelled) {
-            for (s in event.list) {
-                for (attribute in AttributeManager.attributes) {
-                    val doubles: Array<BaseDouble> = attributeData.find(attribute)
-                    attribute.inject(livingEntity, s, doubles)
+            event.list.forEach { string ->
+                AttributeManager.usableAttributes.forEach {
+                    val attribute = attributeData.getAttribute(it.key)
+                    attributeData.loadTo(attribute, string)
                 }
             }
         }
 
-        AttributeManager[livingEntity.uniqueId] = attributeData
+        AttributeManager.set(livingEntity.uniqueId, attributeData)
 
     }
 
@@ -170,17 +155,16 @@ object OriginAttributeAPI {
     fun call(attributeType: AttributeType, value: Any) {
         var attributeData: AttributeData? = null
         if (value is DamageMemory) {
-            val damageMemory: DamageMemory = value
             attributeData =
-                if (attributeType === AttributeType.ATTACK) damageMemory.attackAttributeData else damageMemory.injuredAttributeData
+                if (attributeType === AttributeType.ATTACK)
+                    value.attackAttributeData else value.injuredAttributeData
         } else if (value is UpdateMemory) {
-            val updateMemory: UpdateMemory = value
-            attributeData = updateMemory.attributeData
+            attributeData = value.attributeData
         }
-        attributeData?.filter(attributeType)?.forEach { pair ->
-            val key: AttributeAdapter = pair.key
-            val baseDoubles: Array<BaseDouble> = pair.value
-            key.method(value as EventMemory, baseDoubles)
+        AttributeManager.usableAttributes.forEach {
+            it.value.toEntities().forEach { entry ->
+                entry.handler(value as EventMemory,attributeData!!.getData(it.key,entry.index))
+            }
         }
     }
 
@@ -203,10 +187,9 @@ object OriginAttributeAPI {
 
 
     fun loadList(entity: LivingEntity?, list: List<String>, origin: AttributeData) {
-        for (s in list) {
-            for (attribute in AttributeManager.attributes) {
-                val doubles: Array<BaseDouble> = origin.find(attribute)
-                attribute.inject(entity, s, doubles)
+        list.forEach { string ->
+            AttributeManager.usableAttributes.forEach {
+                origin.loadTo(it.value,string)
             }
         }
     }

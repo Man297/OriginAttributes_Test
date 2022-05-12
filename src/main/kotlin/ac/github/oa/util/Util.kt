@@ -1,12 +1,9 @@
 package ac.github.oa.util
 
-import ac.github.oa.internal.attribute.AttributeAdapter
-import ac.github.oa.internal.attribute.AttributeManager
 import ac.github.oa.internal.core.item.random.RandomPlant
 import ac.github.oa.internal.core.script.func.EmptyScript
 import ac.github.oa.internal.core.script.hoop.MapScript
 import org.bukkit.entity.LivingEntity
-import taboolib.common.platform.function.info
 import taboolib.platform.BukkitPlugin
 import java.io.File
 import java.lang.reflect.ParameterizedType
@@ -21,9 +18,6 @@ fun newfolder(root: File, name: String, files: List<String>): File {
     return file
 }
 
-fun Class<out AttributeAdapter>.isEnabled(): Boolean {
-    return AttributeManager.isEnabled(this)
-}
 
 fun File.listFile(suffix: String = ""): List<File> {
     val listOf = arrayListOf<File>()
@@ -95,3 +89,4 @@ private fun checkType(type: Type?, index: Int): Class<*>? {
         )
     }
 }
+
