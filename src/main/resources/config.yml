@@ -77,4 +77,5 @@ attributes:
   - Damage
   - Crit
   - Defence
+  - Health
   - javascript-def0

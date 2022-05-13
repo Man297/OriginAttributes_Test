@@ -23,7 +23,7 @@ class Defence : AbstractAttribute() {
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
-            if (memory.injured is Player) {
+            if (memory.attacker is Player) {
                 memory.addDamage(this, -data.get(0))
             }
         }
@@ -35,7 +35,7 @@ class Defence : AbstractAttribute() {
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
-            if (memory.injured !is Player) {
+            if (memory.attacker !is Player) {
                 memory.addDamage(this, -data.get(0))
             }
         }

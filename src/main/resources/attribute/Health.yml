@@ -1,0 +1,8 @@
+health:
+  default: 40
+  health-scale: 20
+  keywords:
+    - 生命上限
+percent:
+  keywords:
+    - 生命提升
