@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.info
 import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
 
@@ -73,27 +74,8 @@ object OnListener {
 
                 // POST CALL
                 if (!entityDamageEvent.isCancelled) {
-                    e.damage = damageMemory.damage.coerceAtLeast(1.0)
-                    if (damager is Player && Command.isDebugEnable(damager)) {
-                        (0..10).forEach { _ -> damager.sendMessage(" ") }
-                        damager.sendMessage("You damage ${entity.name}: Damage logs.")
-                        damageMemory.labels.onEachIndexed { index, entry ->
-                            damager.sendMessage("${index}.${entry.key} = ${entry.value}")
-                        }
-                        damager.sendMessage("Total amount ${e.damage}")
-                        damager.sendMessage("Is cancel ${e.isCancelled}")
-                    }
-
-                    if (entity is Player && Command.isDebugEnable(entity)) {
-                        (0..10).forEach { _ -> entity.sendMessage(" ") }
-                        entity.sendMessage("${damager.name} damage Your: Damage logs.")
-                        damageMemory.labels.onEachIndexed { index, entry ->
-                            entity.sendMessage("${index}.${entry.key} = ${entry.value}")
-                        }
-                        entity.sendMessage("Total amount ${e.damage}")
-                        entity.sendMessage("Is cancel ${e.isCancelled}")
-                    }
-
+                    e.damage = damageMemory.totalDamage.coerceAtLeast(1.0)
+                    info("damage total ${e.damage}")
                 }
             }
         }

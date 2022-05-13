@@ -15,6 +15,7 @@ import taboolib.library.configuration.ConfigurationSection
 import java.io.File
 import javax.script.Compilable
 import javax.script.Invocable
+import javax.script.ScriptEngine
 
 object Script {
 
@@ -50,12 +51,8 @@ object Script {
         override val types: Array<AttributeType>
             get() = root.getEnumList("types", AttributeType::class.java).toTypedArray()
 
-
-        val compileJS = script.compileJS() ?: error(script)
-        val invocable: Invocable
-            get() = compileJS.engine as Invocable
-
         override fun onLoad() {
+
             entries += entry
             entry.name = this.toName()
             entry.index = 0
@@ -67,25 +64,32 @@ object Script {
             return root.name
         }
 
-
         val entry = object : Attribute.Entry() {
 
             override val type: Attribute.Type
                 get() = root.getEnum("value-type", Attribute.Type::class.java)!!
 
+            lateinit var scriptEngine: ScriptEngine
+
+            val invocable: Invocable
+                get() = scriptEngine as Invocable
+
+            override fun onEnable() {
+                scriptEngine = scriptEngineFactory.scriptEngine
+                scriptEngine.put("name", name)
+                scriptEngine.put("index", index)
+                scriptEngine.put("api", ScriptAPI)
+                scriptEngine.eval(script)
+            }
+
             override fun handler(memory: EventMemory, data: AttributeData.Data) {
-                val bindings = compileJS.engine.createBindings()
-                bindings["name"] = name
-                bindings["index"] = index
-                bindings["api"] = ScriptAPI
-                val eval = compileJS.eval(bindings)
-                invocable.invokeFunction("execute", memory, data)
+                invocable.invokeFunction("handler", memory, data)
             }
 
 
             @Suppress("UNCHECKED_CAST")
             override fun getCorrectRules(): List<List<Double>> {
-                return root.getMapList("correct") as List<List<Double>>
+                return root.getList("correct") as List<List<Double>>
             }
 
             override fun getKeywords(): List<String> {
