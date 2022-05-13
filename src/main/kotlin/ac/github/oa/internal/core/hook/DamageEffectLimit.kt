@@ -21,7 +21,7 @@ object DamageEffectLimit {
 
     @Awake(LifeCycle.ENABLE)
     fun init() {
-        if (enable) {
+        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib") && enable) {
             val pm = ProtocolLibrary.getProtocolManager()
             pm.addPacketListener(object :
                 PacketAdapter(

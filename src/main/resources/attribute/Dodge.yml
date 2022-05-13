@@ -1,0 +1,12 @@
+dodge:
+  action: true # 是否启用
+  particle: CLOUD # 脚底粒子效果
+  step: 1.5 #偏移
+  sound: ENTITY_GHAST_SHOOT # 音效
+  volume: 2 # 音量
+  pitch: 2 # 音调
+  keywords:
+    - 闪避
+capture:
+  keywords:
+    - 抓取

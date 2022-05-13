@@ -53,6 +53,7 @@ object OriginPlaceholder : PlaceholderExpansion {
         val attribute = AttributeManager.usableAttributes.values.firstOrNull { it.toName() == key }
         if (attribute !== null) {
             val entry = attribute.getEntry(split[1])
+
             val data = attributeData.getData(attribute.getPriority(),entry.index)
 
             entry.toValue(p, if (split.size == 3) split[2] else "",data)?.apply {

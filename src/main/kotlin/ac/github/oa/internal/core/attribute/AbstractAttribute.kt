@@ -46,6 +46,10 @@ abstract class AbstractAttribute : Attribute {
         this.index = index
     }
 
+    override fun toRoot(): ConfigurationSection {
+        return root
+    }
+
     override fun onDisable() {}
 
     override fun onReload() {}

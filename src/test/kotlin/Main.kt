@@ -1,4 +1,4 @@
-
+import ac.github.oa.internal.core.attribute.getNumber
 
 class Main {
 
@@ -6,37 +6,23 @@ class Main {
 
         @JvmStatic
         fun main(args: Array<String>) {
-
-            val spot = Spot(5000)
-
-            val a = 10
-
-            (0 until 8).forEach {
-                val base = if (spot.isValid()) spot.task().apply { println(this) } else 1.0
-                println(a * base)
-                Thread.sleep(1000)
-            }
+            val s = "§7§l>>>  §7抓取: §a100%"
+            println(getNumber(s))
         }
 
 
     }
 
+    val FILTER_RULES = listOf(
+        Regex("§+[a-z0-9%]"),
+        Regex("-[^0-9]"),
+        Regex("[^-0-9.?]")
+    )
 
-    class Spot(val survival: Long) {
-
-        val stamp = System.currentTimeMillis()
-
-        fun isValid(): Boolean {
-            return surplus() > 0
-        }
-
-        fun surplus(): Long {
-            return stamp + survival - System.currentTimeMillis()
-        }
-
-        fun task(): Double {
-            return 1.0 - surplus().toDouble().div(survival.toDouble())
-        }
+    fun getNumber(string: String): String {
+        var prey = string
+        FILTER_RULES.forEach { prey = prey.replace(it, "") }
+        return prey.ifEmpty { "0.0" }
     }
 
 

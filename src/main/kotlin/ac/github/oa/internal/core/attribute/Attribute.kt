@@ -1,6 +1,7 @@
 package ac.github.oa.internal.core.attribute
 
 import ac.github.oa.internal.base.event.EventMemory
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.LivingEntity
 
 interface Attribute {
@@ -25,6 +26,8 @@ interface Attribute {
     fun getPriority(): Int
 
     fun setPriority(index: Int)
+
+    fun toRoot() : taboolib.library.configuration.ConfigurationSection
 
 
     abstract class Entry {

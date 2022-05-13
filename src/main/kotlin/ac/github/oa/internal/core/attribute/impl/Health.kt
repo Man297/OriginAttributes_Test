@@ -7,8 +7,10 @@ import ac.github.oa.internal.core.attribute.AbstractAttribute
 import ac.github.oa.internal.core.attribute.Attribute
 import ac.github.oa.internal.core.attribute.AttributeData
 import ac.github.oa.internal.core.attribute.AttributeType
+import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import taboolib.common.platform.function.info
 import kotlin.math.max
 
 class Health : AbstractAttribute() {
@@ -35,9 +37,11 @@ class Health : AbstractAttribute() {
             memory as UpdateMemory
             val livingEntity = memory.livingEntity
             // 点数 + 百分百
-            val result = (data.get(this) + default) * (1 + data.get(percent))
-            livingEntity.health = max(livingEntity.health, result)
+            // 110 + 40 * 1 + 0
+            val percent = memory.attributeData.getData(this.index, percent.index).get(percent)
+            val result = (data.get(this) + default) * (1 + percent)
             livingEntity.maxHealth = result
+            livingEntity.health = max(livingEntity.health, result)
 
             if (isHealthScale && livingEntity is Player) {
                 livingEntity.isHealthScaled = true

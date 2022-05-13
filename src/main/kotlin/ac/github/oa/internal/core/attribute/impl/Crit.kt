@@ -6,6 +6,7 @@ import ac.github.oa.internal.core.attribute.AbstractAttribute
 import ac.github.oa.internal.core.attribute.Attribute
 import ac.github.oa.internal.core.attribute.AttributeData
 import ac.github.oa.internal.core.attribute.AttributeType
+import taboolib.common.platform.function.info
 import taboolib.common.util.random
 
 class Crit : AbstractAttribute() {
@@ -43,14 +44,15 @@ class Crit : AbstractAttribute() {
                 // 爆伤抵抗
                 val critChanceResistance =
                     memory.injuredAttributeData
-                        .getData(this@Crit.index, critChanceResistance.index)
-                        .get(critChanceResistance)
+                        .getData(this@Crit.index, critDamageResistance.index)
+                        .get(critDamageResistance)
                 val scope = (data.get(0) - critChanceResistance) / 100
 
                 // 给伤害来源先乘以倍数
                 memory.getDamageSources().forEach {
                     it.value += it.value * scope
                 }
+                info("暴击后伤害 ${memory.totalDamage} 倍率${scope}")
             }
         }
 

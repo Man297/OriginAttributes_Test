@@ -78,4 +78,6 @@ attributes:
   - Crit
   - Defence
   - Health
+  - Capture
+  - Dodge
   - javascript-def0
