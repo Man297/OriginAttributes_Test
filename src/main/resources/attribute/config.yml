@@ -1,5 +1,6 @@
 script:
-  def0:
+  javascript-def0:
     types: ATTACK
+    value-type: SINGLE
     keywords:
       - '真实伤害'

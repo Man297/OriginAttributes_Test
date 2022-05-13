@@ -1,6 +1,5 @@
-package ac.github.oa.internal.core.condition.impl
+package ac.github.oa.internal.core.condition
 
-import ac.github.oa.internal.core.condition.ICondition
 import ac.github.oa.internal.core.equip.AdaptItem
 import ac.github.oa.internal.core.equip.SlotVariation
 import org.bukkit.entity.LivingEntity

@@ -11,6 +11,7 @@ def0:
     - '&c来源: &f{papi:%player_name%}'
     - ''
     - '{random:group:描述}'
+    - '{max:10,20,30}'
   item-flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES

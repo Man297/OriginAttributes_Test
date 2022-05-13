@@ -22,7 +22,7 @@ import taboolib.library.xseries.XMaterial
 import taboolib.module.nms.getItemTag
 import taboolib.platform.util.sendLang
 
-@CommandHeader("rpg")
+@CommandHeader("rpg", aliases = ["oa","rpgo","originattribute"])
 object Command {
 
 

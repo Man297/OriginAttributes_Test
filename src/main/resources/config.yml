@@ -1,5 +1,3 @@
-
-
 options:
   random-split-char: '#'
   decimal-format: '#.##'
@@ -34,6 +32,9 @@ options:
       lore:
         - 点击回收
   condition:
+    bind:
+      prefix: '绑定于'
+      suffix: ''
     level:
       keyword:
         - '使用等级'
@@ -74,18 +75,6 @@ options:
 
 attributes:
   - Damage
-  - BloodSucking
   - Crit
-  - JumpDamage
-  - Hit
-  - Armor
-  - Dodge
-  - Rebound
-  - ExpAddon
-  - HealthRecovery
-  - Health
-  - MoveSpeed
-  - Special
-  - ArmorBreak
-  - Power
-  - AttackSpeed
+  - Defence
+  - javascript-def0

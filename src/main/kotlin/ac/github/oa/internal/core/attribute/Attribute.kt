@@ -22,25 +22,49 @@ interface Attribute {
 
     fun toEntrySize(): Int
 
-    fun getPriority() : Int
+    fun getPriority(): Int
 
     fun setPriority(index: Int)
-
 
 
     abstract class Entry {
 
         var index: Int = -1
+
         open val type = Type.SINGLE
-        open lateinit var name : String
+
+        open lateinit var name: String
+
         open lateinit var node: Attribute
+
         open fun onEnable() {}
 
         abstract fun handler(memory: EventMemory, data: AttributeData.Data)
 
         open fun toValue(entity: LivingEntity, args: String, data: AttributeData.Data): Any? {
+            if (type == Type.SINGLE) {
+                return data.get(0)
+            }
+            if (type == Type.RANGE) {
+                return when (args) {
+                    "max" -> data.get(1)
+                    "min" -> data.get(0)
+                    else -> "${data.get(0)} - ${data.get(1)}"
+                }
+            }
+            return "N/O"
+        }
 
-            return Any()
+
+        @Suppress("UNCHECKED_CAST")
+        open fun getCorrectRules(): List<List<Double>> {
+            val path = "${this.name}.correct"
+            val root = getRoot()
+            return root.getMapList(path) as List<List<Double>>
+        }
+
+        open fun getKeywords(): List<String> {
+            return getRoot().getStringList("${this.name}.keywords")
         }
 
     }

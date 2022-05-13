@@ -1,8 +1,6 @@
 package ac.github.oa.internal.core.condition
 
 import ac.github.oa.internal.core.equip.AdaptItem
-import ac.github.oa.internal.core.item.ItemPlant
-import ac.github.oa.internal.core.item.generator.ItemGenerator
 import org.bukkit.entity.LivingEntity
 import taboolib.common.LifeCycle
 import taboolib.common.io.getInstance
@@ -19,7 +17,7 @@ object ConditionManager {
     fun loadCondition() {
         runningClasses.forEach {
             if (ICondition::class.java.isAssignableFrom(it)) {
-                val any = it.getInstance()?.get() ?: return
+                val any = it.getInstance()?.get() ?: return@forEach
                 conditions += any as ICondition
                 info("Loaded condition ${it.simpleName}")
             }

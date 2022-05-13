@@ -1,30 +1,30 @@
 physical:
   keywords:
-    - 物理攻击
+    - 物理防御
   correct:
     - [ 0,999999999999999 ]
     - [ 0,999999999999999 ]
 magic:
   keywords:
-    - 魔法攻击
+    - 魔法防御
   correct:
     - [ 0,999999999999999 ]
     - [ 0,999999999999999 ]
 pvpDamage:
   keywords:
-    - PVP攻击
+    - PVP防御
   correct:
     - [ 0,999999999999999 ]
     - [ 0,999999999999999 ]
 pveDamage:
   keywords:
-    - PVE攻击
+    - PVE防御
   correct:
     - [ 0,999999999999999 ]
     - [ 0,999999999999999 ]
 addon:
   keywords:
-    - 攻击力加成
+    - 防御力加成
   correct:
     - [ 0,999999999999999 ]
     - [ 0,999999999999999 ]

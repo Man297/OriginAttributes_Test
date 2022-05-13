@@ -31,7 +31,7 @@ object OriginAttributeAPI {
         val attributeData = AttributeData()
         val data = AttributeManager.get(livingEntity.uniqueId)
         attributeData.merge(data)
-        attributeData.items + data.items
+        attributeData.items += data.items
         getExtras(livingEntity.uniqueId).values.forEach(attributeData::merge)
         val event = EntityGetterDataEvent(livingEntity, attributeData)
         event.call()
@@ -73,7 +73,7 @@ object OriginAttributeAPI {
         // baubles load.
         if (livingEntity is Player) {
             val inventory = livingEntity.inventory
-            OriginAttribute.config.getStringList("options.condition.slot.pattern.InventorySlot")?.forEach {
+            OriginAttribute.config.getStringList("options.condition.slot.pattern.InventorySlot").forEach {
                 val split = it.split(" ")
                 val slot = split[0].toInt()
                 val itemStack = inventory.getItem(slot)
@@ -99,7 +99,7 @@ object OriginAttributeAPI {
 
         val items = loadInventory(livingEntity)
         attributeData.items.clear()
-        attributeData.items + items
+        attributeData.items += items
 
         val list: MutableList<String> = ArrayList()
 
@@ -161,11 +161,13 @@ object OriginAttributeAPI {
         } else if (value is UpdateMemory) {
             attributeData = value.attributeData
         }
-        AttributeManager.usableAttributes.forEach {
-            it.value.toEntities().forEach { entry ->
-                entry.handler(value as EventMemory,attributeData!!.getData(it.key,entry.index))
+        AttributeManager.usableAttributes
+            .filter { it.value.includesType(attributeType) }
+            .forEach {
+                it.value.toEntities().forEach { entry ->
+                    entry.handler(value as EventMemory, attributeData!!.getData(it.key, entry.index))
+                }
             }
-        }
     }
 
 
@@ -189,7 +191,7 @@ object OriginAttributeAPI {
     fun loadList(entity: LivingEntity?, list: List<String>, origin: AttributeData) {
         list.forEach { string ->
             AttributeManager.usableAttributes.forEach {
-                origin.loadTo(it.value,string)
+                origin.loadTo(it.value, string)
             }
         }
     }

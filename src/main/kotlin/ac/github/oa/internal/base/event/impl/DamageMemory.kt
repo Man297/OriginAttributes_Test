@@ -8,6 +8,7 @@ import ac.github.oa.internal.core.attribute.AttributeData
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import taboolib.common5.Coerce
 
 class DamageMemory(
     val attacker: LivingEntity,
@@ -18,6 +19,11 @@ class DamageMemory(
 ) : EventMemory {
 
     var arrow = attacker is Arrow
+
+    companion object {
+
+        val EMPTY_SOURCE = Source(-1, 0.0)
+    }
 
     // 如果关闭原版属性 并且玩家是玩家 则启用
     var damage = if (!OriginAttribute.original && attacker is Player) 0.0 else event.damage
@@ -32,8 +38,25 @@ class DamageMemory(
         return addDamage(attribute.toLocalName(), value)
     }
 
+    val totalDamage: Double
+        get() = getDamageSources().sumOf { it.value }
+
+    fun getDamage(key: Any): Double {
+        val source = getDamageSources().firstOrNull { it.any == key } ?: EMPTY_SOURCE
+        return Coerce.toDouble(source.value)
+    }
+
+    fun getDamageSources(): List<Source> {
+        return labels.keys.filterIsInstance<Source>()
+    }
+
     fun addDamage(key: Any, value: Double): DamageMemory {
-        setLabel(key, value).damage += value
+        setLabel(Source(key, value), value)
+        return this
+    }
+
+    fun takeDamage(key: Any, value: Double): DamageMemory {
+        addDamage(key, -value)
         return this
     }
 
@@ -41,5 +64,8 @@ class DamageMemory(
         damage += value
         return this
     }
+
+
+    class Source(val any: Any, var value: Double)
 
 }

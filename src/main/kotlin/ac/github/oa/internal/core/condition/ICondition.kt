@@ -3,12 +3,7 @@ package ac.github.oa.internal.core.condition
 import ac.github.oa.OriginAttribute
 import ac.github.oa.internal.core.equip.AdaptItem
 import org.bukkit.entity.LivingEntity
-import taboolib.common.LifeCycle
-import taboolib.common.inject.Injector
-import taboolib.common.platform.Awake
 import taboolib.library.configuration.ConfigurationSection
-import taboolib.platform.util.isNotAir
-import java.util.function.Supplier
 
 interface ICondition {
 

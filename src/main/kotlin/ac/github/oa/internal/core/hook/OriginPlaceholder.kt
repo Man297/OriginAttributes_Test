@@ -55,7 +55,7 @@ object OriginPlaceholder : PlaceholderExpansion {
             val entry = attribute.getEntry(split[1])
             val data = attributeData.getData(attribute.getPriority(),entry.index)
 
-            entry.toValue(p,args,data)?.apply {
+            entry.toValue(p, if (split.size == 3) split[2] else "",data)?.apply {
                 return if (this is Double) {
                     OriginAttribute.decimalFormat.format(this)
                 } else this.toString()

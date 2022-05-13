@@ -16,7 +16,7 @@ open class InternalConfig(
         var s = value
         for (config in list) {
             val format = config.format(entity, wrappers)
-            s = s.replace("{" + config.string + "}", format!!)
+            s = s.replaceFirst("{" + config.string + "}", format!!)
         }
         val internalScript = InternalScriptManager.filter(key)
         if (internalScript != null) {

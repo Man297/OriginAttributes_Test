@@ -8,6 +8,7 @@ import taboolib.module.configuration.ConfigFile
 import taboolib.module.configuration.Configuration
 import java.io.File
 
+@Abstract
 abstract class AbstractAttribute : Attribute {
 
     open lateinit var root: ConfigurationSection
@@ -17,15 +18,14 @@ abstract class AbstractAttribute : Attribute {
 
     override fun onLoad() {
         val file = File(getDataFolder(), toRootPath())
-        if (!file.exists()) {
-            releaseResourceFile(toRootPath(), true)
-        }
+        releaseResourceFile(toRootPath(), false)
         root = Configuration.loadFromFile(file) as ConfigurationSection
         this::class.java.declaredFields.forEach {
             if (Attribute.Entry::class.java.isAssignableFrom(it.type)) {
                 it.isAccessible = true
                 entries += (it.get(this) as Attribute.Entry).apply {
                     this.name = it.name
+                    this.index = entries.size
                     this.node = this@AbstractAttribute
                 }
             }
@@ -59,7 +59,7 @@ abstract class AbstractAttribute : Attribute {
     }
 
     override fun toName(): String {
-        return AbstractAttribute::class.java.simpleName
+        return this::class.java.simpleName
     }
 
     override fun getEntry(index: Int): Attribute.Entry {

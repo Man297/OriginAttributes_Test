@@ -3,16 +3,14 @@ package ac.github.oa.internal.core.condition.impl
 import ac.github.oa.OriginAttribute
 import ac.github.oa.internal.core.condition.ICondition
 import ac.github.oa.internal.core.equip.AdaptItem
-import ac.github.oa.util.TimeUtil
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
 import taboolib.platform.util.sendLang
-import java.time.LocalDateTime
 import java.util.*
 
 object TimeCondition : ICondition {
+
+
     override fun post(livingEntity: LivingEntity, adaptItem: AdaptItem): Boolean {
 
         if (livingEntity is Player) {

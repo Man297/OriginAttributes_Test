@@ -29,15 +29,24 @@ class AttributeData {
         }
     }
 
-    fun merge(data: AttributeData) {
-
+    fun merge(target: AttributeData) {
+        this.tables.forEachIndexed { index, arrayOfDatas ->
+            arrayOfDatas.forEachIndexed { dataIndex, data ->
+                data.merge(target.tables[index][dataIndex])
+            }
+        }
     }
 
     fun autoCombatPower() {
 
     }
 
+    override fun toString(): String {
+        return "AttributeData(items=$items, tables=${tables.contentToString()}, combatPower=$combatPower)"
+    }
+
     class Data(length: Int) {
+
         val array = Array(length) { 0.0 }
 
         fun set(index: Int, value: Double) {
@@ -57,6 +66,20 @@ class AttributeData {
                 Attribute.Type.SINGLE -> array[0]
                 Attribute.Type.RANGE -> random(array[0], array[1])
             }
+        }
+
+        fun get(index: Int): Double {
+            return array[index]
+        }
+
+        fun merge(data: Data) {
+            this.array.forEachIndexed { index, _ ->
+                add(index, data.get(index))
+            }
+        }
+
+        override fun toString(): String {
+            return "Data(array=${array.contentToString()})"
         }
 
     }

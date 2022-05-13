@@ -31,7 +31,7 @@ interface InternalScript<out T : BaseWrapper> {
             for (config in configs) {
                 val format = config.format(entity, wrapper)
                 if (format != null) {
-                    source = source.replace("{" + config.string + "}", call(config, format))
+                    source = source.replaceFirst("{" + config.string + "}", call(config, format))
                 }
             }
             return source

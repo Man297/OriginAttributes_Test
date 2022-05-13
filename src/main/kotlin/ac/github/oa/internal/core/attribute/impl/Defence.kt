@@ -2,17 +2,14 @@ package ac.github.oa.internal.core.attribute.impl
 
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
-import ac.github.oa.internal.core.attribute.AbstractAttribute
-import ac.github.oa.internal.core.attribute.Attribute
-import ac.github.oa.internal.core.attribute.AttributeData
-import ac.github.oa.internal.core.attribute.AttributeType
-import org.bukkit.entity.Mob
+import ac.github.oa.internal.core.attribute.*
 import org.bukkit.entity.Player
+import taboolib.common.reflect.Reflex.Companion.getProperty
 
-class Damage : AbstractAttribute() {
+class Defence : AbstractAttribute() {
 
     override val types: Array<AttributeType>
-        get() = arrayOf(AttributeType.ATTACK)
+        get() = arrayOf(AttributeType.DEFENSE)
 
     val physical = DefaultImpl()
 
@@ -20,29 +17,30 @@ class Damage : AbstractAttribute() {
 
     val addon = DefaultAddonImpl()
 
-    val pvpDamage = object : Attribute.Entry() {
+    val pvpDefence = object : Attribute.Entry() {
         override val type: Attribute.Type
             get() = Attribute.Type.RANGE
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
             if (memory.injured is Player) {
-                memory.addDamage(this, data.get(0))
+                memory.addDamage(this, -data.get(0))
             }
         }
     }
 
-    val pveDamage = object : Attribute.Entry() {
+    val pveDefence = object : Attribute.Entry() {
         override val type: Attribute.Type
             get() = Attribute.Type.RANGE
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
             if (memory.injured !is Player) {
-                memory.addDamage(this, data.get(0))
+                memory.addDamage(this, -data.get(0))
             }
         }
     }
+
 
     class DefaultImpl : Attribute.Entry() {
 
@@ -51,8 +49,14 @@ class Damage : AbstractAttribute() {
 
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
-            val damageMemory = memory as DamageMemory
-            damageMemory.addDamage(name, data.get(this))
+            memory as DamageMemory
+            memory.getDamageSources().forEach {
+                if (it.any is Damage.DefaultImpl) {
+                    if (it.any.name == name) {
+                        it.value -= data.get(this)
+                    }
+                }
+            }
         }
 
     }
@@ -62,15 +66,16 @@ class Damage : AbstractAttribute() {
         override val type: Attribute.Type
             get() = Attribute.Type.RANGE
 
-
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
             memory.getDamageSources().forEach {
-                if (it.value > 0) {
-                    it.value += (it.value * data.get(0))
+                if (it.any is Damage.DefaultImpl) {
+                    it.value -= it.value * data.get(this) / 100
                 }
             }
         }
 
     }
+
+
 }
