@@ -17,6 +17,8 @@ import taboolib.common.platform.sendTo
 import taboolib.common.util.random
 import taboolib.common5.Coerce
 import taboolib.platform.util.toProxyLocation
+import kotlin.math.max
+import kotlin.math.min
 
 class Capture : AbstractAttribute() {
 
@@ -32,10 +34,16 @@ class Capture : AbstractAttribute() {
                     val attacker = damageMemory.attacker
                     val injured = damageMemory.injured
                     // 目标b偏移向目标a
-                    val locationA = injured.location
-                    val locationB = attacker.location
+                    val locationA = injured.location.clone()
+                    val locationB = attacker.location.clone()
+                    locationA.pitch = 0f
+                    locationB.pitch = 0f
+                    val distance = locationA.distance(locationB)
                     val vectorAB = locationB.clone().subtract(locationA).toVector()
-                    injured.velocity = vectorAB.multiply(3.0)
+                    vectorAB.length()
+                    val step = min(0.1, distance)
+                    info("@Capture $step")
+                    injured.velocity = vectorAB.multiply(step)
                 }
             }
         }
@@ -53,7 +61,6 @@ class Capture : AbstractAttribute() {
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
             memory.setLabel("@Capture", random(data.get(this)))
-            info("@Capture ${memory.labels["@Capture"]} $data")
         }
 
     }
