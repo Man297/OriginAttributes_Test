@@ -1,3 +1,4 @@
 capture:
+  step: 0.3
   keywords:
     - 抓取

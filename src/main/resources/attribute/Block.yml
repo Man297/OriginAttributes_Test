@@ -1,0 +1,14 @@
+chance:
+  sound: BLOCK_ANVIL_FALL # 音效
+  volume: 2 # 音量
+  pitch: 2 # 音调
+  keywords:
+    - 格挡几率
+
+percent:
+  keyword:
+    - 格挡倍率
+
+damage:
+  keyword:
+    - 格挡伤害

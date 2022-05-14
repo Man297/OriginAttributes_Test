@@ -25,6 +25,9 @@ class Capture : AbstractAttribute() {
 
     companion object {
 
+        val captureInstance: Capture
+            get() = AttributeManager.getAttribute("Capture") as Capture
+
         @SubscribeEvent
         fun onCapture(e: EntityDamageEvent) {
             if (e.priorityEnum == PriorityEnum.POST) {
@@ -41,8 +44,7 @@ class Capture : AbstractAttribute() {
                     val distance = locationA.distance(locationB)
                     val vectorAB = locationB.clone().subtract(locationA).toVector()
                     vectorAB.length()
-                    val step = min(0.1, distance)
-                    info("@Capture $step")
+                    val step = min(captureInstance.capture.step, distance)
                     injured.velocity = vectorAB.multiply(step)
                 }
             }
@@ -53,10 +55,16 @@ class Capture : AbstractAttribute() {
     override val types: Array<AttributeType>
         get() = arrayOf(AttributeType.ATTACK)
 
-    val capture = object : Attribute.Entry() {
+    val capture = DefaultImpl()
+
+    class DefaultImpl : Attribute.Entry() {
 
         override val type: Attribute.Type
             get() = Attribute.Type.SINGLE
+
+        val step: Double
+            get() = node.toRoot().getDouble("${name}.step")
+
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
