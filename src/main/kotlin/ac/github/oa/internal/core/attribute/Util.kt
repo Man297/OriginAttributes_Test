@@ -20,11 +20,11 @@ fun AttributeData.loadTo(attribute: Attribute, string: String) {
 fun AttributeData.Data.loadTo(entry: Attribute.Entry, string: String) {
     val keywords = entry.getKeywords()
     if (keywords.any { it in string }) {
-        val split = getNumber(string).split("-")
         if (entry.type == Attribute.Type.SINGLE) {
-            add(0, Coerce.toDouble(getNumber(split[0])))
+            add(0, Coerce.toDouble(getNumber(string)))
         }
         if (entry.type == Attribute.Type.RANGE) {
+            val split = string.replace(FILTER_RULES[0],"").split(" - ")
             add(0, Coerce.toDouble(getNumber(split[0])))
             add(1, Coerce.toDouble(getNumber(if (split.size == 1) split[0] else split[1])))
         }
@@ -47,7 +47,6 @@ fun AttributeData.Data.correct(entry: Attribute.Entry) {
         }
     }
 }
-
 
 
 fun Attribute.Entry.getRoot() = (node as AbstractAttribute).root

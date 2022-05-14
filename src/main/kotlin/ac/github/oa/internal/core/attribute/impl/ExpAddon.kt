@@ -27,10 +27,15 @@ class ExpAddon : AbstractAttribute() {
             val addon = (amount * (value / 100))
             e.amount += addon.toInt()
             if (expAddonInstance.addon.actionBar != null) {
-                e.player.sendActionBar(
-                    expAddonInstance.addon.actionBar!!.replace("{0}", amount.toString()).replace("{1}", addon.toString())
-                )
+                e.player.sendActionBar(toTip(expAddonInstance.addon.actionBar!!,amount, addon))
             }
+            if (expAddonInstance.addon.message != null) {
+                e.player.sendActionBar(toTip(expAddonInstance.addon.message!!,amount, addon))
+            }
+        }
+
+        fun toTip(string: String,amount : Int,addon : Double): String {
+            return string.replace("{0}", amount.toString()).replace("{1}", addon.toString())
         }
 
     }
@@ -41,6 +46,9 @@ class ExpAddon : AbstractAttribute() {
 
         val actionBar: String?
             get() = node.toRoot().getString("$name.action-bar")
+
+        val message: String?
+            get() = node.toRoot().getString("$name.message")
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {}
     }

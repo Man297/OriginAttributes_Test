@@ -41,7 +41,9 @@ class Health : AbstractAttribute() {
             val percent = memory.attributeData.getData(this.index, percent.index).get(percent)
             val result = (data.get(this) + default) * (1 + percent)
             livingEntity.maxHealth = result
-            if (result < livingEntity.health) {
+
+            if (livingEntity.health >= result) {
+                info("entity ${livingEntity.health}/${livingEntity.maxHealth} to $result")
                 livingEntity.health = result
             }
 

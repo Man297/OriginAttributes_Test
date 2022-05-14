@@ -178,6 +178,20 @@ object OriginAttributeAPI {
         return loadList(null, list)
     }
 
+    fun loadItem(livingEntity: LivingEntity, adaptItem: AdaptItem): AttributeData {
+        val attributeData = AttributeData()
+        if (adaptItem.isValid) {
+            // conditioning...
+            if (ConditionManager.pre(livingEntity, adaptItem) && ConditionManager.screen(livingEntity, adaptItem)) {
+                adaptItem.enable = true
+                if (adaptItem.isValid) {
+                    attributeData.merge(loadList(livingEntity, adaptItem.item.itemMeta?.lore ?: emptyList()))
+                }
+            }
+        }
+        return attributeData
+    }
+
     /**
      * 根据实体 读取list加载属性
      */

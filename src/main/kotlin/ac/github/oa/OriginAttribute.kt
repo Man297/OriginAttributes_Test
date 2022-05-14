@@ -20,6 +20,9 @@ object OriginAttribute : Plugin() {
     @Config("config.yml", migrate = true)
     lateinit var config: Configuration
 
+    @Config("module.yml", migrate = true)
+    lateinit var module: Configuration
+
     val decimalFormat: DecimalFormat
         get() = DecimalFormat(config.getString("options.decimal-format"))
 

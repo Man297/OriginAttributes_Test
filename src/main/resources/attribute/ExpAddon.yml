@@ -1,4 +1,5 @@
 addon:
   action-bar: 'Exp get {0} +{1}！'
+  message: 'OriginAttribute: Exp get {0} +{1}！'
   keywords:
     - 经验加成
