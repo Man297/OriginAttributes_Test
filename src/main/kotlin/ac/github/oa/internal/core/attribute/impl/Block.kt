@@ -40,7 +40,7 @@ class Block : AbstractAttribute() {
 
     val chance = ChanceImpl()
 
-    val percent = object : Attribute.Entry() {
+    val ratio = object : Attribute.Entry() {
 
         override val type: Attribute.Type
             get() = Attribute.Type.SINGLE
@@ -56,7 +56,7 @@ class Block : AbstractAttribute() {
                 memory.getDamageSources().forEach {
                     it.value -= (it.value * percent).apply { count += this }
                 }
-                memory.labels["block-percent"] = count
+                memory.labels["block-ratio"] = count
             }
         }
     }
@@ -96,7 +96,6 @@ class Block : AbstractAttribute() {
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
             memory.setLabel("@Block", random(data.get(this)))
-            info("@Block ${memory.labels["@Block"]}")
         }
     }
 

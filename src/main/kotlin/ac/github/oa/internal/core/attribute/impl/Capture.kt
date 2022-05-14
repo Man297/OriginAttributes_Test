@@ -28,7 +28,7 @@ class Capture : AbstractAttribute() {
         val captureInstance: Capture
             get() = AttributeManager.getAttribute("Capture") as Capture
 
-        @SubscribeEvent
+        @SubscribeEvent(ignoreCancelled = true)
         fun onCapture(e: EntityDamageEvent) {
             if (e.priorityEnum == PriorityEnum.POST) {
                 val damageMemory = e.damageMemory

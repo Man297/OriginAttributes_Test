@@ -22,7 +22,6 @@ class Map : AbstractAttribute() {
                 it as DefaultImpl
                 val entryData = data.getData(mapInstance.index, it.index)
                 val readList = ArrayUtils.read(it.attributeList, entryData.get(it))
-                info("${it.index } read $readList")
                 val resultData = OriginAttributeAPI.loadList(e.livingEntity, readList)
                 e.attributeData.merge(resultData)
             }

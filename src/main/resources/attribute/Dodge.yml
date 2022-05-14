@@ -7,6 +7,3 @@ dodge:
   pitch: 2 # 音调
   keywords:
     - 闪避
-capture:
-  keywords:
-    - 抓取

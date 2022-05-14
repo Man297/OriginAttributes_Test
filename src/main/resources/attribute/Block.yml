@@ -5,7 +5,7 @@ chance:
   keywords:
     - 格挡几率
 
-percent:
+ratio:
   default: 5
   keyword:
     - 格挡倍率

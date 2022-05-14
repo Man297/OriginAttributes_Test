@@ -26,7 +26,7 @@ class Dodge : AbstractAttribute() {
         val dodgeInstance: Dodge
             get() = AttributeManager.getAttribute("Dodge") as Dodge
 
-        @SubscribeEvent
+        @SubscribeEvent(ignoreCancelled = true)
         fun onDodge(e: EntityDamageEvent) {
             if (e.priorityEnum == PriorityEnum.POST) {
                 val damageMemory = e.damageMemory

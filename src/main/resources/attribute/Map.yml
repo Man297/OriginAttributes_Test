@@ -20,7 +20,7 @@ endurance: # 耐力
 all attribute: # 全属性加成
   keywords:
     - 全属性加成
-  attribute:
+  attributes:
     - 攻击力 +{eval:{map:value} * 1.1}
     - 暴击几率 +{eval:{map:value} * 0.2}
     - 暴击伤害 +{eval:{map:value} * 0.8}
