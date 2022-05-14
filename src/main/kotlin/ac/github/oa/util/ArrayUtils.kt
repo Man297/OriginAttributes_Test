@@ -9,7 +9,7 @@ object ArrayUtils {
     /**
      * damage +{eval:{map:value}*10+2.0}
      */
-    fun read(strings: List<String>?, amount: Int): List<String> {
+    fun read(strings: List<String>?, amount: Double): List<String> {
         val arrayList = ArrayList(strings)
         for (i in arrayList.indices) {
             val wrapper = MapScript.Wrapper()

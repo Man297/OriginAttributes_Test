@@ -1,0 +1,29 @@
+power: # 力量
+  attributes:
+    - 攻击力 +{eval:{map:value}*1.2}
+    - 生命上限 +{eval:{map:value} * 0.5}
+    - 防御力 +{eval:{map:value} * 0.5}
+  keywords:
+    - 力量
+spirit: # 精神
+  attributes:
+    - 暴击几率 +{eval:{map:value} * 0.2}
+    - 暴击伤害 +{eval:{map:value} * 0.8}
+  keywords:
+    - 精神
+endurance: # 耐力
+  attributes:
+    - 生命上限 +{eval:{map:value} * 1.5}
+    - 防御力 +{eval:{map:value} * 1.2}
+  keywords:
+    - 耐力
+all attribute: # 全属性加成
+  keywords:
+    - 全属性加成
+  attribute:
+    - 攻击力 +{eval:{map:value} * 1.1}
+    - 暴击几率 +{eval:{map:value} * 0.2}
+    - 暴击伤害 +{eval:{map:value} * 0.8}
+    - 生命上限 +{eval:{map:value} * 1.3}
+    - 生命恢复 +{eval:{map:value} * 0.3}
+    - 防御力 +{eval:{map:value} * 0.6}

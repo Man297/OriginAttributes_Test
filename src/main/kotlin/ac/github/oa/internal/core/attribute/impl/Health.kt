@@ -41,7 +41,9 @@ class Health : AbstractAttribute() {
             val percent = memory.attributeData.getData(this.index, percent.index).get(percent)
             val result = (data.get(this) + default) * (1 + percent)
             livingEntity.maxHealth = result
-            livingEntity.health = max(livingEntity.health, result)
+            if (result < livingEntity.health) {
+                livingEntity.health = result
+            }
 
             if (isHealthScale && livingEntity is Player) {
                 livingEntity.isHealthScaled = true

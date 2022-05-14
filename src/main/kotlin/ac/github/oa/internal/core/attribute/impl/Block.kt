@@ -7,6 +7,7 @@ import ac.github.oa.internal.base.event.impl.DamageMemory
 import ac.github.oa.internal.core.attribute.*
 import org.bukkit.Sound
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.info
 import taboolib.common.util.random
 import taboolib.common5.Coerce
 
@@ -28,6 +29,8 @@ class Block : AbstractAttribute() {
         fun e(e: EntityDamageEvent) {
             if (e.priorityEnum == PriorityEnum.POST && e.damageMemory.labels["@Block"] == true) {
                 val injured = e.damageMemory.injured
+                e.isCancelled = true
+                e.damageMemory.event.isCancelled = true
                 injured.world.playSound(injured.eyeLocation, chanceEntry.sound, chanceEntry.volume, chanceEntry.pitch)
             }
         }
@@ -42,10 +45,13 @@ class Block : AbstractAttribute() {
         override val type: Attribute.Type
             get() = Attribute.Type.SINGLE
 
+        val default: Double
+            get() = node.toRoot().getDouble("${name}.default", 0.0)
+
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
             if (memory.labels["@Block"] == true) {
-                val percent = data.get(this) / 100
+                val percent = (data.get(this) + default) / 100
                 var count = 0.0
                 memory.getDamageSources().forEach {
                     it.value -= (it.value * percent).apply { count += this }
@@ -90,6 +96,7 @@ class Block : AbstractAttribute() {
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
             memory.setLabel("@Block", random(data.get(this)))
+            info("@Block ${memory.labels["@Block"]}")
         }
     }
 
