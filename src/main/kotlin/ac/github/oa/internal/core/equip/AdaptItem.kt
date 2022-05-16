@@ -21,4 +21,9 @@ class AdaptItem(val slot: Slot, var enable: Boolean = false) {
         return ItemInstance(item, parseItem, slot)
     }
 
+    override fun toString(): String {
+        return "AdaptItem(slot=$slot, enable=$enable)"
+    }
+
+
 }

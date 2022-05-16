@@ -2,10 +2,12 @@ package ac.github.oa.internal.core.attribute
 
 import ac.github.oa.OriginAttribute
 import ac.github.oa.api.event.plugin.AttributeLoadEvent
+import ac.github.oa.api.event.plugin.OriginPluginReloadEvent
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.io.runningClasses
 import taboolib.common.platform.Awake
+import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.Configuration
@@ -73,6 +75,11 @@ object AttributeManager {
         usableAttributes.forEach {
             enableAttribute(it.value)
         }
+    }
+
+    @SubscribeEvent
+    fun e(e: OriginPluginReloadEvent) {
+        usableAttributes.values.forEach { it.onReload() }
     }
 
     fun enableAttribute(attribute: Attribute) {

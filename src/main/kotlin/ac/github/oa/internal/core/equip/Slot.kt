@@ -11,5 +11,9 @@ abstract class Slot(private val itemStack: ItemStack?) : ISlot, SlotCondition {
         return keyword.any { string.contains(it) }
     }
 
+    override fun toString(): String {
+        return "Slot(id=${id},itemStack=${item.itemMeta?.displayName ?: "Air"})"
+    }
+
 
 }

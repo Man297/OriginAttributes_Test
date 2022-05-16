@@ -58,10 +58,15 @@ object Script {
             entry.index = 0
             entry.onEnable()
 
-            info("|- Registered attribute ${toName()}.")        }
+            info("|- Registered attribute ${toName()}.")
+        }
 
         override fun toName(): String {
             return root.name
+        }
+
+        override fun onReload() {
+            AttributeManager.config.reload()
         }
 
         val entry = object : Attribute.Entry() {

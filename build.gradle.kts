@@ -47,11 +47,10 @@ dependencies {
 
 }
 
-tasks.withType<JavaCompile> {00000000
+tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-000000000000000000000000000000000000000000000
 
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8

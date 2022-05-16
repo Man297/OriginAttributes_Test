@@ -77,7 +77,7 @@ abstract class AbstractAttribute : Attribute {
     }
 
     override fun getEntry(name: String): Attribute.Entry {
-        return toEntities().first { it.name == name }
+        return toEntities().firstOrNull { it.name == name } ?: error("${this.toName()}: $name not found.")
     }
 
     override fun toEntrySize(): Int {
