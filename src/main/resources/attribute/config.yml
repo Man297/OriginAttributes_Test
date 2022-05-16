@@ -5,3 +5,14 @@ script:
     combat-power: 1.0
     keywords:
       - '真实伤害'
+
+damage-handler: |-
+  if(openAPI.hasLabel("@Crit")) {
+    openAPI.attacker.sendMessage('暴击' + openAPI.totalDamage)
+  } else {
+    openAPI.attacker.sendMessage('伤害' + openAPI.totalDamage)
+  }
+
+  if(openAPI.hasLabel("@SuckBlood")) {
+      openAPI.attacker.sendMessage('吸血' + openAPI.getLabel('suck-blood'))
+  }

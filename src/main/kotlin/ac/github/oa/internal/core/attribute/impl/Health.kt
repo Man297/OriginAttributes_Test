@@ -38,7 +38,7 @@ class Health : AbstractAttribute() {
             val livingEntity = memory.livingEntity
             // 点数 + 百分百
             // 110 + 40 * 1 + 0
-            val percent = memory.attributeData.getData(this.index, percent.index).get(percent)
+            val percent = memory.attributeData.getData(this@Health.index, percent.index).get(percent)
             val result = (data.get(this) + default) * (1 + percent)
             livingEntity.maxHealth = result
 
