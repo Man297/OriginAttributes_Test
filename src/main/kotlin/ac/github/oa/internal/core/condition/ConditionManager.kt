@@ -19,7 +19,7 @@ object ConditionManager {
             if (ICondition::class.java.isAssignableFrom(it)) {
                 val any = it.getInstance()?.get() ?: return@forEach
                 conditions += any as ICondition
-                info("Loaded condition ${it.simpleName}")
+                info("|- Loaded condition ${it.simpleName}")
             }
         }
     }

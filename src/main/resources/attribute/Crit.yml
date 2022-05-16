@@ -1,6 +1,8 @@
 change:
+  combat-power: 1.0
   keywords:
     - 暴击几率
 damage:
+  combat-power: 1.0
   keywords:
     - 暴击伤害

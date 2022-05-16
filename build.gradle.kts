@@ -47,15 +47,11 @@ dependencies {
 
 }
 
-tasks.withType<JavaCompile> {
+tasks.withType<JavaCompile> {00000000
     options.encoding = "UTF-8"
 }
 
-tasks.withType<Jar> {
-//    destinationDir = file("F:/Server/spigot 1.17/plugins")
-//    destinationDir = file("F:/Server/Spigot 1.12.2 - 赏金测试/plugins")
-//    destinationDir = file("F:/Server/spigot 1.17/plugins")
-}
+000000000000000000000000000000000000000000000
 
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8

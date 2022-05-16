@@ -38,7 +38,19 @@ class AttributeData {
     }
 
     fun autoCombatPower() {
-
+        var count = 0.0
+        AttributeManager.usableAttributes.values.forEach {
+            it.toEntities().forEach { entry ->
+                count += when (entry.type) {
+                    Attribute.Type.SINGLE -> this.getData(it.getPriority(), entry.index).get(entry)
+                    Attribute.Type.RANGE -> {
+                        val data = this.getData(it.getPriority(), entry.index)
+                        (data.get(0) + data.get(1)) / 2
+                    }
+                }
+            }
+        }
+        this.combatPower = count
     }
 
     override fun toString(): String {

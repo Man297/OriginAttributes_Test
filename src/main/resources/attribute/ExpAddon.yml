@@ -1,5 +1,6 @@
 addon:
   action-bar: 'Exp get {0} +{1}！'
   message: 'OriginAttribute: Exp get {0} +{1}！'
+  combat-power: 1.0
   keywords:
     - 经验加成

@@ -1,4 +1,5 @@
 ratio:
   base: 0.2
+  combat-power: 1.0
   keywords:
     - 移速加成

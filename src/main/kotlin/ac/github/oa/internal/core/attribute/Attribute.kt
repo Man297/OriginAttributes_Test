@@ -27,7 +27,7 @@ interface Attribute {
 
     fun setPriority(index: Int)
 
-    fun toRoot() : taboolib.library.configuration.ConfigurationSection
+    fun toRoot(): taboolib.library.configuration.ConfigurationSection
 
 
     abstract class Entry {
@@ -39,6 +39,9 @@ interface Attribute {
         open lateinit var name: String
 
         open lateinit var node: Attribute
+
+        open val combatPower: Double
+            get() = node.toRoot().getDouble("${name}.combat-power", 0.0)
 
         open fun onEnable() {}
 

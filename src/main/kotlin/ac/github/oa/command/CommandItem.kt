@@ -181,7 +181,6 @@ object CommandItem {
             }
 
             onClick { _, element ->
-                info("click")
                 openSubManageMenu(element)
             }
 

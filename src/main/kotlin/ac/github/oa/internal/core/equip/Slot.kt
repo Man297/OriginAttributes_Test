@@ -10,4 +10,6 @@ abstract class Slot(private val itemStack: ItemStack?) : ISlot, SlotCondition {
     override fun screen(string: String, keyword: List<String>): Boolean {
         return keyword.any { string.contains(it) }
     }
+
+
 }

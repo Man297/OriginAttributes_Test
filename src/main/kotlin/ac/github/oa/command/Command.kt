@@ -3,10 +3,12 @@ package ac.github.oa.command
 import ac.github.oa.OriginAttribute
 import ac.github.oa.api.ItemAPI
 import ac.github.oa.api.OriginAttributeAPI
+import ac.github.oa.api.event.plugin.OriginPluginReloadEvent
 import ac.github.oa.internal.core.item.ItemBuilder
 import ac.github.oa.internal.core.item.ItemPlant
 import ac.github.oa.internal.core.item.random.RandomPlant
 import ac.github.oa.internal.core.script.content.JavaScriptPlant
+import ac.github.oa.internal.core.ui.InfoUI
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
@@ -22,7 +24,7 @@ import taboolib.library.xseries.XMaterial
 import taboolib.module.nms.getItemTag
 import taboolib.platform.util.sendLang
 
-@CommandHeader("rpg", aliases = ["oa","rpgo","originattribute"])
+@CommandHeader("rpg", aliases = ["oa", "rpgo", "originattribute"])
 object Command {
 
     val map = mutableMapOf<Player, Boolean>()
@@ -39,8 +41,33 @@ object Command {
             Bukkit.getOnlinePlayers().forEach {
                 ItemAPI.checkUpdate(it, it.inventory)
             }
+            OriginPluginReloadEvent().call()
             sender.sendMessage("reload successful.")
         }
+    }
+
+    @CommandBody
+    val info = subCommand {
+        dynamic(commit = "viewer") {
+            suggestion<ProxyCommandSender> { _, _ -> Bukkit.getOnlinePlayers().map { it.name } }
+
+            execute<ProxyCommandSender> { _, _, argument ->
+                Bukkit.getPlayerExact(argument)?.let {
+                    InfoUI(it, it).open()
+                }
+            }
+
+            dynamic(commit = "target") {
+                suggestion<ProxyCommandSender> { _, _ -> Bukkit.getOnlinePlayers().map { it.name } }
+
+                execute<ProxyCommandSender> { sender, context, argument ->
+                    InfoUI(Bukkit.getPlayerExact(context.argument(-1))!!, Bukkit.getPlayerExact(argument)!!).open()
+                }
+
+            }
+
+        }
+
     }
 
     @CommandBody
@@ -50,7 +77,6 @@ object Command {
             sender.sendMessage("Debug status switch to " + isDebugEnable(sender))
         }
     }
-
 
 
 }

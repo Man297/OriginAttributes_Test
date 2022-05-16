@@ -1,4 +1,5 @@
 capture:
   step: 0.3
+  combat-power: 1.0
   keywords:
     - 抓取

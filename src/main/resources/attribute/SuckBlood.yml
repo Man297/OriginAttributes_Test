@@ -1,7 +1,9 @@
 chance:
+  combat-power: 1.0
   keywords:
     - 吸血几率
 
 ratio:
+  combat-power: 1.0
   keywords:
     - 吸血倍率

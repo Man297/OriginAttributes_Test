@@ -1,4 +1,5 @@
 power: # 力量
+  combat-power: 1.0
   attributes:
     - 攻击力 +{eval:{map:value}*1.2}
     - 生命上限 +{eval:{map:value} * 0.5}
@@ -6,18 +7,21 @@ power: # 力量
   keywords:
     - 力量
 spirit: # 精神
+  combat-power: 1.0
   attributes:
     - 暴击几率 +{eval:{map:value} * 0.2}
     - 暴击伤害 +{eval:{map:value} * 0.8}
   keywords:
     - 精神
 endurance: # 耐力
+  combat-power: 1.0
   attributes:
     - 生命上限 +{eval:{map:value} * 1.5}
     - 防御力 +{eval:{map:value} * 1.2}
   keywords:
     - 耐力
 all attribute: # 全属性加成
+  combat-power: 1.0
   keywords:
     - 全属性加成
   attributes:

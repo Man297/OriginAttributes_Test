@@ -1,28 +1,33 @@
 physical:
+  combat-power: 1.0
   keywords:
     - 物理攻击
   correct:
     - [ 0,999999999999999 ]
     - [ 0,999999999999999 ]
 magic:
+  combat-power: 1.0
   keywords:
     - 魔法攻击
   correct:
     - [ 0,999999999999999 ]
     - [ 0,999999999999999 ]
 pvpDamage:
+  combat-power: 1.0
   keywords:
     - PVP攻击
   correct:
     - [ 0,999999999999999 ]
     - [ 0,999999999999999 ]
 pveDamage:
+  combat-power: 1.0
   keywords:
     - PVE攻击
   correct:
     - [ 0,999999999999999 ]
     - [ 0,999999999999999 ]
 addon:
+  combat-power: 1.0
   keywords:
     - 攻击力加成
   correct:

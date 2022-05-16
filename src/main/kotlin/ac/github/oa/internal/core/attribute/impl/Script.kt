@@ -39,7 +39,7 @@ object Script {
                     AttributeManager.enableAttribute(scriptAttribute)
                 }
             } else {
-                info("The 'attribute/${it}.js' attribute script was not found.")
+                info("|- The 'attribute/${it}.js' attribute script was not found.")
             }
         }
     }
@@ -57,8 +57,8 @@ object Script {
             entry.name = this.toName()
             entry.index = 0
             entry.onEnable()
-            info("${toName()} registered.")
-        }
+
+            info("|- Registered attribute ${toName()}.")        }
 
         override fun toName(): String {
             return root.name

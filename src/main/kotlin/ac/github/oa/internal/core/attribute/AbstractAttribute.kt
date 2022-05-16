@@ -17,9 +17,7 @@ abstract class AbstractAttribute : Attribute {
     open var index = 0
 
     override fun onLoad() {
-        val file = File(getDataFolder(), toRootPath())
-        releaseResourceFile(toRootPath(), false)
-        root = Configuration.loadFromFile(file) as ConfigurationSection
+        this.loadFile()
         this::class.java.declaredFields.forEach {
             if (Attribute.Entry::class.java.isAssignableFrom(it.type)) {
                 it.isAccessible = true
@@ -34,8 +32,14 @@ abstract class AbstractAttribute : Attribute {
             entry.onEnable()
         }
 
-        info("${toName()} registered.")
+        info("|- Registered attribute ${toName()}.")
 
+    }
+
+    fun loadFile() {
+        val file = File(getDataFolder(), toRootPath())
+        releaseResourceFile(toRootPath(), false)
+        root = Configuration.loadFromFile(file)
     }
 
     override fun getPriority(): Int {
@@ -52,7 +56,9 @@ abstract class AbstractAttribute : Attribute {
 
     override fun onDisable() {}
 
-    override fun onReload() {}
+    override fun onReload() {
+        this.loadFile()
+    }
 
     fun toRootPath(): String {
         return "attribute/${toLocalName()}.yml"

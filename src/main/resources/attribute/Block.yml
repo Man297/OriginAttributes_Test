@@ -2,14 +2,17 @@ chance:
   sound: BLOCK_ANVIL_PLACE # 音效
   volume: 10 # 音量
   pitch: 2 # 音调
+  combat-power: 1.0
   keywords:
     - 格挡几率
 
 ratio:
   default: 5
-  keyword:
+  combat-power: 1.0
+  keywords:
     - 格挡倍率
 
 damage:
-  keyword:
+  combat-power: 1.0
+  keywords:
     - 格挡伤害

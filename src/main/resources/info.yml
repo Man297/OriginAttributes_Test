@@ -1,0 +1,38 @@
+__option__:
+  rows: 6
+  name: '{viewer} {target}'
+
+head:
+  slots: [ 11 ]
+  equipment: HEAD
+chest:
+  slots: [ 20 ]
+  equipment: CHEST
+letgs:
+  slots: [ 29 ]
+  equipment: LEGS
+feet:
+  slots: [ 38 ]
+  equipment: FEET
+hand:
+  slots: [ 19 ]
+  equipment: HAND
+off-hand:
+  slots: [ 21 ]
+  equipment: OFF_HAND
+
+attack-info:
+  slots: [ 24 ]
+  icon:
+    material: DIAMOND_SWORD
+    name: '&c&n攻击属性'
+    lore:
+      - '物理攻击: %rpg_Damage:physical%'
+
+defence-info:
+  slots: [ 25 ]
+  icon:
+    material: DIAMOND_SWORD
+    name: '&c&n防御属性'
+    lore:
+      - '物理防御: %rpg_Defence:physical%'

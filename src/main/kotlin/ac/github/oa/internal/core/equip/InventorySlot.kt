@@ -5,8 +5,12 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.library.xseries.XMaterial
 import taboolib.platform.util.sendLang
+import taboolib.type.BukkitEquipment
 
 class InventorySlot(private val index: Int, itemStack: ItemStack?) : Slot(itemStack), SlotVariation {
+
+    override val id: String
+        get() = index.toString()
 
     override fun examine(livingEntity: LivingEntity, adaptItem: AdaptItem, patterns: List<String>): Boolean {
         val orNull = patterns.firstOrNull { it.split(" ")[0].toInt() == index }

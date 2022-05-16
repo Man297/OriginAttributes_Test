@@ -6,7 +6,7 @@ class Main {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            val s = "物理攻击: -50"
+            val s = "物理攻击: 0.3%"
             println(getNumber(s))
         }
 

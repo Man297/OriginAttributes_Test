@@ -15,7 +15,7 @@ object ItemGeneratorLoader {
             if (ItemGenerator::class.java.isAssignableFrom(it)) {
                 val any = it.getInstance()?.get() ?: return@forEach
                 ItemPlant.generators += any as ItemGenerator
-                info("Loaded generator ${it.simpleName}")
+                info("|- Loaded generator ${it.simpleName}")
             }
         }
     }

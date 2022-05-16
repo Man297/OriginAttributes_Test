@@ -1,8 +1,10 @@
 health:
   default: 40
   health-scale: 20
+  combat-power: 1.0
   keywords:
     - 生命上限
 percent:
+  combat-power: 1.0
   keywords:
     - 生命提升

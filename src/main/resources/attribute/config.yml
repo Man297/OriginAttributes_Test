@@ -2,5 +2,6 @@ script:
   javascript-def0:
     types: ATTACK
     value-type: SINGLE
+    combat-power: 1.0
     keywords:
       - '真实伤害'

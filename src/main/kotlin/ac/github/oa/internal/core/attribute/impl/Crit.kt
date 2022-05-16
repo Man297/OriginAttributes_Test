@@ -52,7 +52,6 @@ class Crit : AbstractAttribute() {
                 memory.getDamageSources().forEach {
                     it.value += it.value * scope
                 }
-                info("暴击后伤害 ${memory.totalDamage} 倍率${scope}")
             }
         }
 

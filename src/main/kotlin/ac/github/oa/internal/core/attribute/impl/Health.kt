@@ -43,7 +43,6 @@ class Health : AbstractAttribute() {
             livingEntity.maxHealth = result
 
             if (livingEntity.health >= result) {
-                info("entity ${livingEntity.health}/${livingEntity.maxHealth} to $result")
                 livingEntity.health = result
             }
 
