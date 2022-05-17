@@ -6,7 +6,6 @@ import org.bukkit.entity.LivingEntity
 
 interface Attribute {
 
-
     fun onLoad()
 
     fun onReload()

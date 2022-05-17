@@ -1,6 +1,7 @@
 __option__:
   rows: 6
   name: '{viewer} {target}'
+  clean-nbt: true # 隐藏 icon 的nbt标签
 
 head:
   slots: [ 11 ]
