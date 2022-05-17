@@ -35,7 +35,7 @@ class Health : AbstractAttribute() {
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as UpdateMemory
-            val livingEntity = memory.livingEntity
+            val livingEntity = memory.livingEntity as? Player ?: return
             // 点数 + 百分百
             // 110 + 40 * 1 + 0
             val percent = memory.attributeData.getData(this@Health.index, percent.index).get(percent)

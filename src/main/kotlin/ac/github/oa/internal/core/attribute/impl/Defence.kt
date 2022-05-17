@@ -17,32 +17,32 @@ class Defence : AbstractAttribute() {
 
     val addon = DefaultAddonImpl()
 
-    val pvpDefence = object : Attribute.Entry() {
+    val pvpDefence = object : AbstractDefenceEntry() {
         override val type: Attribute.Type
             get() = Attribute.Type.RANGE
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
             if (memory.attacker is Player) {
-                memory.addDamage(this, -data.get(0))
+                memory.addDamage(this, -(data.get(0) * scale))
             }
         }
     }
 
-    val pveDefence = object : Attribute.Entry() {
+    val pveDefence = object : AbstractDefenceEntry() {
         override val type: Attribute.Type
             get() = Attribute.Type.RANGE
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
             if (memory.attacker !is Player) {
-                memory.addDamage(this, -data.get(0))
+                memory.addDamage(this, -(data.get(0) * scale))
             }
         }
     }
 
 
-    class DefaultImpl : Attribute.Entry() {
+    class DefaultImpl : AbstractDefenceEntry() {
 
         override val type: Attribute.Type
             get() = Attribute.Type.RANGE
@@ -53,7 +53,7 @@ class Defence : AbstractAttribute() {
             memory.getDamageSources().forEach {
                 if (it.any is Damage.DefaultImpl) {
                     if (it.any.name == name) {
-                        it.value -= data.get(this)
+                        it.value -= data.get(this) * scale
                     }
                 }
             }
@@ -61,7 +61,7 @@ class Defence : AbstractAttribute() {
 
     }
 
-    class DefaultAddonImpl : Attribute.Entry() {
+    class DefaultAddonImpl : AbstractDefenceEntry() {
 
         override val type: Attribute.Type
             get() = Attribute.Type.RANGE
@@ -70,10 +70,17 @@ class Defence : AbstractAttribute() {
             memory as DamageMemory
             memory.getDamageSources().forEach {
                 if (it.any is Damage.DefaultImpl) {
-                    it.value -= it.value * data.get(this) / 100
+                    it.value -= (it.value * data.get(this) / 100) * scale
                 }
             }
         }
+
+    }
+
+    abstract class AbstractDefenceEntry : Attribute.Entry() {
+
+        val scale: Double
+            get() = node.toRoot().getDouble("${name}.scale", 1.0)
 
     }
 

@@ -18,6 +18,7 @@ import taboolib.library.xseries.getItemStack
 import taboolib.module.chat.colored
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.Configuration
+import taboolib.module.nms.ItemTag
 import taboolib.platform.util.buildItem
 import taboolib.platform.util.isAir
 import taboolib.platform.util.modifyMeta
@@ -83,6 +84,9 @@ object Info {
                     name = PlaceholderAPI.setPlaceholders(player, name).colored()
                     lore.clear()
                     lore += PlaceholderAPI.setPlaceholders(player, config.getStringList("icon.lore")).colored()
+                    if (cleanNbt) {
+                        flags += ItemFlag.values()
+                    }
                 }
             } else {
                 val itemStack = data.items.firstOrNull { it.slot.id == equipment }?.item
@@ -91,11 +95,7 @@ object Info {
                     return airIcon
                 }
 
-                return itemStack.modifyMeta<ItemMeta> {
-                    if (cleanNbt) {
-                        itemFlags += ItemFlag.values()
-                    }
-                }
+                return itemStack
             }
 
         }

@@ -1,5 +1,6 @@
 physical:
   combat-power: 1.0
+  scale: 1
   keywords:
     - 物理防御
   correct:
@@ -7,6 +8,7 @@ physical:
     - [ 0,999999999999999 ]
 magic:
   combat-power: 1.0
+  scale: 1
   keywords:
     - 魔法防御
   correct:
@@ -14,6 +16,7 @@ magic:
     - [ 0,999999999999999 ]
 pvpDamage:
   combat-power: 1.0
+  scale: 1
   keywords:
     - PVP防御
   correct:
@@ -21,6 +24,7 @@ pvpDamage:
     - [ 0,999999999999999 ]
 pveDamage:
   combat-power: 1.0
+  scale: 1
   keywords:
     - PVE防御
   correct:
@@ -28,6 +32,7 @@ pveDamage:
     - [ 0,999999999999999 ]
 addon:
   combat-power: 1.0
+  scale: 1
   keywords:
     - 防御力加成
   correct:

@@ -60,7 +60,7 @@ class Damage : AbstractAttribute() {
     class DefaultAddonImpl : Attribute.Entry() {
 
         override val type: Attribute.Type
-            get() = Attribute.Type.RANGE
+            get() = Attribute.Type.SINGLE
 
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {

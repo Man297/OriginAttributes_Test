@@ -1,0 +1,9 @@
+__option__:
+  period: 20
+
+amount:
+  keywords:
+    - 生命恢复值
+ratio:
+  keywords:
+    - 生命恢复比例

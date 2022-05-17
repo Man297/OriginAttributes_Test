@@ -1,6 +1,7 @@
 __option__:
   rows: 6
   name: '{viewer} {target}'
+  clean-nbt: true
 
 head:
   slots: [ 11 ]
