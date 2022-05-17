@@ -34,6 +34,7 @@ object Command {
     @CommandBody
     val reload = subCommand {
         execute<ProxyCommandSender> { sender, _, _ ->
+            OriginAttribute.module.reload()
             ItemPlant.init()
             RandomPlant.init()
             JavaScriptPlant.init()

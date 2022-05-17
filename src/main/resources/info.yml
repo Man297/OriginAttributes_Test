@@ -22,17 +22,64 @@ off-hand:
   equipment: OFF_HAND
 
 attack-info:
-  slots: [ 24 ]
+  slots: [ 33 ]
   icon:
-    material: DIAMOND_SWORD
+    material: GOLD_SWORD
     name: '&c&n攻击属性'
     lore:
-      - '物理攻击: %rpg_Damage:physical%'
+      - ''
+      - '&6物理攻击: &7%rpg_Damage:physical%'
+      - '&9魔法攻击: &7%rpg_Damage:magic%'
+      - '&6PVP攻击: &7%rpg_Damage:pvpDamage%'
+      - '&6PVE攻击: &7%rpg_Damage:pveDamage%'
+      - '&a攻击力加成: &7%rpg_Damage:addon%'
+      - ''
+      - '&c吸血几率: &7%rpg_SuckBlood:chance%&7&l%'
+      - '&c吸血倍率: &7%rpg_SuckBlood:ratio%&7&l%'
+      - ''
+      - '&4暴击几率: &7%rpg_Crit:change%&7&l%'
+      - '&4暴击伤害: &7%rpg_Crit:damage%&7&l%'
 
 defence-info:
-  slots: [ 25 ]
+  slots: [ 34 ]
   icon:
-    material: DIAMOND_SWORD
+    material: GOLD_CHESTPLATE
     name: '&c&n防御属性'
     lore:
-      - '物理防御: %rpg_Defence:physical%'
+      - ''
+      - '&6物理防御: &7%rpg_Defence:physical%'
+      - '&9魔法防御: &7%rpg_Defence:magic%'
+      - '&6PVP防御: &7%rpg_Defence:pvpDefence%'
+      - '&6PVE防御: &7%rpg_Defence:pveDefence%'
+      - '&a防御力加成: &7%rpg_Defence:addon%&7&l%'
+      - ''
+      - '&c吸血抗性: &7%rpg_Resistance:ratio%'
+      - ''
+      - '&6格挡几率: &7%rpg_Block:chance%&7&l%'
+      - '&6格挡倍率: &7%rpg_Block:ratio%&7&l%'
+      - '&6格挡伤害: &7%rpg_Block:damage%'
+combat-info:
+  slots: [ 35 ]
+  icon:
+    material: DIAMOND_SWORD
+    name: '&c&n基础属性'
+    lore:
+      - ''
+      - '&6战力值: &7%rpg_combat-power%'
+      - ''
+      - '&a生命值: &7%rpg_Health:health%'
+      - '&a生命提升: &7%rpg_Health:percent%'
+      - ''
+      - '&a闪避: &7%rpg_Dodge:dodge%&7&l%'
+      - '&a经验加成: &7%rpg_ExpAddon:addon%&7&l%'
+      - '&a移动速度: &7%rpg_MoveSpeed:ratio%&7&l%'
+map-info:
+  slots: [ 43 ]
+  icon:
+    material: GREEN_RECORD
+    name: '&c&n属性映射类'
+    lore:
+      - ''
+      - '&6力量: &7%rpg_Map:power% '
+      - '&6精神: &7%rpg_Map:spirit% '
+      - '&6耐力: &7%rpg_Map:endurance% '

@@ -2,3 +2,7 @@ germ-plugin:
   slots: []
 dragon-core:
   slots: []
+action-bar:
+  enable: true
+  period: 20
+  value: "%player_name%"

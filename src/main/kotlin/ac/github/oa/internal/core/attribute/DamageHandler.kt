@@ -52,6 +52,9 @@ object DamageHandler {
         val defender: LivingEntity
             get() = e.damageMemory.injured
 
+        val totalDamage: Double
+            get() = e.damageMemory.totalDamage
+
     }
 
 
