@@ -5,11 +5,7 @@ import taboolib.common5.Coerce
 import kotlin.math.max
 import kotlin.math.min
 
-val FILTER_RULES = listOf(
-    Regex("§+[a-z0-9%]"),
-    Regex("-[^0-9]"),
-    Regex("[^-0-9.?]")
-)
+
 
 fun AttributeData.loadTo(attribute: Attribute, string: String) {
     attribute.toEntities().forEach {
@@ -30,7 +26,11 @@ fun AttributeData.Data.loadTo(entry: Attribute.Entry, string: String) {
         }
     }
 }
-
+val FILTER_RULES = listOf(
+    Regex("§+[a-z0-9%]"),
+    Regex("-[^0-9]"),
+    Regex("[^-0-9.?]")
+)
 fun getNumber(string: String): String {
     var prey = string
     FILTER_RULES.forEach { prey = prey.replace(it, "") }

@@ -5,7 +5,9 @@ import ac.github.oa.internal.core.attribute.AttributeData
 import ac.github.oa.internal.core.attribute.AttributeManager
 import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.ItemMeta
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.event.SubscribeEvent
@@ -18,6 +20,7 @@ import taboolib.module.configuration.Config
 import taboolib.module.configuration.Configuration
 import taboolib.platform.util.buildItem
 import taboolib.platform.util.isAir
+import taboolib.platform.util.modifyMeta
 
 object Info {
 
@@ -36,6 +39,9 @@ object Info {
 
     val title: String
         get() = config.getString("__option__.name")!!
+
+    val cleanNbt: Boolean
+        get() = config.getBoolean("__option__.clean-nbt", false)
 
     @Awake(LifeCycle.ENABLE)
     fun load() {
@@ -85,7 +91,11 @@ object Info {
                     return airIcon
                 }
 
-                return itemStack
+                return itemStack.modifyMeta<ItemMeta> {
+                    if (cleanNbt) {
+                        itemFlags += ItemFlag.values()
+                    }
+                }
             }
 
         }

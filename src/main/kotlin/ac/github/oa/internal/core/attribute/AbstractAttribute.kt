@@ -12,8 +12,11 @@ import java.io.File
 abstract class AbstractAttribute : Attribute {
 
     open lateinit var root: ConfigurationSection
+
     val entries = mutableListOf<Attribute.Entry>()
+
     abstract val types: Array<AttributeType>
+
     open var index = 0
 
     override fun onLoad() {
