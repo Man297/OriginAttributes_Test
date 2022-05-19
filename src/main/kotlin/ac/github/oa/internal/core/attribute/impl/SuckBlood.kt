@@ -56,7 +56,7 @@ class SuckBlood : AbstractAttribute() {
             memory as DamageMemory
             if (memory.labels["@SuckBlood"] == true) {
                 val value = data.get(this)
-                memory.labels["suck-blood"] = memory.totalDamage * value / 100
+                memory.labels["suck-blood"] = memory.totalDamage * (value / 100)
             }
         }
 

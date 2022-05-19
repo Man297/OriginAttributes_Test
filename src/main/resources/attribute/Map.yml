@@ -1,5 +1,6 @@
 power: # 力量
   combat-power: 1.0
+  permission: none
   attributes:
     - 攻击力 +{eval:{map:value}*1.2}
     - 生命上限 +{eval:{map:value} * 0.5}

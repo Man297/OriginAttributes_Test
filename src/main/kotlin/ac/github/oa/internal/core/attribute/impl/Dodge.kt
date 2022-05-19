@@ -90,7 +90,7 @@ class Dodge : AbstractAttribute() {
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
             if (isAction) {
-                memory.setLabel("@Dodge", random(data.get(0)))
+                memory.setLabel("@Dodge", random(data.get(0) / 100))
             }
 
         }

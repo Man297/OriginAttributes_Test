@@ -5,6 +5,7 @@ import ac.github.oa.api.event.entity.EntityGetterDataEvent
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.core.attribute.*
 import ac.github.oa.util.ArrayUtils
+import org.bukkit.entity.Player
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
 
@@ -12,13 +13,24 @@ class Map : AbstractAttribute() {
 
     companion object {
 
+        const val NONE = "none"
+
         val mapInstance: Map
             get() = AttributeManager.getAttribute("Map") as Map
 
         @SubscribeEvent
         fun e(e: EntityGetterDataEvent) {
             val data = e.attributeData
-            mapInstance.entries.forEach {
+            val entries = mutableListOf<Attribute.Entry>()
+            if (e.livingEntity is Player) {
+                entries += mapInstance.entries.filterIsInstance<DefaultImpl>().filter {
+                    it.permission == NONE || e.livingEntity.hasPermission(it.permission)
+                }
+            } else {
+                entries += mapInstance.entries
+            }
+
+            entries.forEach {
                 it as DefaultImpl
                 val entryData = data.getData(mapInstance.index, it.index)
                 val readList = ArrayUtils.read(it.attributeList, entryData.get(it))
@@ -49,6 +61,9 @@ class Map : AbstractAttribute() {
 
         val attributeList: List<String>
             get() = node.toRoot().getStringList("${name}.attributes")
+
+        val permission: String
+            get() = node.toRoot().getString("${name}.permission", NONE)!!
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {}
 

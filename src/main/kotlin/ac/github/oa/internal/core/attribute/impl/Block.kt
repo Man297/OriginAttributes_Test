@@ -29,8 +29,6 @@ class Block : AbstractAttribute() {
         fun e(e: EntityDamageEvent) {
             if (e.priorityEnum == PriorityEnum.POST && e.damageMemory.labels["@Block"] == true) {
                 val injured = e.damageMemory.injured
-                e.isCancelled = true
-                e.damageMemory.event.isCancelled = true
                 injured.world.playSound(injured.eyeLocation, chanceEntry.sound, chanceEntry.volume, chanceEntry.pitch)
             }
         }
