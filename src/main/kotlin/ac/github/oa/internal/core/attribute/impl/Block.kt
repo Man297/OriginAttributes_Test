@@ -93,7 +93,7 @@ class Block : AbstractAttribute() {
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
-            memory.setLabel("@Block", random(data.get(this)))
+            memory.setLabel("@Block", random(data.get(this) / 100))
         }
     }
 

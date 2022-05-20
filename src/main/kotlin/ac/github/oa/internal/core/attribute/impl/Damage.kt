@@ -67,7 +67,7 @@ class Damage : AbstractAttribute() {
             memory as DamageMemory
             memory.getDamageSources().forEach {
                 if (it.value > 0) {
-                    it.value += (it.value * data.get(0))
+                    it.value += (it.value * (data.get(0) / 100))
                 }
             }
         }
