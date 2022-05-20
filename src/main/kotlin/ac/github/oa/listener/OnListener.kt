@@ -80,7 +80,6 @@ object OnListener {
                 // POST CALL
                 if (!entityDamageEvent.isCancelled) {
                     e.damage = damageMemory.totalDamage.coerceAtLeast(1.0)
-                    info("damage total ${e.damage}")
                 }
             }
         }
