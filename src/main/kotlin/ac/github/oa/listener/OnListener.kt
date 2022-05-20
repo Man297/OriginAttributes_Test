@@ -31,6 +31,9 @@ import taboolib.type.BukkitEquipment
 
 object OnListener {
 
+    val remotes: List<String>
+        get() = OriginAttribute.config.getStringList("options.remotes")
+
     @SubscribeEvent
     fun e(e: OriginCustomDamageEvent) {
         var damager: LivingEntity? = null
@@ -53,17 +56,19 @@ object OnListener {
         if (damager != null && entity != null) {
             if (e.damager !is Projectile) {
                 val itemStack = BukkitEquipment.HAND.getItem(damager)
-                if (itemStack != null && itemStack.isNotAir() && OriginAttribute.config.getStringList("options.remotes")
-                        .any { it == itemStack.type.name }
-                ) {
+                if (itemStack != null && itemStack.isNotAir() && itemStack.type.name in remotes) {
                     e.isCancelled = true
                     return
                 }
             }
 
-            val a = OriginAttributeAPI.getAttributeData(damager)
-            val d = OriginAttributeAPI.getAttributeData(entity)
-            val damageMemory = DamageMemory(damager, entity, e, a, d)
+            val damageMemory = DamageMemory(
+                damager,
+                entity,
+                e,
+                OriginAttributeAPI.getAttributeData(damager),
+                OriginAttributeAPI.getAttributeData(entity)
+            )
             val entityDamageEvent = EntityDamageEvent(damageMemory, PriorityEnum.PRE)
             entityDamageEvent.call()
             e.isCancelled = entityDamageEvent.isCancelled

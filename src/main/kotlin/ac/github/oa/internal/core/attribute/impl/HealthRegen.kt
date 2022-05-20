@@ -5,7 +5,9 @@ import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.core.attribute.*
 import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
+import taboolib.common.platform.function.info
 import taboolib.common.platform.function.submit
+import kotlin.math.max
 import kotlin.math.min
 
 class HealthRegen : AbstractAttribute() {
@@ -21,8 +23,12 @@ class HealthRegen : AbstractAttribute() {
         submit(async = true, period = this.period) {
             Bukkit.getOnlinePlayers().forEach {
                 if (it.health != it.maxHealth) {
+
                     val regenValue = it.getRegenValue()
-                    it.health = min(regenValue + it.health, it.maxHealth)
+                    if (regenValue > 0) {
+                        val result = min(regenValue + it.health, it.maxHealth)
+                        it.health = result
+                    }
                 }
             }
         }

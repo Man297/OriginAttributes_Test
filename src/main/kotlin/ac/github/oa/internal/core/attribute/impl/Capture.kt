@@ -68,7 +68,7 @@ class Capture : AbstractAttribute() {
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
-            memory.setLabel("@Capture", random(data.get(this)))
+            memory.setLabel("@Capture", random(data.get(this) / 100))
         }
 
     }

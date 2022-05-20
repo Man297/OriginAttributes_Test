@@ -29,7 +29,7 @@ import taboolib.platform.util.sendLang
 import java.io.File
 import kotlin.math.ceil
 
-@CommandHeader("item", aliases = ["item", "ri"])
+//@CommandHeader("item", aliases = ["item", "ri"])
 object CommandItem {
 
     @CommandBody

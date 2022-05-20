@@ -42,7 +42,7 @@ class SuckBlood : AbstractAttribute() {
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             if (memory is DamageMemory) {
-                memory.setLabel("@SuckBlood", random(data.get(this)))
+                memory.setLabel("@SuckBlood", random(data.get(this) / 100))
             }
         }
     }
@@ -55,8 +55,7 @@ class SuckBlood : AbstractAttribute() {
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as DamageMemory
             if (memory.labels["@SuckBlood"] == true) {
-                val value = data.get(this)
-                memory.labels["suck-blood"] = memory.totalDamage * (value / 100)
+                memory.labels["suck-blood"] = memory.totalDamage * (data.get(this) / 100)
             }
         }
 

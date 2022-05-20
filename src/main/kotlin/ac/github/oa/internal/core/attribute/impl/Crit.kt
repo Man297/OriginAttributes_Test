@@ -28,7 +28,7 @@ class Crit : AbstractAttribute() {
                         .getData(this@Crit.index, critChanceResistance.index)
                         .get(critChanceResistance)
 
-                memory.setLabel(this, random(data.get(this) - critChanceResistance))
+                memory.setLabel(this, random((data.get(this) - critChanceResistance) / 100))
             }
         }
     }
