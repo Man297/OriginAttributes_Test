@@ -14,9 +14,11 @@ import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.command.CommandBody
 import taboolib.common.platform.command.CommandHeader
+import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.info
 import taboolib.common5.Coerce
+import taboolib.expansion.createHelper
 import taboolib.library.xseries.XMaterial
 import taboolib.module.nms.getItemTag
 import taboolib.module.ui.ClickType
@@ -27,11 +29,15 @@ import taboolib.platform.util.sendLang
 import java.io.File
 import kotlin.math.ceil
 
-@CommandHeader("rpgItem", aliases = ["item", "ri"])
+@CommandHeader("item", aliases = ["item", "ri"])
 object CommandItem {
 
-    val slots = IntRange(0, 54).map { it }
+    @CommandBody
+    val helper = mainCommand {
+        createHelper()
+    }
 
+    val slots = IntRange(0, 54).map { it }
 
     @CommandBody
     val get = subCommand {
@@ -159,6 +165,7 @@ object CommandItem {
         }
         OriginAttributeAPI.callUpdate(sender)
     }
+
     @CommandBody
     val manager = subCommand {
 

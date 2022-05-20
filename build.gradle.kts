@@ -17,6 +17,7 @@ taboolib {
     install("module-kether")
     install("module-chat")
     install("expansion-javascript")
+    install("expansion-command-helper")
     classifier = null
     version = "6.0.7-64"
 

@@ -17,15 +17,22 @@ import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.*
 import taboolib.common.platform.command.CommandBody
 import taboolib.common.platform.command.CommandHeader
+import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.info
 import taboolib.common5.Coerce
+import taboolib.expansion.createHelper
 import taboolib.library.xseries.XMaterial
 import taboolib.module.nms.getItemTag
 import taboolib.platform.util.sendLang
 
 @CommandHeader("rpg", aliases = ["oa", "rpgo", "originattribute"])
 object Command {
+
+    @CommandBody
+    val helper = mainCommand {
+        createHelper()
+    }
 
     val map = mutableMapOf<Player, Boolean>()
 
@@ -78,6 +85,9 @@ object Command {
             sender.sendMessage("Debug status switch to " + isDebugEnable(sender))
         }
     }
+
+    @CommandBody
+    val item = CommandItem
 
 
 }
