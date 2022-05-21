@@ -28,10 +28,10 @@ class Health : AbstractAttribute() {
             get() = root.getDouble("${this.name}.default")
 
         val isHealthScale: Boolean
-            get() = root.isDouble("${this.name}.health-scale")
+            get() = healthScale != -1.0
 
         val healthScale: Double
-            get() = root.getDouble("${this.name}.health-scale")
+            get() = root.getDouble("${this.name}.health-scale", -1.0)
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as UpdateMemory

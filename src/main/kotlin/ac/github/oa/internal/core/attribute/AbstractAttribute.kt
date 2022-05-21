@@ -39,9 +39,17 @@ abstract class AbstractAttribute : Attribute {
 
     }
 
-    fun loadFile() {
-        val file = File(getDataFolder(), toRootPath())
+    open fun toDataFolder(): File {
+        return getDataFolder()
+    }
+
+    open fun releaseResourceFile() {
         releaseResourceFile(toRootPath(), false)
+    }
+
+    open fun loadFile() {
+        val file = File(toDataFolder(), toRootPath())
+        releaseResourceFile()
         root = Configuration.loadFromFile(file)
     }
 

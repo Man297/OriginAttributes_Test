@@ -2,6 +2,7 @@ package ac.github.oa.internal.core.attribute.impl
 
 import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.api.event.entity.EntityGetterDataEvent
+import ac.github.oa.api.event.plugin.AttributeMapRenderEvent
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.core.attribute.*
 import ac.github.oa.util.ArrayUtils
@@ -33,7 +34,10 @@ class Map : AbstractAttribute() {
             entries.forEach {
                 it as DefaultImpl
                 val entryData = data.getData(mapInstance.index, it.index)
-                val readList = ArrayUtils.read(it.attributeList, entryData.get(it))
+                val event =
+                    AttributeMapRenderEvent(e.livingEntity, it.attributeList.toMutableList(), it)
+                event.call()
+                val readList = ArrayUtils.read(event.list, entryData.get(it))
                 val resultData = OriginAttributeAPI.loadList(e.livingEntity, readList)
                 e.attributeData.merge(resultData)
             }
