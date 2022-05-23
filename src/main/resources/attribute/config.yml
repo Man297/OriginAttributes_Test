@@ -8,7 +8,7 @@ script:
 damage-handler: |-
 
   if(openAPI.hasLabel("@Crit")) {
-    openAPI.attacker.sendTitle('','                 §c-§o' + openAPI.totalDamage,15,30,15)
+    openAPI.attacker.sendTitle('','                 §c-§o' + openAPI.totalDamage.toFixed(2),15,30,15)
   } else {
-    openAPI.attacker.sendTitle('','                 §f§o-' + openAPI.totalDamage,15,30,15)
+    openAPI.attacker.sendTitle('','                 §f§o-' + openAPI.totalDamage.toFixed(2),15,30,15)
   }

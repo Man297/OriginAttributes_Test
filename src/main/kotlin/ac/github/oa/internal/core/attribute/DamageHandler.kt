@@ -30,7 +30,7 @@ object DamageHandler {
         this.compile()
     }
 
-    @SubscribeEvent(priority = EventPriority.MONITOR)
+    @SubscribeEvent(ignoreCancelled = true, priority = EventPriority.MONITOR)
     fun e(e: EntityDamageEvent) {
         if (!e.isCancelled && !e.damageMemory.event.isCancelled && e.priorityEnum == PriorityEnum.POST) {
             if (handlerScript != null) {
