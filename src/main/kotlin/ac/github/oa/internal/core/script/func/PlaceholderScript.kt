@@ -16,7 +16,7 @@ class PlaceholderScript : InternalScript<BaseWrapper> {
 
     override fun execute(entity: Entity?, wrapper: BaseWrapper, config: InternalConfig, string: String): String? {
         val split = string.split(":")
-        val def = if (split.size == 2) split[1] else "papi undefined"
+        val def = if (split.size == 2) split[1] else error("{papi:<expression>:<default>} 缺少默认值")
         return if (entity is Player) PlaceholderAPI.setPlaceholders(entity, split[0]) else def
     }
 }

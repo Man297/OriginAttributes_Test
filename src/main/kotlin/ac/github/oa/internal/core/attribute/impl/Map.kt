@@ -37,7 +37,7 @@ class Map : AbstractAttribute() {
                 val event =
                     AttributeMapRenderEvent(e.livingEntity, it.attributeList.toMutableList(), it)
                 event.call()
-                val readList = ArrayUtils.read(event.list, entryData.get(it))
+                val readList = ArrayUtils.read(e.livingEntity,event.list, entryData.get(it))
                 val resultData = OriginAttributeAPI.loadList(e.livingEntity, readList)
                 e.attributeData.merge(resultData)
             }
