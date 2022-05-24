@@ -6,9 +6,8 @@ script:
     keywords:
       - '真实伤害'
 damage-handler: |-
-
   if(openAPI.hasLabel("@Crit")) {
-    openAPI.attacker.sendTitle('','                 §c-§o' + openAPI.totalDamage.toFixed(2),15,30,15)
+    openAPI.sendTitle(openAPI.attacker,'','                 §c-§o' + openAPI.totalDamage.toFixed(2),15,30,15)
   } else {
-    openAPI.attacker.sendTitle('','                 §f§o-' + openAPI.totalDamage.toFixed(2),15,30,15)
+    openAPI.sendTitle(openAPI.attacker,'','                 §f-§o' + openAPI.totalDamage.toFixed(2),15,30,15)
   }

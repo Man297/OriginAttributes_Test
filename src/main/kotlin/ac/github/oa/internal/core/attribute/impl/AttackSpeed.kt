@@ -17,7 +17,7 @@ class AttackSpeed {
         val cache = Collections.synchronizedMap(mutableMapOf<UUID, Cache>())
 
 
-        @SubscribeEvent(ignoreCancelled = true, priority = EventPriority.MONITOR)
+        @SubscribeEvent(ignoreCancelled = true, priority = EventPriority.HIGH)
         fun e(proxyEvent: EntityDamageEvent) {
             if (proxyEvent.priorityEnum == PriorityEnum.PRE) return
 
@@ -36,6 +36,7 @@ class AttackSpeed {
             createCache(attacker)?.let {
                 cache[attacker.uniqueId] = it
             }
+            info("attack speed total ${proxyEvent.damageMemory.totalDamage}")
         }
 
         fun createCache(entity: LivingEntity): Cache? {

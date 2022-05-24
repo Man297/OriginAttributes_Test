@@ -15,4 +15,6 @@ class EntityDamageEvent(
     override val allowCancelled: Boolean
         get() = true
 
+
+
 }

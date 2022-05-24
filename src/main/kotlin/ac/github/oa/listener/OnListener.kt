@@ -23,6 +23,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
@@ -88,7 +89,7 @@ object OnListener {
     val damageCauses: List<String>
         get() = OriginAttribute.config.getStringList("options.damage-cause")
 
-    @SubscribeEvent(ignoreCancelled = false)
+    @SubscribeEvent(ignoreCancelled = true, priority = EventPriority.LOWEST)
     fun e(e: EntityDamageByEntityEvent) {
 
         if (e.isCancelled) return
@@ -106,6 +107,7 @@ object OnListener {
                 if (entity is LivingEntity && entity.health - e.damage <= 0) {
                     EntityDeathEvent(entity, event).call()
                 }
+                info("post damage ${e.damage}")
             }
         }
 

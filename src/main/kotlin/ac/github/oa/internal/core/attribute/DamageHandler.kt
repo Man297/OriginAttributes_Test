@@ -6,6 +6,7 @@ import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.entity.Silverfish
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.event.EventPriority
@@ -34,10 +35,13 @@ object DamageHandler {
     fun e(e: EntityDamageEvent) {
         if (!e.isCancelled && !e.damageMemory.event.isCancelled && e.priorityEnum == PriorityEnum.POST) {
             if (handlerScript != null) {
-                submit(async = true) {
-                    val bindings = handlerScript!!.engine.createBindings()
-                    bindings["openAPI"] = DamageEventOpenAPI(e)
-                    handlerScript!!.eval(bindings)
+                try {
+                    handlerScript?.eval(handlerScript!!.engine.createBindings().also {
+                        it["openAPI"] = DamageEventOpenAPI(e)
+                    })
+                } catch (_: Exception) {
+                    info("error ${e.damageMemory}")
+
                 }
             }
 
@@ -59,6 +63,16 @@ object DamageHandler {
         // 打印
         fun println(vararg any: Any) {
             info(any)
+        }
+
+        fun sendTitle(entity: LivingEntity, title: String, subTitle: String, fadeIn: Int, stay: Int, fadeOut: Int) {
+            if (entity is Player) {
+                entity.sendTitle(title, subTitle, fadeIn, stay, fadeOut)
+            }
+        }
+
+        fun tell(entity: LivingEntity, message: String) {
+
         }
 
         // 攻击者

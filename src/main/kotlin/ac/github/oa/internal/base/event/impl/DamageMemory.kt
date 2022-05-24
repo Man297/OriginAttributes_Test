@@ -39,7 +39,7 @@ class DamageMemory(
     }
 
     val totalDamage: Double
-        get() = getDamageSources().sumOf { it.value }
+        get() = getDamageSources().sumOf { it.value } + damage
 
     fun getDamage(key: Any): Double {
         val source = getDamageSources().firstOrNull { it.any == key } ?: EMPTY_SOURCE
@@ -63,6 +63,10 @@ class DamageMemory(
     fun addDamage(value: Double): DamageMemory {
         damage += value
         return this
+    }
+
+    override fun toString(): String {
+        return "DamageMemory(attacker=$attacker, injured=$injured, totalDamage=$totalDamage)"
     }
 
 
