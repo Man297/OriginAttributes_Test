@@ -17,7 +17,7 @@ abstract class AbstractAttribute : Attribute {
 
     abstract val types: Array<AttributeType>
 
-    open var index = 0
+    open var index = -1
 
     override fun onLoad() {
         this.loadFile()

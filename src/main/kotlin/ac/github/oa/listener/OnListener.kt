@@ -107,7 +107,6 @@ object OnListener {
                 if (entity is LivingEntity && entity.health - e.damage <= 0) {
                     EntityDeathEvent(entity, event).call()
                 }
-                info("post damage ${e.damage}")
             }
         }
 

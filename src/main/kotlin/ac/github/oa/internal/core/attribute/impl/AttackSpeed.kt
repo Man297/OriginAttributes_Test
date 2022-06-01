@@ -36,7 +36,6 @@ class AttackSpeed {
             createCache(attacker)?.let {
                 cache[attacker.uniqueId] = it
             }
-            info("attack speed total ${proxyEvent.damageMemory.totalDamage}")
         }
 
         fun createCache(entity: LivingEntity): Cache? {

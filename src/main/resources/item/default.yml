@@ -26,3 +26,8 @@ def0:
           if check inventory hand is "minecraft:*[lore=关键字]" then {
             skillapi cast "skill"
           }
+
+drop-table:
+  g: group
+  items:
+    - def0 1 1

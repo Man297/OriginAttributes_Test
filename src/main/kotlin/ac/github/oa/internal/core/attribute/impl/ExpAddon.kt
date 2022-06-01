@@ -19,6 +19,7 @@ class ExpAddon : AbstractAttribute() {
 
         @SubscribeEvent
         fun e(e: PlayerExpChangeEvent) {
+            if (expAddonInstance.index == -1) return
             val amount = e.amount
             val attributeData = OriginAttributeAPI.getAttributeData(e.player)
             val value = attributeData
