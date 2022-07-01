@@ -52,6 +52,9 @@ class Health : AbstractAttribute() {
                     }
 
                 }
+                if (livingEntity.health > livingEntity.maxHealth) {
+                    livingEntity.health = livingEntity.maxHealth
+                }
                 if (isHealthScale && livingEntity is Player) {
                     livingEntity.isHealthScaled = true
                     livingEntity.healthScale = healthScale
