@@ -6,99 +6,108 @@ import ac.github.oa.api.event.entity.EntityDamageEvent
 import ac.github.oa.api.event.entity.EntityDeathEvent
 import ac.github.oa.api.event.entity.OriginCustomDamageEvent
 import ac.github.oa.api.event.render.AttributeRenderStringEvent
-import ac.github.oa.command.Command
 import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.event.impl.DamageMemory
+import ac.github.oa.internal.core.attribute.AttributeData
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
-import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
+import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.entity.ItemMergeEvent
 import org.bukkit.event.entity.ItemSpawnEvent
+import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.metadata.FixedMetadataValue
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.common.platform.function.info
+import taboolib.platform.BukkitPlugin
 import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
+import java.util.UUID
 
 object OnListener {
 
     val remotes: List<String>
         get() = OriginAttribute.config.getStringList("options.remotes")
 
-    @SubscribeEvent
-    fun e(e: OriginCustomDamageEvent) {
-        var damager: LivingEntity? = null
-        var entity: LivingEntity? = null
-
-        if (e.entity is LivingEntity) {
-            entity = e.entity
-        }
-
-        if (e.damager is Projectile) {
-            val projectile = e.damager
-            val shooter = projectile.shooter
-            if (shooter is LivingEntity) {
-                damager = shooter
-            }
-        } else if (e.damager is LivingEntity) {
-            damager = e.damager
-        }
-
-        if (damager != null && entity != null) {
-            if (e.damager !is Projectile) {
-                val itemStack = BukkitEquipment.HAND.getItem(damager)
-                if (itemStack != null && itemStack.isNotAir() && itemStack.type.name in remotes) {
-                    e.isCancelled = true
-                    return
-                }
-            }
-
-            val damageMemory = DamageMemory(
-                damager,
-                entity,
-                e,
-                OriginAttributeAPI.getAttributeData(damager),
-                OriginAttributeAPI.getAttributeData(entity)
-            )
-            val entityDamageEvent = EntityDamageEvent(damageMemory, PriorityEnum.PRE)
-            entityDamageEvent.call()
-            e.isCancelled = entityDamageEvent.isCancelled
-            if (!entityDamageEvent.isCancelled) {
-                OriginAttributeAPI.callDamage(damageMemory)
-                entityDamageEvent.priorityEnum = PriorityEnum.POST
-                entityDamageEvent.call()
-
-                // POST CALL
-                if (!entityDamageEvent.isCancelled) {
-                    e.damage = damageMemory.totalDamage.coerceAtLeast(1.0)
-                }
-            }
-        }
-    }
-
     val damageCauses: List<String>
         get() = OriginAttribute.config.getStringList("options.damage-cause")
 
+
+    @SubscribeEvent
+    fun e(e: OriginCustomDamageEvent) {
+        val entity: LivingEntity = e.entity as? LivingEntity ?: return
+        val attacker = e.attacker ?: return
+
+
+        if (!e.isProjectile) {
+            val itemStack = BukkitEquipment.HAND.getItem(attacker)
+            if (itemStack != null && itemStack.isNotAir() && itemStack.type.name in remotes) {
+                e.isCancelled = true
+                return
+            }
+        }
+
+        val attr = if (e.isProjectile && e.damager.hasMetadata("attributeData")) {
+            e.damager.getMetadata("attributeData").first().value() as AttributeData
+        } else {
+            OriginAttributeAPI.getAttributeData(attacker)
+        }
+        val damageMemory = DamageMemory(
+            attacker,
+            entity,
+            e,
+            attr,
+            OriginAttributeAPI.getAttributeData(entity)
+        )
+        val entityDamageEvent = EntityDamageEvent(damageMemory, PriorityEnum.PRE)
+        entityDamageEvent.call()
+        e.isCancelled = entityDamageEvent.isCancelled
+        if (!entityDamageEvent.isCancelled) {
+            OriginAttributeAPI.callDamage(damageMemory)
+            entityDamageEvent.priorityEnum = PriorityEnum.POST
+            entityDamageEvent.call()
+
+            // POST CALL
+            if (!entityDamageEvent.isCancelled) {
+                e.damage = damageMemory.totalDamage.coerceAtLeast(0.0)
+            }
+        }
+
+    }
+
+
     @SubscribeEvent(ignoreCancelled = true, priority = EventPriority.LOWEST)
     fun e(e: EntityDamageByEntityEvent) {
-
         if (e.isCancelled) return
 
         val cause = e.cause
         if (damageCauses.contains(cause.name) || e.entity::class.java.simpleName != "PlayerNPC") {
             val entity = e.entity
+            var force = 0.0f
+            val damager = e.damager
+            var attacker: LivingEntity? = null
 
-            val event = OriginCustomDamageEvent(e.damager, entity, e.damage, e)
+            if (damager is LivingEntity) {
+                attacker = damager
+                attacker.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.value?.let { force = (e.damage / it).toFloat() }
+            } else if (damager is Projectile) {
+                attacker = damager.shooter as? LivingEntity
+                if (e.damager.hasMetadata("force")) {
+                    force = e.damager.getMetadata("force").first().asFloat()
+                }
+            }
+
+
+            val event = OriginCustomDamageEvent(damager, entity, e.damage, force, attacker, e)
             event.call()
             e.isCancelled = event.isCancelled
             if (!event.isCancelled) {
@@ -112,6 +121,18 @@ object OnListener {
 
     }
 
+    @SubscribeEvent(priority = EventPriority.MONITOR)
+    fun e(event: EntityShootBowEvent) {
+        if (event.isCancelled) return
+        event.projectile.setMetadata(
+            "attributeData",
+            FixedMetadataValue(BukkitPlugin.getInstance(), OriginAttributeAPI.getAttributeData(event.entity))
+        )
+        event.projectile.setMetadata(
+            "force",
+            FixedMetadataValue(BukkitPlugin.getInstance(), event.force)
+        )
+    }
 
     @SubscribeEvent
     fun e(event: ItemSpawnEvent) {

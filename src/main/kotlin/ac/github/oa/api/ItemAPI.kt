@@ -59,7 +59,7 @@ object ItemAPI {
     fun e(e: OriginCustomDamageEvent) {
         if (e.isCancelled) return
         // 扣除攻击者的主手副手耐久
-        (e.damager as? Player)?.let { player ->
+        (e.attacker as? Player)?.let { player ->
 
             val attributeData = AttributeManager.get(player)
             attributeData.items.forEach {

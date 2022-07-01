@@ -7,11 +7,10 @@ import ac.github.oa.internal.core.attribute.AbstractAttribute
 import ac.github.oa.internal.core.attribute.Attribute
 import ac.github.oa.internal.core.attribute.AttributeData
 import ac.github.oa.internal.core.attribute.AttributeType
-import org.bukkit.Bukkit
+import ac.github.oa.util.sync
+import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import taboolib.common.platform.function.info
-import kotlin.math.max
 
 class Health : AbstractAttribute() {
 
@@ -35,23 +34,31 @@ class Health : AbstractAttribute() {
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as UpdateMemory
-            val livingEntity = memory.livingEntity as? Player ?: return
-            // 点数 + 百分百
-            // 110 + 40 * 1 + 0
+            val livingEntity = memory.livingEntity
+
             val percent = memory.attributeData.getData(this@Health.index, percent.index).get(percent)
-            val result = (data.get(this) + default) * (1 + percent / 100)
+            val result = (data.get(this) + if (livingEntity is Player) default else 0.0) * (1 + percent)
 
-            if (livingEntity.maxHealth != result) {
-                livingEntity.maxHealth = result
-            }
+            sync {
+                livingEntity.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH)?.apply {
+                    AttributeModifier(
+                        livingEntity.uniqueId,
+                        "OriginAttribute",
+                        result,
+                        AttributeModifier.Operation.ADD_NUMBER
+                    ).also {
+                        removeModifier(it)
+                        addModifier(it)
+                    }
 
-            if (livingEntity.health >= result) {
-                livingEntity.health = result
-            }
-
-            if (isHealthScale) {
-                livingEntity.isHealthScaled = true
-                livingEntity.healthScale = healthScale
+                }
+                if (livingEntity.health > livingEntity.maxHealth) {
+                    livingEntity.health = livingEntity.maxHealth
+                }
+                if (isHealthScale && livingEntity is Player) {
+                    livingEntity.isHealthScaled = true
+                    livingEntity.healthScale = healthScale
+                }
             }
         }
 
