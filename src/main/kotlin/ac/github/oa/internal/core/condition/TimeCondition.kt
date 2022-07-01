@@ -2,7 +2,7 @@ package ac.github.oa.internal.core.condition.impl
 
 import ac.github.oa.OriginAttribute
 import ac.github.oa.internal.core.condition.ICondition
-import ac.github.oa.internal.core.equip.AdaptItem
+import ac.github.oa.internal.core.attribute.equip.AdaptItem
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import taboolib.platform.util.sendLang

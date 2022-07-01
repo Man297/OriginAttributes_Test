@@ -21,6 +21,10 @@ abstract class AbstractAttribute : Attribute {
 
     override fun onLoad() {
         this.loadFile()
+        this.loadEntry()
+    }
+
+    open fun loadEntry() {
         this::class.java.declaredFields.forEach {
             if (Attribute.Entry::class.java.isAssignableFrom(it.type)) {
                 it.isAccessible = true
@@ -34,9 +38,7 @@ abstract class AbstractAttribute : Attribute {
         entries.forEachIndexed { _, entry ->
             entry.onEnable()
         }
-
         info("|- Registered attribute ${toName()}.")
-
     }
 
     open fun toDataFolder(): File {

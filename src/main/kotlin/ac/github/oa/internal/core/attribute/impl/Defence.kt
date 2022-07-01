@@ -4,6 +4,7 @@ import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import ac.github.oa.internal.core.attribute.*
 import org.bukkit.entity.Player
+import taboolib.common.platform.function.info
 import taboolib.common.reflect.Reflex.Companion.getProperty
 
 class Defence : AbstractAttribute() {

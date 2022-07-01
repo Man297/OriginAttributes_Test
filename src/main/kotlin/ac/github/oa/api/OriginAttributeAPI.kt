@@ -11,7 +11,7 @@ import ac.github.oa.internal.base.event.impl.DamageMemory
 import ac.github.oa.internal.base.event.impl.UpdateMemory
 import ac.github.oa.internal.core.attribute.*
 import ac.github.oa.internal.core.condition.ConditionManager
-import ac.github.oa.internal.core.equip.*
+import ac.github.oa.internal.core.attribute.equip.*
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.submit
@@ -32,7 +32,9 @@ object OriginAttributeAPI {
         val data = AttributeManager.get(livingEntity.uniqueId)
         attributeData.merge(data)
         attributeData.items += data.items
-        getExtras(livingEntity.uniqueId).values.forEach(attributeData::merge)
+        getExtras(livingEntity.uniqueId).values
+            .filter { it.isValid }
+            .forEach(attributeData::merge)
         val event = EntityGetterDataEvent(livingEntity, attributeData)
         event.call()
         attributeData.autoCombatPower()

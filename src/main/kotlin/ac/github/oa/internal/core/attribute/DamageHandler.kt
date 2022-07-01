@@ -39,7 +39,8 @@ object DamageHandler {
                     handlerScript?.eval(handlerScript!!.engine.createBindings().also {
                         it["openAPI"] = DamageEventOpenAPI(e)
                     })
-                } catch (_: Exception) {
+                } catch (error: Exception) {
+                    error.printStackTrace()
                     info("error ${e.damageMemory}")
 
                 }

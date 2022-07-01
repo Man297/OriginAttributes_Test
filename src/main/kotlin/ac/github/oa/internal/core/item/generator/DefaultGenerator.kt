@@ -3,17 +3,22 @@ package ac.github.oa.internal.core.item.generator
 import ac.github.oa.OriginAttribute
 import ac.github.oa.internal.core.item.Item
 import ac.github.oa.internal.core.item.Translator
-import ac.github.oa.internal.core.script.hoop.MapScript
+import ac.github.oa.internal.core.item.script.hoop.MapScript
 import ac.github.oa.util.random
 import ac.github.oa.util.rebuild
 import org.bukkit.Color
+import org.bukkit.Material
+import org.bukkit.attribute.Attribute
+import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common5.Coerce
 import taboolib.library.xseries.XEnchantment
 import taboolib.library.xseries.XMaterial
+import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.ItemTagList
 import taboolib.module.nms.getItemTag
@@ -47,13 +52,13 @@ open class DefaultGenerator : ItemGenerator {
         val enchantments = config.getStringList("enchantments").toMutableList().random(wrapper, entity).rebuild()
         val itemFlags = config.getStringList("item-flags").toMutableList().random(wrapper, entity).rebuild()
         val unbreakable = config.getString("unbreakable", "false")!!.random(wrapper, entity)
-        val optional = XMaterial.matchXMaterial(id)
 
-        val material = if (optional.isPresent) {
-            optional.get()
-        } else {
+        val attackSpeed = config.getString("attack-speed")?.random(wrapper, entity)
+        val material = try {
+            Material.valueOf(id.uppercase())
+        } catch (_: Exception) {
             BukkitPlugin.getInstance().logger.log(Level.WARNING, "无效的id $id,追踪节点 ${config.name}.")
-            XMaterial.AIR
+            Material.AIR
         }
 
         return buildItem(material) {
@@ -104,7 +109,24 @@ open class DefaultGenerator : ItemGenerator {
                 itemTag["AttributeModifiers"] = ItemTagData(ItemTagList())
             }
 
+            if (attackSpeed != null) {
+
+                val attributeModifiers = itemTag["AttributeModifiers"]?.asList() ?: ItemTagList()
+                attributeModifiers.add(createAttributeModifier("generic.attackSpeed", "AttackSpeed", Coerce.toDouble(attackSpeed), 0))
+                itemTag["AttributeModifiers"] = attributeModifiers
+            }
             itemTag.saveTo(this)
+        }
+    }
+
+    fun createAttributeModifier(attributeName: String, name: String, amount: Double, operation: Int): ItemTag {
+        return ItemTag().also {
+            it["AttributeName"] = ItemTagData(attributeName)
+            it["Name"] = ItemTagData(name)
+            it["Amount"] = ItemTagData(amount)
+            it["Operation"] = ItemTagData(operation)
+            it["UUIDLeast"] = ItemTagData(20000)
+            it["UUIDMost"] = ItemTagData(1000)
         }
     }
 

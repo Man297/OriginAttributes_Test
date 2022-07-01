@@ -5,9 +5,10 @@ import ac.github.oa.api.event.entity.OriginCustomDamageEvent
 import ac.github.oa.api.event.item.ItemDurabilityDamageEvent
 import ac.github.oa.api.event.item.ItemUpdateEvent
 import ac.github.oa.internal.core.attribute.AttributeManager
-import ac.github.oa.internal.core.equip.Hand
-import ac.github.oa.internal.core.equip.OffHand
+import ac.github.oa.internal.core.attribute.equip.Hand
+import ac.github.oa.internal.core.attribute.equip.OffHand
 import ac.github.oa.internal.core.item.ItemPlant
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
@@ -92,7 +93,7 @@ object ItemAPI {
                 if (s.contains(durabilityKeyword) && s.contains(durabilityChar)) {
                     changed = true
                     val split = s.split(durabilityChar).toMutableList()
-                    split[0] = split[0].replace(getNumber(split[0]).toInt().toString().apply { info(this) }, e.durability.toString())
+                    split[0] = split[0].replace(getNumber(split[0]).toInt().toString(), e.durability.toString())
                     split[1] = split[1].replace(getNumber(split[1]).toInt().toString(), e.maxDurability.toString())
                     lore[index] = split.joinToString(durabilityChar.toString())
                 }
@@ -131,12 +132,13 @@ object ItemAPI {
         val item = ItemPlant.parseItem(this) ?: return false
         if (!item.isUpdate) return false
         val itemTag = this.getItemTag()
-        val asLong = itemTag["conch-hasCode"]?.asInt() ?: 0
+        val asLong = itemTag["oa-hasCode"]?.asInt() ?: 0
         return asLong != item.hasCode
     }
 
 
     fun ItemStack.takeDurability(player: Player? = null, value: Int = 1) {
+        if (this.type == Material.AIR) return
         val itemTag = getItemTag()
         if (itemTag.containsKey(NBT.MAX_DURABILITY.key)) {
             val maxDurability = itemTag[NBT.MAX_DURABILITY.key]!!.asInt()

@@ -2,32 +2,43 @@ package ac.github.oa.internal.core.attribute.impl
 
 import ac.github.oa.api.event.entity.EntityDamageEvent
 import ac.github.oa.internal.base.enums.PriorityEnum
+import ac.github.oa.internal.base.event.EventMemory
+import ac.github.oa.internal.base.event.impl.DamageMemory
+import ac.github.oa.internal.core.attribute.AbstractAttribute
+import ac.github.oa.internal.core.attribute.AttributeData
+import ac.github.oa.internal.core.attribute.AttributeType
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
 import java.util.*
 
-class AttackSpeed {
+class AttackSpeed : AbstractAttribute() {
 
-    companion object {
+    override val types: Array<AttributeType>
+        get() = arrayOf(AttributeType.ATTACK)
 
-        val cache = Collections.synchronizedMap(mutableMapOf<UUID, Cache>())
+    override fun onLoad() {
+        this.loadEntry()
+    }
 
+    override fun onReload() {
 
-        @SubscribeEvent(ignoreCancelled = true, priority = EventPriority.HIGH)
-        fun e(proxyEvent: EntityDamageEvent) {
-            if (proxyEvent.priorityEnum == PriorityEnum.PRE) return
+    }
 
-            val attacker = proxyEvent.damageMemory.attacker
+    override fun onDisable() {
 
+    }
+
+    val impl = object : ac.github.oa.internal.core.attribute.Attribute.Entry() {
+        override fun handler(memory: EventMemory, data: AttributeData.Data) {
+            memory as DamageMemory
+
+            val attacker = memory.attacker
             if (cache.containsKey(attacker.uniqueId)) {
                 val cache = cache[attacker.uniqueId]!!
                 val progress = cache.progress()
                 if (progress < 1) {
-                    proxyEvent.damageMemory.getDamageSources().forEach {
+                    memory.getDamageSources().forEach {
                         it.value = it.value * progress
                     }
                 }
@@ -37,6 +48,24 @@ class AttackSpeed {
                 cache[attacker.uniqueId] = it
             }
         }
+
+        override val combatPower: Double
+            get() = 0.0
+
+        override fun toValue(entity: LivingEntity, args: String, data: AttributeData.Data): Any? {
+            return "n/o"
+        }
+
+        override fun getKeywords(): List<String> {
+            return listOf()
+        }
+
+    }
+
+
+    companion object {
+
+        val cache = Collections.synchronizedMap(mutableMapOf<UUID, Cache>())
 
         fun createCache(entity: LivingEntity): Cache? {
             val attribute = entity.getAttribute(Attribute.GENERIC_ATTACK_SPEED) ?: return null
@@ -59,5 +88,6 @@ class AttackSpeed {
         }
 
     }
+
 
 }

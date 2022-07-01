@@ -1,15 +1,17 @@
 package ac.github.oa.internal.core.attribute
 
-import ac.github.oa.internal.core.equip.AdaptItem
+import ac.github.oa.internal.core.attribute.equip.AdaptItem
 import taboolib.common.util.random
-import java.math.BigDecimal
 
-class AttributeData {
+open class AttributeData {
 
     val items = mutableListOf<AdaptItem>()
 
     var tables: Array<Array<Data>>
     var combatPower = 0.0
+
+    open val isValid: Boolean
+        get() = true
 
     fun getArrayData(index: Int): Array<Data> {
         return tables[index]
@@ -22,7 +24,7 @@ class AttributeData {
     init {
         val attributes = AttributeManager.usableAttributes
         this.tables = Array(attributes.size) {
-            val iAttribute = attributes[it]!!
+            val iAttribute = attributes[it] ?: error("error $it")
             Array(iAttribute.toEntrySize()) { entryIndex ->
                 Data(iAttribute.getEntry(entryIndex).type.size)
             }

@@ -52,7 +52,7 @@ class Damage : AbstractAttribute() {
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             val damageMemory = memory as DamageMemory
-            damageMemory.addDamage(name, data.get(this))
+            damageMemory.addDamage(this, data.get(this))
         }
 
     }

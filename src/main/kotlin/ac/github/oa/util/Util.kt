@@ -1,8 +1,8 @@
 package ac.github.oa.util
 
 import ac.github.oa.internal.core.item.random.RandomPlant
-import ac.github.oa.internal.core.script.func.EmptyScript
-import ac.github.oa.internal.core.script.hoop.MapScript
+import ac.github.oa.internal.core.item.script.func.EmptyScript
+import ac.github.oa.internal.core.item.script.hoop.MapScript
 import org.bukkit.entity.LivingEntity
 import taboolib.platform.BukkitPlugin
 import java.io.File

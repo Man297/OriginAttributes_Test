@@ -27,6 +27,7 @@ import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
+import taboolib.module.chat.colored
 import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
 
@@ -34,6 +35,9 @@ object OnListener {
 
     val remotes: List<String>
         get() = OriginAttribute.config.getStringList("options.remotes")
+
+    val isDebug: Boolean
+        get() = OriginAttribute.config.getBoolean("options.debug", false)
 
     @SubscribeEvent
     fun e(e: OriginCustomDamageEvent) {
@@ -82,7 +86,24 @@ object OnListener {
                 if (!entityDamageEvent.isCancelled) {
                     e.damage = damageMemory.totalDamage.coerceAtLeast(1.0)
                 }
+
+                if (damageMemory.attacker is Player) {
+                    sendDamageInfo(damageMemory, damageMemory.attacker)
+                }
+
+                if (damageMemory.injured is Player) {
+                    sendDamageInfo(damageMemory, damageMemory.injured)
+                }
             }
+        }
+    }
+
+    fun sendDamageInfo(damageMemory: DamageMemory, sender: Player) {
+        if (isDebug) {
+            damageMemory.labels.forEach {
+                sender.sendMessage("&c${it.key} &8= &b${it.value} ".colored())
+            }
+            sender.sendMessage("&ctotal damage &8= &b${damageMemory.totalDamage}".colored())
         }
     }
 

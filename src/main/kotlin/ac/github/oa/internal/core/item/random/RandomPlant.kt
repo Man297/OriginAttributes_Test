@@ -1,7 +1,7 @@
 package ac.github.oa.internal.core.item.random
 
-import ac.github.oa.internal.core.script.InternalScript
-import ac.github.oa.internal.core.script.hoop.MapScript
+import ac.github.oa.internal.core.item.script.InternalScript
+import ac.github.oa.internal.core.item.script.hoop.MapScript
 import ac.github.oa.util.listFile
 import ac.github.oa.util.newfolder
 import org.bukkit.entity.LivingEntity

@@ -1,6 +1,6 @@
 package ac.github.oa.internal.core.condition
 
-import ac.github.oa.internal.core.equip.AdaptItem
+import ac.github.oa.internal.core.attribute.equip.AdaptItem
 import org.bukkit.entity.LivingEntity
 import taboolib.common.LifeCycle
 import taboolib.common.io.getInstance

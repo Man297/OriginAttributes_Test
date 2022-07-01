@@ -1,8 +1,7 @@
 package ac.github.oa.internal.core.condition
 
 import ac.github.oa.internal.core.attribute.getNumber
-import ac.github.oa.internal.core.condition.ICondition
-import ac.github.oa.internal.core.equip.AdaptItem
+import ac.github.oa.internal.core.attribute.equip.AdaptItem
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import taboolib.common5.Coerce

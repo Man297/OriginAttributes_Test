@@ -13,7 +13,11 @@ class ItemBuilder(val item: Item) {
     /**
      * 创建物品
      */
-    fun create(target: LivingEntity?, amount: Int = 1, options: MutableMap<String, String> = mutableMapOf()): MutableList<ItemStack> {
+    fun create(
+        target: LivingEntity?,
+        amount: Int = 1,
+        options: MutableMap<String, String> = mutableMapOf()
+    ): MutableList<ItemStack> {
         return (0 until amount).mapNotNull { item.create(target, options) }.toMutableList()
     }
 
@@ -24,12 +28,8 @@ class ItemBuilder(val item: Item) {
     fun to(target: Player, itemStack: MutableList<ItemStack>): List<ItemStack> {
         val event = EntityGetItemEvent(target, itemStack, item).apply { call() }
         if (event.isCancelled) return mutableListOf()
-        event.result.forEach {
-            if (target.inventory.firstEmpty() == -1) {
-                target.world.dropItem(target.location, it)
-            } else {
-                target.inventory.addItem(it)
-            }
+        target.inventory.addItem(*event.result.toTypedArray()).forEach {
+            target.world.dropItem(target.location, it.value)
         }
         return event.result
     }

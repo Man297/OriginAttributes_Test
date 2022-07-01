@@ -24,9 +24,10 @@ class Map : AbstractAttribute() {
             val data = e.attributeData
             val entries = mutableListOf<Attribute.Entry>()
             if (e.livingEntity is Player) {
-                entries += mapInstance.entries.filterIsInstance<DefaultImpl>().filter {
-                    it.permission == NONE || e.livingEntity.hasPermission(it.permission)
-                }
+                entries += mapInstance
+                    .entries
+                    .filterIsInstance<DefaultImpl>()
+                    .filter { it.permission == NONE || e.livingEntity.hasPermission(it.permission) }
             } else {
                 entries += mapInstance.entries
             }
@@ -37,7 +38,7 @@ class Map : AbstractAttribute() {
                 val event =
                     AttributeMapRenderEvent(e.livingEntity, it.attributeList.toMutableList(), it)
                 event.call()
-                val readList = ArrayUtils.read(e.livingEntity,event.list, entryData.get(it))
+                val readList = ArrayUtils.read(e.livingEntity, e.attributeData, event.list, entryData.get(it))
                 val resultData = OriginAttributeAPI.loadList(e.livingEntity, readList)
                 e.attributeData.merge(resultData)
             }
@@ -61,15 +62,15 @@ class Map : AbstractAttribute() {
         entries.forEach { it.onEnable() }
     }
 
-    class DefaultImpl : Attribute.Entry() {
+    open class DefaultImpl : Attribute.Entry() {
 
-        val attributeList: List<String>
+        open val attributeList: List<String>
             get() = node.toRoot().getStringList("${name}.attributes")
 
-        val permission: String
+        open val permission: String
             get() = node.toRoot().getString("${name}.permission", NONE)!!
 
-        override fun handler(memory: EventMemory, data: AttributeData.Data) {}
+        open override fun handler(memory: EventMemory, data: AttributeData.Data) {}
 
     }
 
