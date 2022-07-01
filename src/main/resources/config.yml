@@ -74,6 +74,7 @@ options:
     - BOW
 
 attributes:
+  - AttackSpeed
   - Damage
   - Crit
   - Defence

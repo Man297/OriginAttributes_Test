@@ -1,5 +1,6 @@
 package ac.github.oa.internal.core.attribute.impl
 
+import ac.github.oa.OriginAttribute
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.UpdateMemory
 import ac.github.oa.internal.core.attribute.AbstractAttribute
@@ -17,7 +18,7 @@ class AttackSpeed : AbstractAttribute() {
         get() = arrayOf(AttributeType.UPDATE)
 
 
-    val health = object : Attribute.Entry() {
+    val value = object : Attribute.Entry() {
 
         override val type: Attribute.Type
             get() = Attribute.Type.SINGLE
@@ -26,10 +27,12 @@ class AttackSpeed : AbstractAttribute() {
         override fun handler(memory: EventMemory, data: AttributeData.Data) {
             memory as UpdateMemory
             val livingEntity = memory.livingEntity
-
-            val result = data.get(this)
-
+            val ratio = memory.attributeData.getData(this@AttackSpeed.index, ratio.index).get(ratio)
+            val result = data.get(this) * (1 + ratio)
             sync {
+                if (!OriginAttribute.original) {
+                    livingEntity.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED)?.baseValue = 0.0
+                }
                 livingEntity.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED)?.apply {
                     AttributeModifier(
                         livingEntity.uniqueId,
@@ -43,6 +46,12 @@ class AttackSpeed : AbstractAttribute() {
                 }
             }
         }
+    }
+    val ratio = object : Attribute.Entry() {
+        override val type: Attribute.Type
+            get() = Attribute.Type.SINGLE
+
+        override fun handler(memory: EventMemory, data: AttributeData.Data) {}
     }
 
 
