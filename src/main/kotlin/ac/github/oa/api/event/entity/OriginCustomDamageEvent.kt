@@ -10,7 +10,7 @@ class OriginCustomDamageEvent(
     val damager: Entity,
     val entity: Entity,
     var damage: Double,
-    val power: Double,
+    val power: Float,
     val attacker: LivingEntity?,
     val origin: EntityDamageByEntityEvent?
 ) : BukkitProxyEvent() {
