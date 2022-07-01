@@ -4,6 +4,8 @@ import ac.github.oa.internal.core.item.random.RandomPlant
 import ac.github.oa.internal.core.item.script.func.EmptyScript
 import ac.github.oa.internal.core.item.script.hoop.MapScript
 import org.bukkit.entity.LivingEntity
+import taboolib.common.platform.function.isPrimaryThread
+import taboolib.common.platform.function.submit
 import taboolib.platform.BukkitPlugin
 import java.io.File
 import java.lang.reflect.ParameterizedType
@@ -87,6 +89,14 @@ private fun checkType(type: Type?, index: Int): Class<*>? {
             "Expected a Class, ParameterizedType"
                     + ", but <" + type + "> is of type " + className
         )
+    }
+}
+
+fun sync(func: () -> Unit) {
+    if (isPrimaryThread) {
+        func()
+    } else {
+        submit { func() }
     }
 }
 

@@ -1,6 +1,6 @@
 plugins {
     java
-    id("io.izzel.taboolib") version "1.26"
+    id("io.izzel.taboolib") version "1.40"
     id("org.jetbrains.kotlin.jvm") version "1.5.10"
 }
 
@@ -19,7 +19,7 @@ taboolib {
     install("expansion-javascript")
     install("expansion-command-helper")
     classifier = null
-    version = "6.0.7-64"
+    version = "6.0.9-14"
 
     description {
         contributors {
@@ -56,6 +56,13 @@ tasks.withType<Jar> {
 //    destinationDir = file("F:/Server/spigot 1.17/plugins")
     destinationDir = file("F:/Server/Spigot 1.12.2 - 赏金测试/plugins")
 //    destinationDir = file("F:/Server/spigot 1.17/plugins")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = listOf("-Xjvm-default=all")
+    }
 }
 
 configure<JavaPluginConvention> {

@@ -1,0 +1,8 @@
+value:
+  combat-power: 1.0
+  keywords:
+    - 攻击速度
+ratio:
+  combat-power: 1.0
+  keywords:
+    - 攻速加成
