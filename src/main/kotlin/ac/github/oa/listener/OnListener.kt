@@ -6,15 +6,13 @@ import ac.github.oa.api.event.entity.EntityDamageEvent
 import ac.github.oa.api.event.entity.EntityDeathEvent
 import ac.github.oa.api.event.entity.OriginCustomDamageEvent
 import ac.github.oa.api.event.render.AttributeRenderStringEvent
-import ac.github.oa.command.Command
 import ac.github.oa.internal.base.enums.PriorityEnum
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
-import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.ItemMergeEvent
@@ -26,7 +24,6 @@ import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.common.platform.function.info
 import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
 
@@ -37,53 +34,39 @@ object OnListener {
 
     @SubscribeEvent
     fun e(e: OriginCustomDamageEvent) {
-        var damager: LivingEntity? = null
-        var entity: LivingEntity? = null
+        val entity: LivingEntity = e.entity as? LivingEntity ?: return
+        val attacker = e.attacker ?: return
 
-        if (e.entity is LivingEntity) {
-            entity = e.entity
+
+        if (!e.isProjectile) {
+            val itemStack = BukkitEquipment.HAND.getItem(attacker)
+            if (itemStack != null && itemStack.isNotAir() && itemStack.type.name in remotes) {
+                e.isCancelled = true
+                return
+            }
         }
 
-        if (e.damager is Projectile) {
-            val projectile = e.damager
-            val shooter = projectile.shooter
-            if (shooter is LivingEntity) {
-                damager = shooter
-            }
-        } else if (e.damager is LivingEntity) {
-            damager = e.damager
-        }
-
-        if (damager != null && entity != null) {
-            if (e.damager !is Projectile) {
-                val itemStack = BukkitEquipment.HAND.getItem(damager)
-                if (itemStack != null && itemStack.isNotAir() && itemStack.type.name in remotes) {
-                    e.isCancelled = true
-                    return
-                }
-            }
-
-            val damageMemory = DamageMemory(
-                damager,
-                entity,
-                e,
-                OriginAttributeAPI.getAttributeData(damager),
-                OriginAttributeAPI.getAttributeData(entity)
-            )
-            val entityDamageEvent = EntityDamageEvent(damageMemory, PriorityEnum.PRE)
+        val damageMemory = DamageMemory(
+            attacker,
+            entity,
+            e,
+            OriginAttributeAPI.getAttributeData(attacker),
+            OriginAttributeAPI.getAttributeData(entity)
+        )
+        val entityDamageEvent = EntityDamageEvent(damageMemory, PriorityEnum.PRE)
+        entityDamageEvent.call()
+        e.isCancelled = entityDamageEvent.isCancelled
+        if (!entityDamageEvent.isCancelled) {
+            OriginAttributeAPI.callDamage(damageMemory)
+            entityDamageEvent.priorityEnum = PriorityEnum.POST
             entityDamageEvent.call()
-            e.isCancelled = entityDamageEvent.isCancelled
-            if (!entityDamageEvent.isCancelled) {
-                OriginAttributeAPI.callDamage(damageMemory)
-                entityDamageEvent.priorityEnum = PriorityEnum.POST
-                entityDamageEvent.call()
 
-                // POST CALL
-                if (!entityDamageEvent.isCancelled) {
-                    e.damage = damageMemory.totalDamage.coerceAtLeast(1.0)
-                }
+            // POST CALL
+            if (!entityDamageEvent.isCancelled) {
+                e.damage = damageMemory.totalDamage.coerceAtLeast(0.0)
             }
         }
+
     }
 
     val damageCauses: List<String>
@@ -97,8 +80,19 @@ object OnListener {
         val cause = e.cause
         if (damageCauses.contains(cause.name) || e.entity::class.java.simpleName != "PlayerNPC") {
             val entity = e.entity
+            var power = 1.0
+            val damager = e.damager
+            var attacker: LivingEntity? = null
 
-            val event = OriginCustomDamageEvent(e.damager, entity, e.damage, e)
+            if (damager is LivingEntity) {
+                attacker = damager
+                attacker.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.value?.let { power = e.damage / it }
+            } else if (damager is Projectile) {
+                attacker = damager.shooter as? LivingEntity
+            }
+
+
+            val event = OriginCustomDamageEvent(damager, entity, e.damage, power, attacker, e)
             event.call()
             e.isCancelled = event.isCancelled
             if (!event.isCancelled) {

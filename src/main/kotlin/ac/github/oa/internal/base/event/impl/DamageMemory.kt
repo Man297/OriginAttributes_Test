@@ -15,7 +15,7 @@ class DamageMemory(
     val injured: LivingEntity,
     val event: OriginCustomDamageEvent,
     val attackAttributeData: AttributeData,
-    val injuredAttributeData: AttributeData
+    val injuredAttributeData: AttributeData,
 ) : EventMemory {
 
     var arrow = attacker is Arrow
@@ -39,7 +39,7 @@ class DamageMemory(
     }
 
     val totalDamage: Double
-        get() = getDamageSources().sumOf { it.value } + damage
+        get() = (getDamageSources().sumOf { it.value } + damage) * event.power
 
     fun getDamage(key: Any): Double {
         val source = getDamageSources().firstOrNull { it.any == key } ?: EMPTY_SOURCE
