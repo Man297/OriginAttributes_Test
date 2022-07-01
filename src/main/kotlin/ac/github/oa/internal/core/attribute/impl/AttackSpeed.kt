@@ -35,10 +35,7 @@ class AttackSpeed : AbstractAttribute() {
                 }
                 livingEntity.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED)?.apply {
                     AttributeModifier(
-                        livingEntity.uniqueId,
-                        "OriginAttribute",
-                        result,
-                        AttributeModifier.Operation.ADD_NUMBER
+                        livingEntity.uniqueId, "OriginAttribute", result, AttributeModifier.Operation.ADD_NUMBER
                     ).also {
                         removeModifier(it)
                         addModifier(it)
@@ -52,8 +49,6 @@ class AttackSpeed : AbstractAttribute() {
             get() = Attribute.Type.SINGLE
 
         override fun handler(memory: EventMemory, data: AttributeData.Data) {}
-    }
-
     }
 
 }

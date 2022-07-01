@@ -30,6 +30,7 @@ import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
+import taboolib.platform.BukkitPlugin
 import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
 
