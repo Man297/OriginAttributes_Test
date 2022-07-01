@@ -129,7 +129,7 @@ class SingleGenerator : ItemGenerator {
             this.lore.addAll(lore)
             enchantments.forEach {
                 val split = it.split(":")
-                val key = XEnchantment.valueOf(split[0]).parseEnchantment()!!
+                val key = XEnchantment.matchXEnchantment(split[0]).get().enchant!!
                 val level = if (split.size == 2) split[1].toInt() else key.startLevel
                 enchants[key] = (enchants[key] ?: 0) + level
             }
