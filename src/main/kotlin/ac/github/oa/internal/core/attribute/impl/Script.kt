@@ -130,6 +130,10 @@ object ScriptAPI {
         taboolib.common.platform.function.info(any.toString())
     }
 
+    fun tell(entity: LivingEntity, any: Any) {
+        entity.sendMessage(any.toString())
+    }
+
     fun getData(context: DamageMemory, entity: LivingEntity, index: Int, entry: Int): AttributeData.Data {
         return getData(context, entity, index).get(entry)
     }

@@ -1,6 +1,6 @@
 script:
   javascript-def0:
-    types: ATTACK
+    types: [ ATTACK ]
     value-type: SINGLE
     combat-power: 1.0
     keywords:

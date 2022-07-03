@@ -15,4 +15,7 @@ class OriginCustomDamageEvent(
 ) : BukkitProxyEvent() {
     val isProjectile: Boolean
         get() = damager is Projectile
+
+    val cause = origin?.cause
+
 }
