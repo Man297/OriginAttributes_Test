@@ -96,6 +96,7 @@ object Script {
                 get() = scriptEngine as Invocable
 
             override fun onEnable() {
+                if (script.isEmpty()) return
                 scriptEngine = scriptEngineFactory.scriptEngine
                 scriptEngine.put("name", name)
                 scriptEngine.put("index", index)
@@ -104,6 +105,7 @@ object Script {
             }
 
             override fun handler(memory: EventMemory, data: AttributeData.Data) {
+                if (script.isEmpty()) return
                 invocable.invokeFunction("handler", memory, data)
             }
 

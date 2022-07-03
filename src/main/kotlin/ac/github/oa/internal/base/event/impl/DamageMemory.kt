@@ -20,8 +20,9 @@ class DamageMemory(
 
     var arrow = attacker is Arrow
 
-    val accumulatorPower = event.damage / (attacker.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE)?.value
-        ?: event.damage)
+    val accumulatorPower =
+        event.damage / (attacker.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE)?.value
+            ?: event.damage)
 
     companion object {
 
@@ -53,6 +54,8 @@ class DamageMemory(
         return labels.keys.filterIsInstance<Source>()
     }
 
+    fun getDamageSource(any: Any) = getDamageSources().firstOrNull { it.any == any }
+
     fun addDamage(key: Any, value: Double): DamageMemory {
         setLabel(Source(key, value), value)
         return this
@@ -73,6 +76,10 @@ class DamageMemory(
     }
 
 
-    class Source(val any: Any, var value: Double)
+    class Source(val any: Any, var value: Double) {
+        override fun toString(): String {
+            return "Source(any=$any, value=$value)"
+        }
+    }
 
 }
