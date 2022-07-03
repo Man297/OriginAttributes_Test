@@ -63,11 +63,7 @@ object OnListener {
             OriginAttributeAPI.getAttributeData(attacker)
         }
         val damageMemory = DamageMemory(
-            attacker,
-            entity,
-            e,
-            attr,
-            OriginAttributeAPI.getAttributeData(entity)
+            attacker, entity, e, attr, OriginAttributeAPI.getAttributeData(entity)
         )
         val entityDamageEvent = EntityDamageEvent(damageMemory, PriorityEnum.PRE)
         entityDamageEvent.call()
@@ -91,24 +87,19 @@ object OnListener {
         if (e.isCancelled) return
 
         val cause = e.cause
-        if (damageCauses.contains(cause.name) || e.entity::class.java.simpleName != "PlayerNPC") {
+        if (cause.name in damageCauses || e.entity::class.java.simpleName != "PlayerNPC") {
             val entity = e.entity
-            var force = 0.0f
             val damager = e.damager
             var attacker: LivingEntity? = null
 
             if (damager is LivingEntity) {
                 attacker = damager
-                attacker.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.value?.let { force = (e.damage / it).toFloat() }
             } else if (damager is Projectile) {
                 attacker = damager.shooter as? LivingEntity
-                if (e.damager.hasMetadata("force")) {
-                    force = e.damager.getMetadata("force").first().asFloat()
-                }
             }
 
 
-            val event = OriginCustomDamageEvent(damager, entity, e.damage, force, attacker, e)
+            val event = OriginCustomDamageEvent(damager, entity, e.damage, attacker, e)
             event.call()
             e.isCancelled = event.isCancelled
             if (!event.isCancelled) {
@@ -130,8 +121,7 @@ object OnListener {
             FixedMetadataValue(BukkitPlugin.getInstance(), OriginAttributeAPI.getAttributeData(event.entity))
         )
         event.projectile.setMetadata(
-            "force",
-            FixedMetadataValue(BukkitPlugin.getInstance(), event.force)
+            "force", FixedMetadataValue(BukkitPlugin.getInstance(), event.force)
         )
     }
 

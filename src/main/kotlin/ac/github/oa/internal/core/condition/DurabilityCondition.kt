@@ -1,5 +1,6 @@
 package ac.github.oa.internal.core.condition
 
+import ac.github.oa.api.ItemAPI
 import ac.github.oa.internal.core.attribute.getNumber
 import ac.github.oa.internal.core.attribute.equip.AdaptItem
 import org.bukkit.entity.LivingEntity
@@ -17,10 +18,8 @@ object DurabilityCondition : ICondition {
             val list = options("durability").getStringList("keyword")
             val lore = item.itemMeta!!.lore!!
             if (any(lore, list)) {
-                val string = lore.first { list.any { s -> it.contains(s) } }
-                val number = Coerce.toInteger(getNumber(string))
-                if (livingEntity.level < number) {
-                    livingEntity.sendLang("condition-durability-not-enough", item.itemMeta!!.displayName, number)
+                if (ItemAPI.getDurability(adaptItem.item) <= 1) {
+                    livingEntity.sendLang("condition-durability-not-enough", item.itemMeta!!.displayName)
                     return false
                 }
             }

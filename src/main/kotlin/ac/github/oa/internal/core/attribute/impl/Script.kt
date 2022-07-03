@@ -1,9 +1,13 @@
 package ac.github.oa.internal.core.attribute.impl
 
+import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.api.event.plugin.AttributeLoadEvent
 import ac.github.oa.internal.base.event.EventMemory
+import ac.github.oa.internal.base.event.impl.DamageMemory
 import ac.github.oa.internal.core.attribute.*
+import org.bukkit.entity.LivingEntity
 import taboolib.common.LifeCycle
+import taboolib.common.io.newFile
 import taboolib.common.platform.Awake
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.getDataFolder
@@ -18,6 +22,8 @@ import javax.script.Invocable
 import javax.script.ScriptEngine
 
 object Script {
+
+    val cache = mutableMapOf<String, Int>()
 
     @Awake(LifeCycle.ENABLE)
     fun onLoad() {
@@ -44,9 +50,17 @@ object Script {
         }
     }
 
+    fun reloadScripts() {
+        AttributeManager.usableAttributes.values.filterIsInstance<ScriptAttribute>().forEach {
+            it.root = AttributeManager.config.getConfigurationSection("script.${it.toName()}")!!
+            it.script = newFile(getDataFolder(), "attribute/${it.toName()}.js", create = true).readText()
+            it.entry.onEnable()
+        }
+    }
+
 
     @Abstract
-    class ScriptAttribute(override var root: ConfigurationSection, val script: String) : AbstractAttribute() {
+    class ScriptAttribute(override var root: ConfigurationSection, var script: String) : AbstractAttribute() {
 
         override val types: Array<AttributeType>
             get() = root.getEnumList("types", AttributeType::class.java).toTypedArray()
@@ -66,7 +80,9 @@ object Script {
         }
 
         override fun onReload() {
+            cache.clear()
             AttributeManager.config.reload()
+            reloadScripts()
         }
 
         val entry = object : Attribute.Entry() {
@@ -107,10 +123,41 @@ object Script {
 
 }
 
+
 object ScriptAPI {
 
-    fun info(vararg any: Any) {
-        info(any)
+    fun info(any: Any) {
+        taboolib.common.platform.function.info(any.toString())
+    }
+
+    fun getData(context: DamageMemory, entity: LivingEntity, index: Int, entry: Int): AttributeData.Data {
+        return getData(context, entity, index).get(entry)
+    }
+
+    fun getData(context: DamageMemory, entity: LivingEntity, index: Int): Array<AttributeData.Data> {
+        return getAttributeData(context, entity).getArrayData(index)
+    }
+
+    fun getData(context: DamageMemory, entity: LivingEntity, keyword: String): AttributeData.Data {
+        val index = Script.cache.computeIfAbsent(keyword) {
+            AttributeManager.usableAttributes.values.firstOrNull {
+                keyword in it.toEntities().flatMap { it.getKeywords() }
+            }?.getPriority() ?: -1
+        }
+        if (index == -1) error("Attribute [$keyword] not found.")
+        val entry = AttributeManager.getAttribute(index).searchByKeyword(keyword)
+        val attributeData = getAttributeData(context, entity)
+        val arrayData = attributeData.getArrayData(index)
+        return arrayData[entry.index]
+    }
+
+    fun getAttributeData(context: DamageMemory?, entity: LivingEntity): AttributeData {
+        if (context == null) return OriginAttributeAPI.getAttributeData(entity)
+        return if (context.attacker == entity) {
+            context.attackAttributeData
+        } else if (context.injured == entity) {
+            context.injuredAttributeData
+        } else OriginAttributeAPI.getAttributeData(entity)
     }
 
 }

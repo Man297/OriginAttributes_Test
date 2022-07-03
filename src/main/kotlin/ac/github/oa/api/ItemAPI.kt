@@ -143,7 +143,7 @@ object ItemAPI {
         if (itemTag.containsKey(NBT.MAX_DURABILITY.key)) {
             val maxDurability = itemTag[NBT.MAX_DURABILITY.key]!!.asInt()
             val oldDurability = itemTag[NBT.DURABILITY.key]?.asInt() ?: maxDurability
-            val durability = oldDurability - value
+            val durability = (oldDurability - value).coerceAtLeast(0).coerceAtMost(maxDurability)
             itemTag[NBT.DURABILITY.key] = ItemTagData(durability)
             itemTag.saveTo(this)
             if (player !== null) {

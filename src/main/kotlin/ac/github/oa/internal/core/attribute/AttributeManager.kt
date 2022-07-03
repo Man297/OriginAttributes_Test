@@ -23,7 +23,6 @@ object AttributeManager {
     @Config("attribute/config.yml")
     lateinit var config: Configuration
 
-
     private val table = mutableMapOf<UUID, AttributeData>()
 
     fun remove(uuid: UUID) {
@@ -48,6 +47,10 @@ object AttributeManager {
 
     fun getAttribute(name: String): Attribute {
         return attributeInstances.first { it.toName() == name }
+    }
+
+    fun getAttribute(index: Int): Attribute {
+        return usableAttributes.values.first { it.getPriority() == index }
     }
 
     fun loadAttributeClass() {

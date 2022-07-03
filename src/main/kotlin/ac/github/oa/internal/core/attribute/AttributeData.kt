@@ -78,8 +78,16 @@ open class AttributeData {
         fun get(type: Attribute.Type = Attribute.Type.SINGLE): Double {
             return when (type) {
                 Attribute.Type.SINGLE -> array[0]
-                Attribute.Type.RANGE -> random(array[0], array[1])
+                Attribute.Type.RANGE -> this.random()
             }
+        }
+
+        fun random(): Double {
+            return if (array.size == 1) {
+                random(0.0, array[0])
+            } else if (array.size == 2) {
+                random(array[0], array[1])
+            } else -1.0
         }
 
         fun get(index: Int): Double {

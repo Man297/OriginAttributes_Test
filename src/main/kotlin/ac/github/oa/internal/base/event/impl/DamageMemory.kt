@@ -20,6 +20,9 @@ class DamageMemory(
 
     var arrow = attacker is Arrow
 
+    val accumulatorPower = event.damage / (attacker.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE)?.value
+        ?: event.damage)
+
     companion object {
 
         val EMPTY_SOURCE = Source(-1, 0.0)
@@ -39,7 +42,7 @@ class DamageMemory(
     }
 
     val totalDamage: Double
-        get() = (getDamageSources().sumOf { it.value } + damage) * event.power
+        get() = (getDamageSources().sumOf { it.value } + damage)
 
     fun getDamage(key: Any): Double {
         val source = getDamageSources().firstOrNull { it.any == key } ?: EMPTY_SOURCE
