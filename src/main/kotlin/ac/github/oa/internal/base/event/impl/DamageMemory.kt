@@ -21,8 +21,8 @@ class DamageMemory(
     var arrow = attacker is Arrow
 
     val accumulatorPower =
-        event.damage / (attacker.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE)?.value
-            ?: event.damage)
+        (event.damage / (attacker.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE)?.value
+            ?: event.damage)).coerceAtLeast(0.0).coerceAtMost(1.0)
 
     companion object {
 

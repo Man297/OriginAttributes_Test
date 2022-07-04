@@ -13,6 +13,7 @@ import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.getDataFolder
 import taboolib.common.platform.function.info
 import taboolib.common.platform.function.releaseResourceFile
+import taboolib.common.util.random
 import taboolib.common5.compileJS
 import taboolib.common5.scriptEngineFactory
 import taboolib.library.configuration.ConfigurationSection
@@ -134,6 +135,10 @@ object ScriptAPI {
 
     fun tell(entity: LivingEntity, any: Any) {
         entity.sendMessage(any.toString())
+    }
+
+    fun chance(value: Double): Boolean {
+        return random(value)
     }
 
     fun getData(context: DamageMemory, entity: LivingEntity, index: Int, entry: Int): AttributeData.Data {

@@ -6,6 +6,7 @@
  * API(api)
  *  fun tell(entity,message) 打印到文本框
  *  fun info(message) 打印到控制台
+ *  fun chance(value) : boolean 产生概率 值要求0-1内的数
  *  fun getData(context,entity,attributeName) : Data 取属性 context = memory
  *
  * Data :
