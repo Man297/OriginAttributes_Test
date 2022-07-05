@@ -19,7 +19,7 @@ object DurabilityCondition : ICondition {
             val lore = item.itemMeta!!.lore!!
             if (any(lore, list)) {
                 if (ItemAPI.getDurability(adaptItem.item) <= 1) {
-                    livingEntity.sendLang("condition-durability-not-enough", item.itemMeta!!.displayName)
+                    livingEntity.sendLang("condition-durability-not-enough", item.itemMeta?.displayName ?: "null")
                     return false
                 }
             }
