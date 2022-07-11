@@ -1,9 +1,16 @@
 
 # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html
-blindness:
+def0:
   duration: [ 1 , 5 ]
   amplifier: [ 1 , 3 ]
   type: BLINDNESS
   combat-power: 1
   keywords:
     - '致盲'
+def1:
+  duration: [ 1 , 5 ]
+  amplifier: [ 1 , 3 ]
+  type: SPEED
+  combat-power: 1
+  keywords:
+    - '速度'

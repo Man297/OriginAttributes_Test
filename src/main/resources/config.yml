@@ -90,3 +90,4 @@ attributes:
   - MoveSpeed
   - ExpAddon
   - HealthRegen
+  - Potion

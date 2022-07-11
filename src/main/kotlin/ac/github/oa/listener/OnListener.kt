@@ -30,6 +30,7 @@ import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
+import taboolib.common.platform.function.submit
 import taboolib.platform.BukkitPlugin
 import taboolib.platform.util.isNotAir
 import taboolib.type.BukkitEquipment
@@ -201,21 +202,21 @@ object OnListener {
         val entity: Entity = event.entity
 
         if (entity is LivingEntity) {
-            asyncUpdate(entity)
+            asyncUpdate(entity, 15)
         }
     }
 
     @SubscribeEvent(bind = "io.lumine.xikage.mythicmobs.api.bukkit.events.EntityDeathEvent")
     fun handleMythicDeath(ope: OptionalEvent) {
-        val event = ope.get<MythicMobSpawnEvent>()
+        val event = ope.get<EntityDeathEvent>()
         val entity: Entity = event.entity
         if (entity is LivingEntity) {
             OriginAttributeAPI.remove(entity.uniqueId)
         }
     }
 
-    fun asyncUpdate(entity: LivingEntity) {
-        OriginAttributeAPI.async {
+    fun asyncUpdate(entity: LivingEntity, delay: Long = 0) {
+        OriginAttributeAPI.async(delay = delay) {
             OriginAttributeAPI.loadEntityEquipment(entity)
             OriginAttributeAPI.callUpdate(entity)
         }

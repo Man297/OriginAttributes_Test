@@ -1,5 +1,6 @@
 package ac.github.oa.api.compat
 
+import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.internal.core.item.ItemPlant
 import ac.github.oa.internal.core.item.script.hoop.MapScript
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
@@ -58,7 +59,6 @@ object MythicMobsHook {
     fun e1(ope: OptionalEvent) {
         val event = ope.get<MythicMobSpawnEvent>()
         val mobType = event.mobType
-        val wrapper = MapScript.Wrapper()
         val entity = event.entity as LivingEntity
         // 覆盖背包物品
         mobType.config.getStringList("OriginOptions.Equipment")?.forEach {

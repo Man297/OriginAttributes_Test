@@ -44,8 +44,8 @@ object OriginAttributeAPI {
     /**
      * 执行异步任务
      */
-    fun async(task: () -> Unit) {
-        submit(async = true) {
+    fun async(delay : Long = 0,task: () -> Unit) {
+        submit(async = true, delay = delay) {
             task()
         }
     }
