@@ -6,5 +6,5 @@ import taboolib.platform.type.BukkitProxyEvent
 
 class EntityLoadEquipmentEvent(
     val livingEntity: LivingEntity,
-    val list: List<AdaptItem>
+    val list: MutableList<AdaptItem>
 ) : BukkitProxyEvent()

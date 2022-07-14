@@ -20,11 +20,12 @@ class AttackSpeed : AbstractAttribute() {
 
     companion object {
 
-        @SubscribeEvent(priority = EventPriority.MONITOR)
+        @SubscribeEvent(priority = EventPriority.HIGHEST)
         fun e(e: EntityDamageEvent) {
             // 修正无来源伤害
             e.damageMemory.damage = e.damageMemory.damage * e.damageMemory.accumulatorPower
             // 修正有来源伤害 统一修正
+
             e.damageMemory.getDamageSources().forEach {
                 it.value = it.value * e.damageMemory.accumulatorPower
             }

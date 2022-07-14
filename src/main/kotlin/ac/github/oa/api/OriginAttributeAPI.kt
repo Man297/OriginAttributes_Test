@@ -90,7 +90,7 @@ object OriginAttributeAPI {
      * 加载实体物品容器
      */
     fun loadInventory(livingEntity: LivingEntity): List<AdaptItem> {
-        val items = this.loadItems(livingEntity)
+        val items = this.loadItems(livingEntity).toMutableList()
         val event = EntityLoadEquipmentEvent(livingEntity, items)
         event.call()
         return items

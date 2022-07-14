@@ -20,12 +20,10 @@ def0:
     - HIDE_PLACED_ON
     - HIDE_POTION_EFFECTS
   actions:
-    - $e: on right air
+    - $e: item consume
       action:
         - |-
-          if check inventory hand is "minecraft:*[lore=关键字]" then {
-            skillapi cast "skill"
-          }
+          attribute add def0 5000 "攻击力 +10" they -"@self"
 
 drop-table:
   g: group

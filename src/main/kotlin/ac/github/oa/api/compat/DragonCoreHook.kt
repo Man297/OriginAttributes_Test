@@ -18,8 +18,7 @@ import taboolib.library.xseries.XMaterial
 
 object DragonCoreHook {
 
-    val isEnable: Boolean
-        get() = Bukkit.getPluginManager().isPluginEnabled("DragonCore")
+    val isEnable by lazy { Bukkit.getPluginManager().isPluginEnabled("DragonCore") }
 
     val slots: List<String>
         get() = OriginAttribute.module.getStringList("dragon-core.slots")
