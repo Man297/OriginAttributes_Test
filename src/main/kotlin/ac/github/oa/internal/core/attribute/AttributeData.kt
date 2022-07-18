@@ -83,11 +83,15 @@ open class AttributeData {
         }
 
         fun random(): Double {
-            return if (array.size == 1) {
-                random(0.0, array[0])
-            } else if (array.size == 2) {
-                random(array[0], array[1])
-            } else -1.0
+            return when (array.size) {
+                1 -> {
+                    random(0.0, array[0])
+                }
+                2 -> {
+                    random(array[0], array[1])
+                }
+                else -> -1.0
+            }
         }
 
         fun get(index: Int): Double {

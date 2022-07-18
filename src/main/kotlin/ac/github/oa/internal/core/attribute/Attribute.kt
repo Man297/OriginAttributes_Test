@@ -54,6 +54,7 @@ interface Attribute {
                 return when (args) {
                     "max" -> data.get(1)
                     "min" -> data.get(0)
+                    "random" -> data.random()
                     else -> "${data.get(0)} - ${data.get(1)}"
                 }
             }
