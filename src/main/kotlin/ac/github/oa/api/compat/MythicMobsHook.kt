@@ -3,6 +3,7 @@ package ac.github.oa.api.compat
 import ac.github.oa.internal.core.item.ItemPlant
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
+import jdk.internal.dynalink.beans.StaticClass
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.event.OptionalEvent
@@ -20,10 +21,12 @@ object MythicMobsHook {
     fun e0(ope: OptionalEvent) {
         val event = ope.get<io.lumine.mythic.bukkit.events.MythicMobDeathEvent>()
         val mm = event.mobType
-        event.drops.addAll(handleDrop(
-            mm.displayName.get(),
-            mm.config.getStringList("OriginOptions.Drops")
-        ))
+        event.drops.addAll(
+            handleDrop(
+                mm.displayName.get(),
+                mm.config.getStringList("OriginOptions.Drops")
+            )
+        )
     }
 
     fun handleDrop(displayName: String, drops: List<String>): MutableList<ItemStack> {
@@ -65,10 +68,32 @@ object MythicMobsHook {
     fun e(ope: OptionalEvent) {
         val event = ope.get<MythicMobDeathEvent>()
         val mm = event.mobType
-        event.drops.addAll(handleDrop(
-            mm.displayName.get(),
-            mm.config.getStringList("OriginOptions.Drops")
-        ))
+        event.drops.addAll(
+            handleDrop(
+                mm.displayName.get(),
+                mm.config.getStringList("OriginOptions.Drops")
+            )
+        )
+    }
+
+    fun handleUpdate(entity: LivingEntity, equipments: List<String>) {
+        equipments.forEach {
+            val split = it.split(" ")
+            val key = split[0].uppercase()
+            val slot = split[1]
+            if (ItemPlant.hasKey(key)) {
+                BukkitEquipment.valueOf(slot).setItem(entity, ItemPlant.build(entity, key) ?: return@forEach)
+            }
+        }
+    }
+
+    @SubscribeEvent(bind = "io.lumine.mythic.bukkit.events.MythicMobSpawnEvent")
+    fun e2(ope: OptionalEvent) {
+        val event = ope.get<io.lumine.mythic.bukkit.events.MythicMobSpawnEvent>()
+        val mobType = event.mobType
+        val entity = event.entity as LivingEntity
+
+        handleUpdate(entity, mobType.config.getStringList("OriginOptions.Equipment"))
     }
 
     @SubscribeEvent(bind = "io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent")
@@ -76,18 +101,6 @@ object MythicMobsHook {
         val event = ope.get<MythicMobSpawnEvent>()
         val mobType = event.mobType
         val entity = event.entity as LivingEntity
-        // 覆盖背包物品
-        mobType.config.getStringList("OriginOptions.Equipment")?.forEach {
-            val split = it.split(" ")
-            val key = split[0]
-            val slot = split[1]
-            if (ItemPlant.hasKey(key)) {
-                ItemPlant.build(entity, key)?.let {
-                    BukkitEquipment.valueOf(slot).setItem(entity, it)
-                }
-            } else {
-                info("MythicMobs - Drop No Item: " + event.mobType.displayName + " - " + key)
-            }
-        }
+        handleUpdate(entity, mobType.config.getStringList("OriginOptions.Equipment"))
     }
 }

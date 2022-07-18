@@ -5,6 +5,7 @@ import ac.github.oa.api.event.plugin.AttributeLoadEvent
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
 import ac.github.oa.internal.core.attribute.*
+import jdk.internal.dynalink.beans.StaticClass
 import org.bukkit.entity.LivingEntity
 import taboolib.common.LifeCycle
 import taboolib.common.io.newFile
@@ -13,6 +14,9 @@ import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.getDataFolder
 import taboolib.common.platform.function.info
 import taboolib.common.platform.function.releaseResourceFile
+import taboolib.common.reflect.Reflex.Companion.getProperty
+import taboolib.common.reflect.Reflex.Companion.invokeConstructor
+import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.common.util.random
 import taboolib.common5.compileJS
 import taboolib.common5.scriptEngineFactory
@@ -26,7 +30,14 @@ object Script {
 
     val cache = mutableMapOf<String, Int>()
 
-    val staticClasses = mutableMapOf<String, Any>()
+    private val staticClasses = mutableMapOf<String, Any>()
+
+    fun registerStaticClass(key: String, value: Any) {
+        this.staticClasses[key] = value
+        AttributeManager.usableAttributes.values.filterIsInstance<ScriptAttribute>().forEach {
+            it.entry.getProperty<ScriptEngine>("scriptEngine")?.invokeMethod<Void>("put", key, value)
+        }
+    }
 
     @Awake(LifeCycle.ENABLE)
     fun onLoad() {
@@ -139,6 +150,10 @@ object ScriptAPI {
     fun tell(entity: LivingEntity, any: Any) {
         entity.sendMessage(any.toString())
     }
+
+    fun getClass(clazz: String) = StaticClass.forClass(Class.forName(clazz))
+
+    fun newInstance(clazz: String, vararg args: Any) = Class.forName(clazz).invokeConstructor(args)
 
     fun chance(value: Double): Boolean {
         return random(value)
