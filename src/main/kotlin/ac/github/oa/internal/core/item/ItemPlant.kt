@@ -63,17 +63,17 @@ object ItemPlant {
     ): ItemStack {
         val generator = generators.firstOrNull { item.generator == it.name }
             ?: throw NullPointerException("无效的物品生成器 ${item.generator}")
-        return generator.build(entity, item, map).apply {
-            // 写入nbt
-            val itemTag = getItemTag()
-            itemTag[KEY] = ItemTagData(item.config.name)
-            itemTag[HASCODE] = ItemTagData(item.hasCode)
+        val itemStack = generator.build(entity, item, map)
+        // 写入nbt
+        val itemTag = itemStack.getItemTag()
+        itemTag[KEY] = ItemTagData(item.config.name)
+        itemTag[HASCODE] = ItemTagData(item.hasCode)
 
-            val event = ItemCreatedEvent(entity, item, this, generator, itemTag)
-            event.call()
+        val event = ItemCreatedEvent(entity, item, itemStack, generator, itemTag)
+        event.call()
 
-            event.itemTag.saveTo(event.itemStack)
-        }
+        event.itemTag.saveTo(event.itemStack)
+        return event.itemStack
     }
 
     fun parseItem(itemStack: ItemStack?): Item? {

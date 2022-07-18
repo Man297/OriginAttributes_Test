@@ -26,6 +26,8 @@ object Script {
 
     val cache = mutableMapOf<String, Int>()
 
+    val staticClasses = mutableMapOf<String, Any>()
+
     @Awake(LifeCycle.ENABLE)
     fun onLoad() {
         val config = AttributeManager.config
@@ -102,6 +104,7 @@ object Script {
                 scriptEngine.put("name", name)
                 scriptEngine.put("index", index)
                 scriptEngine.put("api", ScriptAPI)
+                staticClasses.forEach { scriptEngine.put(it.key, it.value) }
                 scriptEngine.eval(script)
             }
 

@@ -41,6 +41,7 @@ repositories {
 }
 
 dependencies {
+    compileOnly("ink.ptms:nms-all:1.0.0")
     implementation("ink.ptms.core:v11701:11701:mapped")
     implementation("ink.ptms.core:v11701:11701:universal")
     compileOnly(kotlin("stdlib"))

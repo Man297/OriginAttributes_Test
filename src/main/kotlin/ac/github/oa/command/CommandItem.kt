@@ -49,40 +49,13 @@ object CommandItem {
                 giveItem(sender, argument, 1)
             }
 
-            dynamic {
-                execute<Player> { sender, context, argument ->
-                    try {
-                        val itemKey = context.argument(-1)
-                        val map = OriginAttribute.json.fromJson<Map<String, String>>(
-                            argument.replace("/s", " "), Map::class.java
-                        )
-                        giveItem(sender, itemKey, 1, map.toMutableMap())
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-
             // [amount]
             dynamic(optional = true) {
+
                 execute<Player> { sender, context, argument ->
                     try {
                         giveItem(sender, context.argument(-1), argument.toInt())
                     } catch (_: Exception) {
-                    }
-                }
-
-                dynamic {
-                    execute<Player> { sender, context, argument ->
-                        try {
-                            val itemKey = context.argument(-2)
-                            val amount = context.argument(-1)
-                            val map = OriginAttribute.json.fromJson<Map<String, String>>(
-                                argument.replace("/s", " "), Map::class.java
-                            )
-                            giveItem(sender, itemKey, amount.toInt(), map.toMutableMap())
-                        } catch (_: Exception) {
-                        }
                     }
                 }
 

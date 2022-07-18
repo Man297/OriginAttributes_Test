@@ -16,7 +16,7 @@ object GermPluginHook {
     val isEnable by lazy { Bukkit.getPluginManager().isPluginEnabled("GermPlugin") }
 
     val slots: List<String>
-        get() = OriginAttribute.module.getStringList("dragon-core.slots")
+        get() = OriginAttribute.module.getStringList("germ-plugin.slots")
 
     @SubscribeEvent
     fun e(e: EntityLoadEquipmentEvent) {

@@ -2,6 +2,7 @@ package ac.github.oa.api
 
 import ac.github.oa.OriginAttribute
 import ac.github.oa.api.event.entity.OriginCustomDamageEvent
+import ac.github.oa.api.event.item.ItemCreatedEvent
 import ac.github.oa.api.event.item.ItemDurabilityDamageEvent
 import ac.github.oa.api.event.item.ItemUpdateEvent
 import ac.github.oa.internal.core.attribute.AttributeManager
@@ -15,9 +16,11 @@ import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
+import taboolib.common5.Coerce
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import taboolib.platform.util.isAir
+import taboolib.platform.util.modifyLore
 import kotlin.math.max
 import kotlin.math.min
 
@@ -44,6 +47,23 @@ object ItemAPI {
             setDurability(newItemStack, durability)
             ItemDurabilityDamageEvent(e.player, newItemStack, max, max, durability).call()
         }
+    }
+
+    /**
+     * 渲染装备战斗力
+     */
+    @SubscribeEvent
+    fun e(e: ItemCreatedEvent) {
+        val itemStack = e.itemStack
+        val attributeData = OriginAttributeAPI.loadList(itemStack.itemMeta?.lore ?: emptyList())
+        attributeData.autoCombatPower()
+        val result = Coerce.toInteger(attributeData.combatPower).toString()
+        itemStack.modifyLore {
+            this.forEachIndexed { index, s ->
+                this[index] = s.replace("%combat-power%", result)
+            }
+        }
+        e.itemTag = itemStack.getItemTag()
     }
 
 //    @SubscribeEvent
