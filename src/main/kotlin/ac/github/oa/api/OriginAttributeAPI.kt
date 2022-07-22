@@ -44,7 +44,7 @@ object OriginAttributeAPI {
     /**
      * 执行异步任务
      */
-    fun async(delay : Long = 0,task: () -> Unit) {
+    fun async(delay: Long = 0, task: () -> Unit) {
         submit(async = true, delay = delay) {
             task()
         }
@@ -129,7 +129,10 @@ object OriginAttributeAPI {
             }
         }
 
-        AttributeManager.set(livingEntity.uniqueId, attributeData)
+        val render = EntityLoadEquipmentEvent.Render(livingEntity, attributeData)
+        render.call()
+
+        AttributeManager.set(livingEntity.uniqueId, render.attributeData)
 
     }
 

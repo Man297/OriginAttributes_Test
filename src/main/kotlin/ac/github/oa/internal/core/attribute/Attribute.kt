@@ -1,5 +1,6 @@
 package ac.github.oa.internal.core.attribute
 
+import ac.github.oa.api.compat.OriginPlaceholder
 import ac.github.oa.internal.base.event.EventMemory
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.LivingEntity
@@ -55,7 +56,7 @@ interface Attribute {
                     "max" -> data.get(1)
                     "min" -> data.get(0)
                     "random" -> data.random()
-                    else -> "${data.get(0)} - ${data.get(1)}"
+                    else -> "${OriginPlaceholder.df2.format(data.get(0))} - ${OriginPlaceholder.df2.format(data.get(1))}"
                 }
             }
             return "N/O"

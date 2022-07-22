@@ -22,6 +22,7 @@ import taboolib.common5.compileJS
 import taboolib.common5.scriptEngineFactory
 import taboolib.library.configuration.ConfigurationSection
 import java.io.File
+import java.nio.charset.StandardCharsets
 import javax.script.Compilable
 import javax.script.Invocable
 import javax.script.ScriptEngine
@@ -35,7 +36,7 @@ object Script {
     fun registerStaticClass(key: String, value: Any) {
         this.staticClasses[key] = value
         AttributeManager.usableAttributes.values.filterIsInstance<ScriptAttribute>().forEach {
-            it.entry.getProperty<ScriptEngine>("scriptEngine")?.invokeMethod<Void>("put", key, value)
+            it.entry.scriptEngine.put(key, value)
         }
     }
 
@@ -49,18 +50,28 @@ object Script {
                 releaseResourceFile("attribute/javascript-def0.js", false)
             }
 
-            val file = File(getDataFolder(), "attribute/${it}.js")
-            if (file.exists()) {
-                val scriptAttribute = ScriptAttribute(section, file.readText())
-                val priority = AttributeManager.getPriority(scriptAttribute)
-                if (priority != -1) {
-                    scriptAttribute.setPriority(priority)
-                    AttributeManager.usableAttributes[priority] = scriptAttribute
-                    AttributeManager.enableAttribute(scriptAttribute)
-                }
+            val scriptAttribute = ScriptAttribute(section, "")
+            if (scriptAttribute.types.size == 1 && AttributeType.OTHER in scriptAttribute.types) {
+                // 为单 other 属性
+                enableScriptAttribute(scriptAttribute)
             } else {
-                info("|- The 'attribute/${it}.js' attribute script was not found.")
+                val file = File(getDataFolder(), "attribute/${it}.js")
+                if (file.exists()) {
+                    scriptAttribute.script = file.readText(StandardCharsets.UTF_8)
+                    enableScriptAttribute(scriptAttribute)
+                } else {
+                    info("|- The 'attribute/${it}.js' attribute script was not found.")
+                }
             }
+        }
+    }
+
+    private fun enableScriptAttribute(scriptAttribute: ScriptAttribute) {
+        val priority = AttributeManager.getPriority(scriptAttribute)
+        if (priority != -1) {
+            scriptAttribute.setPriority(priority)
+            AttributeManager.usableAttributes[priority] = scriptAttribute
+            AttributeManager.enableAttribute(scriptAttribute)
         }
     }
 
@@ -83,6 +94,7 @@ object Script {
 
             entries += entry
             entry.name = this.toName()
+            entry.node = this
             entry.index = 0
             entry.onEnable()
 
@@ -99,41 +111,45 @@ object Script {
             reloadScripts()
         }
 
-        val entry = object : Attribute.Entry() {
+        val entry = Entry()
 
-            override val type: Attribute.Type
-                get() = root.getEnum("value-type", Attribute.Type::class.java)!!
-
-            lateinit var scriptEngine: ScriptEngine
-
-            val invocable: Invocable
-                get() = scriptEngine as Invocable
-
-            override fun onEnable() {
-                if (script.isEmpty()) return
-                scriptEngine = scriptEngineFactory.scriptEngine
-                scriptEngine.put("name", name)
-                scriptEngine.put("index", index)
-                scriptEngine.put("api", ScriptAPI)
-                staticClasses.forEach { scriptEngine.put(it.key, it.value) }
-                scriptEngine.eval(script)
-            }
-
-            override fun handler(memory: EventMemory, data: AttributeData.Data) {
-                if (script.isEmpty()) return
-                invocable.invokeFunction("handler", memory, data)
-            }
+    }
 
 
-            @Suppress("UNCHECKED_CAST")
-            override fun getCorrectRules(): List<List<Double>> {
-                return root.getList("correct") as List<List<Double>>
-            }
+    class Entry : Attribute.Entry() {
 
-            override fun getKeywords(): List<String> {
-                return root.getStringList("keywords")
-            }
+        override val type: Attribute.Type
+            get() = getRoot().getEnum("value-type", Attribute.Type::class.java)!!
 
+        val scriptEngine: ScriptEngine = scriptEngineFactory.scriptEngine
+
+        val invocable: Invocable
+            get() = scriptEngine as Invocable
+
+        val scriptAttribute by lazy { node as ScriptAttribute }
+
+        override fun onEnable() {
+            if (scriptAttribute.script.isEmpty()) return
+            scriptEngine.put("name", name)
+            scriptEngine.put("index", index)
+            scriptEngine.put("api", ScriptAPI)
+            staticClasses.forEach { scriptEngine.put(it.key, it.value) }
+            scriptEngine.eval(scriptAttribute.script)
+        }
+
+        override fun handler(memory: EventMemory, data: AttributeData.Data) {
+            if (scriptAttribute.script.isEmpty()) return
+            invocable.invokeFunction("handler", memory, data)
+        }
+
+
+        @Suppress("UNCHECKED_CAST")
+        override fun getCorrectRules(): List<List<Double>> {
+            return getRoot().getList("correct") as List<List<Double>>
+        }
+
+        override fun getKeywords(): List<String> {
+            return getRoot().getStringList("keywords")
         }
 
     }
@@ -151,9 +167,9 @@ object ScriptAPI {
         entity.sendMessage(any.toString())
     }
 
-    fun getClass(clazz: String) = StaticClass.forClass(Class.forName(clazz))
-
-    fun newInstance(clazz: String, vararg args: Any) = Class.forName(clazz).invokeConstructor(args)
+//    fun getClass(clazz: String) = StaticClass.forClass(Class.forName(clazz))
+//
+//    fun newInstance(clazz: String, vararg args: Any) = Class.forName(clazz).invokeConstructor(args)
 
     fun chance(value: Double): Boolean {
         return random(value)

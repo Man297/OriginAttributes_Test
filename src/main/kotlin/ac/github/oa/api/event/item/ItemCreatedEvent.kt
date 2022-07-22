@@ -12,6 +12,5 @@ class ItemCreatedEvent(
     var entity: LivingEntity?,
     var item: Item,
     var itemStack: ItemStack,
-    var generator: ItemGenerator,
-    var itemTag: ItemTag
+    var generator: ItemGenerator
 ) : BukkitProxyEvent()

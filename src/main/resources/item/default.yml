@@ -5,10 +5,10 @@ def0:
   name: "{map:quality}的 神木"
   lore:
     - ''
-    - '&f攻击力+ &b{eval:{random:group:{map:quality}攻击} * {papi:%player_level%} * 0.5}'
+    - '&f攻击力+ &b{eval:{random:group:{map:quality}攻击} * {papi:%player_level%def:0} * 0.5}'
     - '强度值 {func:format({random:int:0-20})}'
     - ''
-    - '&c来源: &f{papi:%player_name%}'
+    - '&c来源: &f{papi:%player_name%def:0}'
     - ''
     - '{random:group:描述}'
     - '{max:10,20,30}'

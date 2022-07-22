@@ -68,11 +68,10 @@ object ItemPlant {
         val itemTag = itemStack.getItemTag()
         itemTag[KEY] = ItemTagData(item.config.name)
         itemTag[HASCODE] = ItemTagData(item.hasCode)
+        itemTag.saveTo(itemStack)
 
-        val event = ItemCreatedEvent(entity, item, itemStack, generator, itemTag)
-        event.call()
+        val event = ItemCreatedEvent(entity, item, itemStack, generator).also { it.call() }
 
-        event.itemTag.saveTo(event.itemStack)
         return event.itemStack
     }
 

@@ -63,7 +63,6 @@ object ItemAPI {
                 this[index] = s.replace("%combat-power%", result)
             }
         }
-        e.itemTag = itemStack.getItemTag()
     }
 
 //    @SubscribeEvent
