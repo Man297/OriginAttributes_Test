@@ -90,6 +90,7 @@ object OnListener {
         val cause = e.cause
         if (cause.name in damageCauses || e.entity::class.java.simpleName != "PlayerNPC") {
             val entity = e.entity
+
             val damager = e.damager
             var attacker: LivingEntity? = null
 
@@ -102,6 +103,7 @@ object OnListener {
 
             val event = OriginCustomDamageEvent(damager, entity, e.damage, attacker, e)
             event.call()
+
             e.isCancelled = event.isCancelled
             if (!event.isCancelled) {
                 e.damage = event.damage
