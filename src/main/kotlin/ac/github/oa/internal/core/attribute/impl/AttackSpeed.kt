@@ -11,6 +11,7 @@ import ac.github.oa.internal.core.attribute.AttributeType
 import ac.github.oa.util.sync
 
 import org.bukkit.attribute.AttributeModifier
+import org.bukkit.entity.Player
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 
@@ -23,12 +24,15 @@ class AttackSpeed : AbstractAttribute() {
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         fun e(e: EntityDamageEvent) {
             // 修正无来源伤害
-            e.damageMemory.damage = e.damageMemory.damage * e.damageMemory.accumulatorPower
-            // 修正有来源伤害 统一修正
+            if (e.damageMemory.attacker is Player) {
+                e.damageMemory.damage = e.damageMemory.damage * e.damageMemory.accumulatorPower
+                // 修正有来源伤害 统一修正
 
-            e.damageMemory.getDamageSources().forEach {
-                it.value = it.value * e.damageMemory.accumulatorPower
+                e.damageMemory.getDamageSources().forEach {
+                    it.value = it.value * e.damageMemory.accumulatorPower
+                }
             }
+
         }
 
     }

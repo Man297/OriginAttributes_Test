@@ -30,7 +30,7 @@ class DamageMemory(
     }
 
     // 如果关闭原版属性 并且玩家是玩家 则启用
-    var damage = if (!OriginAttribute.original) 0.0 else event.damage
+    var damage = if (!OriginAttribute.original) 0.1 else event.damage
     val labels = mutableMapOf<Any, Any>()
 
     fun setLabel(key: Any, value: Any): DamageMemory {
