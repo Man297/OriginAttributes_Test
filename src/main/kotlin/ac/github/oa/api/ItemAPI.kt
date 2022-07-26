@@ -8,6 +8,7 @@ import ac.github.oa.api.event.item.ItemUpdateEvent
 import ac.github.oa.internal.core.attribute.AttributeManager
 import ac.github.oa.internal.core.attribute.equip.Hand
 import ac.github.oa.internal.core.attribute.equip.OffHand
+import ac.github.oa.internal.core.item.ItemInstance
 import ac.github.oa.internal.core.item.ItemPlant
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -138,9 +139,8 @@ object ItemAPI {
             }
             val canUpdate = item!!.canUpdate()
             if (canUpdate) {
-                val parseItem = ItemPlant.parseItem(item)!!
-                val itemStack = parseItem.create(player)!!
-                val event = ItemUpdateEvent(player, item, itemStack, parseItem)
+                val itemInstance = ItemInstance.get(item)!!
+                val event = ItemUpdateEvent(player, item, itemInstance.rebuild(player), itemInstance.item)
                 event.call()
                 inventory.setItem(i, event.newItemStack)
             }

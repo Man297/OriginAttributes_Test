@@ -9,9 +9,6 @@ def0:
     - '强度值 {func:format({random:int:0-20})}'
     - ''
     - '&c来源: &f{papi:%player_name%def:0}'
-    - ''
-    - '{random:group:描述}'
-    - '{max:10,20,30}'
   item-flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES
@@ -24,6 +21,12 @@ def0:
       action:
         - |-
           attribute add def0 5000 "攻击力 +10" they -"@self"
+
+proxy-def0:
+  g: proxy
+  id: def0
+  vars:
+    quality: 普通
 
 drop-table:
   g: group
