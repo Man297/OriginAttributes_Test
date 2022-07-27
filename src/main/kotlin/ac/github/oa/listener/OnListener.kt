@@ -107,7 +107,6 @@ object OnListener {
             e.isCancelled = event.isCancelled
             if (!event.isCancelled) {
                 e.damage = event.damage
-
                 if (entity is LivingEntity && entity.health - e.damage <= 0) {
                     EntityDeathEvent(entity, event).call()
                 }
