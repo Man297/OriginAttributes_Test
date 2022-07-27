@@ -15,9 +15,7 @@ class AdaptItem(val slot: Slot, var enable: Boolean = false) {
         get() = item.isNotAir() && item.hasItemMeta()
 
     fun instance(): ItemInstance? {
-        if (item.isAir()) return null
-        val parseItem = ItemPlant.parseItem(item) ?: return null
-        return ItemInstance(item, parseItem, slot)
+        return ItemInstance.get(item)
     }
 
     override fun toString(): String {

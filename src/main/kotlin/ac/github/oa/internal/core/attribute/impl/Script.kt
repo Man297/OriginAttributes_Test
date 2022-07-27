@@ -4,6 +4,7 @@ import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.api.event.plugin.AttributeLoadEvent
 import ac.github.oa.internal.base.event.EventMemory
 import ac.github.oa.internal.base.event.impl.DamageMemory
+import ac.github.oa.internal.base.event.impl.UpdateMemory
 import ac.github.oa.internal.core.attribute.*
 import jdk.internal.dynalink.beans.StaticClass
 import org.bukkit.entity.LivingEntity
@@ -175,15 +176,15 @@ object ScriptAPI {
         return random(value)
     }
 
-    fun getData(context: DamageMemory, entity: LivingEntity, index: Int, entry: Int): AttributeData.Data {
+    fun getData(context: EventMemory, entity: LivingEntity, index: Int, entry: Int): AttributeData.Data {
         return getData(context, entity, index).get(entry)
     }
 
-    fun getData(context: DamageMemory, entity: LivingEntity, index: Int): Array<AttributeData.Data> {
+    fun getData(context: EventMemory, entity: LivingEntity, index: Int): Array<AttributeData.Data> {
         return getAttributeData(context, entity).getArrayData(index)
     }
 
-    fun getData(context: DamageMemory, entity: LivingEntity, keyword: String): AttributeData.Data {
+    fun getData(context: EventMemory, entity: LivingEntity, keyword: String): AttributeData.Data {
         val index = Script.cache.computeIfAbsent(keyword) {
             AttributeManager.usableAttributes.values.firstOrNull {
                 keyword in it.toEntities().flatMap { it.getKeywords() }
@@ -196,13 +197,21 @@ object ScriptAPI {
         return arrayData[entry.index]
     }
 
-    fun getAttributeData(context: DamageMemory?, entity: LivingEntity): AttributeData {
+    fun getAttributeData(context: EventMemory?, entity: LivingEntity): AttributeData {
         if (context == null) return OriginAttributeAPI.getAttributeData(entity)
-        return if (context.attacker == entity) {
-            context.attackAttributeData
-        } else if (context.injured == entity) {
-            context.injuredAttributeData
-        } else OriginAttributeAPI.getAttributeData(entity)
+
+        if (context is DamageMemory) {
+            if (context.attacker == entity) {
+                return context.attackAttributeData
+            } else if (context.injured == entity) {
+                return context.injuredAttributeData
+            }
+        } else if (context is UpdateMemory) {
+            if (context.livingEntity == entity) {
+                return context.attributeData
+            }
+        }
+        return OriginAttributeAPI.getAttributeData(entity)
     }
 
 }
