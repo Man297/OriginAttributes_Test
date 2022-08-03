@@ -16,6 +16,10 @@ def0:
     - HIDE_DESTROYS
     - HIDE_PLACED_ON
     - HIDE_POTION_EFFECTS
+  nbt:
+    max-durability: 100
+    attributes:
+      - '物理攻击: 100'
   actions:
     - $e: item consume
       action:

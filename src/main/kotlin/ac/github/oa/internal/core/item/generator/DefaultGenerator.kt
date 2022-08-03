@@ -102,7 +102,14 @@ open class DefaultGenerator : ItemGenerator {
 
             if (config.isConfigurationSection("nbt")) {
                 config.getConfigurationSection("nbt")!!.getKeys(false).forEach {
-                    itemTag[it] = Translator.toNBTBase(config["nbt.$it"])
+                    val path = "nbt.$it"
+                    if (config.isList(path)) {
+                        itemTag[it] = Translator.toNBTBase(config.getStringList(path).toMutableList().random(wrapper, entity))
+                    } else if (config.isString(it)) {
+                        itemTag[it] = Translator.toNBTBase(config.getString(path)!!.random(wrapper, entity))
+                    } else {
+                        itemTag[it] = Translator.toNBTBase(config[path])
+                    }
                 }
             }
             if (item.isClearDefault) {

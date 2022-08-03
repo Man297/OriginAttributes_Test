@@ -8,6 +8,7 @@ import ac.github.oa.internal.base.event.impl.UpdateMemory
 import ac.github.oa.internal.core.attribute.*
 import jdk.internal.dynalink.beans.StaticClass
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.io.newFile
 import taboolib.common.platform.Awake
@@ -110,6 +111,11 @@ object Script {
             cache.clear()
             AttributeManager.config.reload()
             reloadScripts()
+        }
+
+        override fun toValue(player: Player, attributeData: AttributeData, args: Array<String>): Any? {
+            val arg = if (args.size == 3) args[2] else ""
+            return entry.toValue(player, arg, attributeData.getData(this.index, entry.index))
         }
 
         val entry = Entry()

@@ -1,6 +1,7 @@
 package ac.github.oa.api
 
 import ac.github.oa.OriginAttribute
+import ac.github.oa.api.event.entity.EntityLoadEquipmentEvent
 import ac.github.oa.api.event.entity.OriginCustomDamageEvent
 import ac.github.oa.api.event.item.ItemCreatedEvent
 import ac.github.oa.api.event.item.ItemDurabilityDamageEvent
@@ -10,6 +11,7 @@ import ac.github.oa.internal.core.attribute.equip.Hand
 import ac.github.oa.internal.core.attribute.equip.OffHand
 import ac.github.oa.internal.core.item.ItemInstance
 import ac.github.oa.internal.core.item.ItemPlant
+import net.minecraft.server.v1_12_R1.NonNullList
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
@@ -123,6 +125,20 @@ object ItemAPI {
                 itemStack.itemMeta = itemMeta
             }
         }
+    }
+
+    @SubscribeEvent(ignoreCancelled = true)
+    fun e(e: EntityLoadEquipmentEvent.Render) {
+        val items = e.attributeData.items
+        val listOf = mutableListOf<String>()
+        // 从NBT内获取属性
+        items.filter { it.enable }.forEach {
+            it.item.getItemTag()["attributes"]?.asList()?.forEach {
+                listOf += it.asString()
+            }
+        }
+        // 载入属性
+        e.attributeData.merge(OriginAttributeAPI.loadList(e.entity, listOf))
     }
 
     fun getNumber(lore: String): Double {

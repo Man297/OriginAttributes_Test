@@ -2,8 +2,8 @@ package ac.github.oa.internal.core.attribute
 
 import ac.github.oa.api.compat.OriginPlaceholder
 import ac.github.oa.internal.base.event.EventMemory
-import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 
 interface Attribute {
 
@@ -18,6 +18,8 @@ interface Attribute {
     fun toLocalName(): String
 
     fun getEntry(index: Int): Entry
+
+    fun toValue(player: Player,attributeData: AttributeData,args: Array<String>) : Any?
 
     fun getEntry(name: String): Entry
 

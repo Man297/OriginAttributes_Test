@@ -25,11 +25,11 @@ class AttackSpeed : AbstractAttribute() {
         fun e(e: EntityDamageEvent) {
             // 修正无来源伤害
             if (e.damageMemory.attacker is Player) {
-                e.damageMemory.damage = e.damageMemory.damage * e.damageMemory.accumulatorPower
+                e.damageMemory.damage = e.damageMemory.damage * e.damageMemory.vigor
                 // 修正有来源伤害 统一修正
 
                 e.damageMemory.getDamageSources().forEach {
-                    it.value = it.value * e.damageMemory.accumulatorPower
+                    it.value = it.value * e.damageMemory.vigor
                 }
             }
 
@@ -39,6 +39,12 @@ class AttackSpeed : AbstractAttribute() {
 
     override val types: Array<AttributeType>
         get() = arrayOf(AttributeType.UPDATE)
+
+    val default: Double
+        get() = toRoot().getDouble("${toName()}.default", 4.0)
+
+    val scale: Double
+        get() = toRoot().getDouble("${toName()}.scale", 1.0)
 
     val value = object : Attribute.Entry() {
 
@@ -50,22 +56,13 @@ class AttackSpeed : AbstractAttribute() {
             memory as UpdateMemory
             val livingEntity = memory.livingEntity
             val ratio = memory.attributeData.getData(this@AttackSpeed.index, ratio.index).get(ratio)
-            val result = data.get(this) * (1 + ratio)
+            val result = default + data.get(this) * (1 + ratio) * scale
             sync {
-                if (!OriginAttribute.original) {
-                    livingEntity.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED)?.baseValue = 0.0
-                }
-                livingEntity.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED)?.apply {
-                    AttributeModifier(
-                        livingEntity.uniqueId, "OriginAttribute", result, AttributeModifier.Operation.ADD_NUMBER
-                    ).also {
-                        removeModifier(it)
-                        addModifier(it)
-                    }
-                }
+                livingEntity.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED)?.baseValue = result
             }
         }
     }
+
     val ratio = object : Attribute.Entry() {
         override val type: Attribute.Type
             get() = Attribute.Type.SINGLE

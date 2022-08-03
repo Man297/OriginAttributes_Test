@@ -56,6 +56,10 @@ fun List<String>.rebuild(): List<String> {
     return listOf
 }
 
+fun Any.random(wrapper: MapScript.Wrapper, entity: LivingEntity?): String {
+    return toString().random(wrapper, entity)
+}
+
 fun String.random(wrapper: MapScript.Wrapper, entity: LivingEntity?): String {
     return RandomPlant.eval(this, entity, wrapper)
 }

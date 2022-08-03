@@ -1,5 +1,6 @@
 value:
   combat-power: 1.0
+  default: 4.0
   keywords:
     - 攻击速度
 ratio:

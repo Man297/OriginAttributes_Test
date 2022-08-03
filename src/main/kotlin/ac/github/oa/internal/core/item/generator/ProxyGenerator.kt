@@ -18,7 +18,7 @@ class ProxyGenerator : ItemGenerator {
     override val name: String
         get() = "proxy"
 
-    private fun Item.vars(): Map<String, String> {
+    private fun Item.vars(): Map<String, Any> {
         return config.getMap("vars")
     }
 

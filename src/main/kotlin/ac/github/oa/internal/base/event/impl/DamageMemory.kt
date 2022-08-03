@@ -20,13 +20,28 @@ class DamageMemory(
 
     var arrow = attacker is Arrow
 
-    val accumulatorPower =
-        (event.damage / (attacker.getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE)?.value
-            ?: event.damage)).coerceAtLeast(0.0).coerceAtMost(1.0)
+    /**
+     * 攻击力度
+     */
+    val vigor = when (event.damage) {
+        -1.0 -> 1.0
+        else -> {
+            val attackDamage = attacker.genericAttackDamage
+            if (attackDamage == null) {
+                1.0
+            } else {
+                (event.damage / attackDamage).coerceAtLeast(0.0).coerceAtMost(1.0)
+            }
+        }
+    }
 
     companion object {
 
         val EMPTY_SOURCE = Source(-1, 0.0)
+
+        val LivingEntity.genericAttackDamage: Double?
+            get() = getAttribute(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE)?.value
+
     }
 
     // 如果关闭原版属性 并且玩家是玩家 则启用

@@ -1,10 +1,11 @@
 package ac.github.oa.internal.core.attribute
 
+import ac.github.oa.OriginAttribute
+import org.bukkit.entity.Player
 import taboolib.common.platform.function.getDataFolder
 import taboolib.common.platform.function.info
 import taboolib.common.platform.function.releaseResourceFile
 import taboolib.library.configuration.ConfigurationSection
-import taboolib.module.configuration.ConfigFile
 import taboolib.module.configuration.Configuration
 import java.io.File
 
@@ -95,6 +96,12 @@ abstract class AbstractAttribute : Attribute {
 
     override fun toEntrySize(): Int {
         return entries.size
+    }
+
+    override fun toValue(player: Player, attributeData: AttributeData, args: Array<String>): Any? {
+        val entry = this.getEntry(args[1])
+        val data = attributeData.getData(this.index, entry.index)
+        return entry.toValue(player, if (args.size == 3) args[2] else "", data)
     }
 
 }

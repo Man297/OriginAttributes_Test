@@ -21,9 +21,10 @@ object MythicMobsHook {
     fun e0(ope: OptionalEvent) {
         val event = ope.get<io.lumine.mythic.bukkit.events.MythicMobDeathEvent>()
         val mm = event.mobType
+
         event.drops.addAll(
             handleDrop(
-                mm.displayName.get(),
+                mm.config.key,
                 mm.config.getStringList("OriginOptions.Drops")
             )
         )
@@ -70,7 +71,7 @@ object MythicMobsHook {
         val mm = event.mobType
         event.drops.addAll(
             handleDrop(
-                mm.displayName.get(),
+                mm.config.key,
                 mm.config.getStringList("OriginOptions.Drops")
             )
         )
