@@ -1,11 +1,9 @@
 package ac.github.oa.internal.core.attribute
 
-import taboolib.common.platform.function.info
 import taboolib.common5.Coerce
+import java.util.regex.Pattern
 import kotlin.math.max
 import kotlin.math.min
-
-
 
 fun AttributeData.loadTo(attribute: Attribute, string: String) {
     attribute.toEntities().forEach {
@@ -28,12 +26,16 @@ fun AttributeData.Data.loadTo(entry: Attribute.Entry, string: String) {
 }
 val FILTER_RULES = listOf(
     Regex("§+[a-z0-9%]"),
-    Regex("-[^0-9]"),
-    Regex("[^-0-9.?]")
+    Regex("[^0-9+--.]"),
 )
+
+var pattern: Pattern = Pattern.compile(FILTER_RULES[1].pattern)
+
 fun getNumber(string: String): String {
     var prey = string
-    FILTER_RULES.forEach { prey = prey.replace(it, "") }
+    var m = pattern.matcher(prey)
+    var list = m.replaceAll(" ").trim().split(" ").toList()
+    prey = list.filter { it.isNotEmpty() }.stream().mapToDouble{ it.toDouble() }.sum().toString()
     return prey.ifEmpty { "0.0" }
 }
 

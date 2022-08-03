@@ -4,6 +4,7 @@ import ac.github.oa.internal.core.item.script.InternalScript
 import ac.github.oa.internal.core.item.script.hoop.MapScript
 import ac.github.oa.util.listFile
 import ac.github.oa.util.newfolder
+import org.bukkit.ChatColor
 import org.bukkit.entity.LivingEntity
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -25,9 +26,10 @@ object RandomPlant {
             SecuredFile.loadConfiguration(it).apply {
                 getKeys(true).forEach {
                     if (this.isString(it)) {
-                        configs[it] = getString(it)!!
+
+                        configs[ChatColor.stripColor(it).toString()] = getString(it)!!
                     } else if (this.isList(it)) {
-                        configs[it] = getStringList(it)
+                        configs[ChatColor.stripColor(it).toString()] = getStringList(it)
                     }
                 }
             }
