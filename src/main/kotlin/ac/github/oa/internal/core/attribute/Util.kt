@@ -29,13 +29,9 @@ val FILTER_RULES = listOf(
     Regex("[^0-9+--.]"),
 )
 
-var pattern: Pattern = Pattern.compile(FILTER_RULES[1].pattern)
-
 fun getNumber(string: String): String {
     var prey = string
-    var m = pattern.matcher(prey)
-    var list = m.replaceAll(" ").trim().split(" ").toList()
-    prey = list.filter { it.isNotEmpty() }.stream().mapToDouble{ it.toDouble() }.sum().toString()
+    FILTER_RULES.forEach { prey = prey.replace(it, "") }
     return prey.ifEmpty { "0.0" }
 }
 

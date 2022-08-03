@@ -24,7 +24,11 @@ object OriginPlaceholder : PlaceholderExpansion {
         val key = split[0]
         val attributeData = OriginAttributeAPI.getAttributeData(p!!)
 
-        if (params == "combat-power") {
+        if (split[0] == "combat-power") {
+            val mode = split.getOrElse(1) { "d" }
+            if (mode == "i") {
+                return attributeData.combatPower.toInt().toString()
+            }
             return attributeData.combatPower.toString()
         } else if (params == "health") {
             return df2.format(p.health)
@@ -37,7 +41,7 @@ object OriginPlaceholder : PlaceholderExpansion {
 
         if (attribute !== null) {
 
-            val value = attribute.toValue(p,attributeData, split)
+            val value = attribute.toValue(p, attributeData, split)
             return if (value is Double) {
                 OriginAttribute.decimalFormat.format(value)
             } else {

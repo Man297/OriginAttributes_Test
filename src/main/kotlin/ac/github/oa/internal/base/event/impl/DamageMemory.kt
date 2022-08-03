@@ -25,14 +25,16 @@ class DamageMemory(
      */
     val vigor = when (event.damage) {
         -1.0 -> 1.0
-        else -> {
-            val attackDamage = attacker.genericAttackDamage
-            if (attackDamage == null) {
-                1.0
-            } else {
-                (event.damage / attackDamage).coerceAtLeast(0.0).coerceAtMost(1.0)
-            }
+        else -> when (val attackDamage = attacker.genericAttackDamage) {
+
+            null -> 1.0
+
+            0.0 -> 0.0
+
+            else -> (event.damage / attackDamage).coerceAtLeast(0.0).coerceAtMost(1.0)
+
         }
+
     }
 
     companion object {
